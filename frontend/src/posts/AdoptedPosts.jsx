@@ -3,14 +3,14 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { Card, Button, Col, Row, Form, Container } from "react-bootstrap";
-import { cities } from "../../js/cities.js";
-import { dogsList } from "../../js/dogsList.js";
-import { catsList } from "../../js/catsList.js";
-import { petsList } from "../../js/petsList.js";
-import { birdsList } from "../../js/birdsList.js";
-import { reptilesList } from "../../js/reptilesList.js";
-import { rodentsList } from "../../js/rodentsList.js";
-import "../../css/PostList.css";
+import { cities } from "../js/cities.js";
+import { dogsList } from "../js/dogsList.js";
+import { catsList } from "../js/catsList.js";
+import { petsList } from "../js/petsList.js";
+import { birdsList } from "../js/birdsList.js";
+import { reptilesList } from "../js/reptilesList.js";
+import { rodentsList } from "../js/rodentsList.js";
+import "../css/PostList.css";
 
 
 
@@ -156,177 +156,9 @@ const AdoptedPost = () => {
   };
 
   return (
+   
     <div className="container mt-5 mb-5">
-
-      <Row>
-        <Col>
-          <Form className="search-form" onSubmit={handleSearch}>
-            <Container>
-              <h2>חיפוש</h2>
-              <Row>
-                <Col xs={12} md={3}>
-                  <Form.Group controlId="category">
-                    <Form.Label>קטגוריה:</Form.Label>
-                    <Form.Select
-                      value={category}
-                      onChange={(e) => handleCategoryChange(e.target.value)}
-                    >
-                      <option value="">הכל</option>
-                      {petsList.map((pet) => (
-                        <option key={pet} value={pet}>
-                          {pet}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </Form.Group>
-                </Col>
-                <Col xs={12} md={3}>
-                  <Form.Group controlId="type">
-                    <Form.Label>סוג:</Form.Label>
-                    <Form.Select value={type} onChange={(e) => setType(e.target.value)}>
-                      <option value="">בחר סוג</option>
-                      {typeOptions.map((type) => (
-                        <option key={type} value={type}>
-                          {type}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </Form.Group>
-                </Col>
-                <Col xs={12} md={3}>
-                  <Form.Group controlId="gender">
-                    <Form.Label>מין:</Form.Label>
-                    <Form.Select
-                      value={selectedGender}
-                      onChange={(e) => setSelectedGender(e.target.value)}
-                    >
-                      <option value="">הכל</option>
-                      <option value="זכר">זכר</option>
-                      <option value="נקבה">נקבה</option>
-                    </Form.Select>
-                  </Form.Group>
-                </Col>
-                <Col xs={12} md={3}>
-                  <Form.Group controlId="location">
-                    <Form.Label>מיקום:</Form.Label>
-                    <Form.Select
-                      value={selectedLocation}
-                      onChange={(e) => setSelectedLocation(e.target.value)}
-                    >
-                      <option value="">הכל</option>
-                      {cities.map((city) => (
-                        <option key={city} value={city}>
-                          {city}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </Form.Group>
-                </Col>
-                <Col xs={12} md={3}>
-                  <Form.Group controlId="isEducated">
-                    <Form.Label>מחונך לצרכים :</Form.Label>
-                    <Form.Select
-                      value={isEducated}
-                      onChange={(e) => setIsEducated(e.target.value)}
-                    >
-                      <option value="">הכל</option>
-                      <option value="false">לא</option>
-                      <option value="true">כן</option>
-                    </Form.Select>
-                  </Form.Group>
-                </Col>
-                <Col xs={12} md={3}>
-                  <Form.Group controlId="isCastrated">
-                    <Form.Label>  מסורס / מעוקרת :</Form.Label>
-                    <Form.Select
-                      value={isCastrated}
-                      onChange={(e) => setIsCastrated(e.target.value)}
-                    >
-                      <option value="">הכל</option>
-                      <option value="false">לא</option>
-                      <option value="true">כן</option>
-                    </Form.Select>
-                  </Form.Group>
-                </Col>
-                <Col xs={12} md={3}>
-                  <Form.Group controlId="isImmune">
-                    <Form.Label>מחוסן/ת:</Form.Label>
-                    <Form.Select
-                      value={isImmune}
-                      onChange={(e) => setIsImmune(e.target.value)}
-                    >
-                      <option value="">הכל</option>
-                      <option value="false">לא</option>
-                      <option value="true">כן</option>
-                    </Form.Select>
-                  </Form.Group>
-                </Col>
-                <Row className="align-items-center">
-        <Col xs={12} md={6}>
-          <Form.Group controlId="minAge">
-            <Form.Label>גיל מינימלי:</Form.Label>
-            <Form.Control
-              type="number"
-              value={minAge}
-              onChange={(e) => {
-                const value = parseInt(e.target.value);
-                if (!isNaN(value) && value >= 0) {
-                  setMinAge(value);
-                }
-              }}
-              className="small-input" // Custom CSS class for smaller input width
-            />
-          </Form.Group>
-        </Col>
-        <Col xs={12} md={6}>
-          <Form.Group controlId="maxAge">
-            <Form.Label>גיל מקסימלי:</Form.Label>
-            <Form.Control
-              type="number"
-              value={maxAge}
-              onChange={(e) => {
-                const value = parseInt(e.target.value);
-                if (!isNaN(value) && value >= 0) {
-                  setMaxAge(value);
-                }
-              }}
-              className="small-input" // Custom CSS class for smaller input width
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-
-              </Row>
-
-              <Row className="search-row">
-                <Col className="search-col">
-                  <Form.Group controlId="search">
-                    <Form.Label>חיפוש:</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col className="search-col">
-                  <Button variant="primary" type="submit">
-                    חיפוש
-                  </Button>
-                </Col>
-              </Row>
-            </Container>
-
-          </Form>
-        </Col>
-        <Link
-          style={{ marginBottom: '80px', height: "60px", fontSize: "26px" }}
-          to="/addPost"
-          className="btn btn-primary"
-        >
-          ➕ הוסף פוסט חדש
-        </Link>
-      </Row>
+      <h1 className="title-text-pets-get-live">Animals Granted a Second Lease On Life</h1>
       <Row xs={1} md={2} lg={3} className="g-4">
         {posts.map((post, index) => (
           <Col key={post._id} className="mb-3">

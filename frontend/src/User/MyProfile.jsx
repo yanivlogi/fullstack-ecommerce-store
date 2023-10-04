@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Card, Button, Form, Table, Image, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
-import "../../css/MyProfile.css";
+import "../css/MyProfile.css";
 
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
@@ -265,11 +265,9 @@ const Profile = () => {
     setShowImageModal(true);
   };
 
-
   const handleDeleteImage = async () => {
     try {
       const token = localStorage.getItem('token');
-
       const response = await axios.delete(
         'http://localhost:5000/userProfile/image',
         {

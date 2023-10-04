@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import axios from 'axios';
-import logo from "../../uploads/logo.jpg";
+import logo from "../uploads/logo.png";
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -60,38 +60,29 @@ const Header = () => {
     <header>
     <Navbar bg="primary" variant="dark" expand="lg" fixed="top">
       <Container>
-        {/* <Navbar.Brand className="d-flex align-items-center justify-content-center">
-          <a href="/" className="d-flex align-items-center" style={{ textDecoration: 'none' }}>
-            <img
-              src={logo}
-              alt="Logo"
-              className="mr-2 rounded-circle"
-              style={{ width: '45px', marginLeft: 'auto', marginRight: 'auto' }}
-            />
-            <span style={{ fontSize: '20px', fontWeight: 'bold' }}>דף הבית</span>
-          </a>
-        </Navbar.Brand> */}
         <Navbar.Brand className="d-flex align-items-center justify-content-center">
           <a href="/" className="d-flex align-items-center" style={{ textDecoration: 'none' }}>
-            <img
+            <img 
               src={logo}
               alt="Logo"
               className="mr-2 rounded-circle"
-              style={{ width: '45px', marginLeft: 'auto', marginRight: 'auto' }}
+              style={{ width: '45px', marginLeft: 'auto', marginRight: 'auto',animation: 'slidein 3s linear 1s infinite alternate' }}
             />
-            <span style={{ fontSize: '20px', fontWeight: 'bold' }}>דף הבית</span>
+            <span style={{ fontSize: '20px', fontWeight: 'bold' }}>PetHouse</span>
           </a>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar-nav" />
         <Navbar.Collapse id="navbar-nav">
           <Nav className="me-auto mb-2 mb-lg-0">
               <Nav.Link href="/AboutUs">עלינו</Nav.Link>
+              <Nav.Link href="/ContactUs">ContactUs</Nav.Link>
               <Nav.Link href="/AdoptedPosts">חיות שאומצו</Nav.Link>
               <Nav.Link href="/AllPosts">כל הפוסטים</Nav.Link>
             </Nav>
             <Nav className="ms-auto mb-2 mb-lg-0">
               {!isLoggedIn ? (
                 <>
+                  <Nav.Link href="/confirm-registration">בדיקה</Nav.Link>
                   <Nav.Link href="/register">הרשמה</Nav.Link>
                   <Nav.Link href="/userLogin">התחבר/י</Nav.Link>
                 </>

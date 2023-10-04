@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const UserRegister = () => {
   const [username, setUsername] = useState("");
@@ -48,7 +48,7 @@ const UserRegister = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      navigate("/");
+      navigate("/confirm-registration"); // Перенаправить на страницу подтверждения
     } catch (error) {
       if (error.response && error.response.status === 400) {
         if (error.response.data.message.includes("username")) {
@@ -150,8 +150,8 @@ const UserRegister = () => {
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
               >
-                <option value="male">זכר</option>
-                <option value="female">נקבה</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
               </select>
             </div>
             <div className="form-group">
@@ -163,7 +163,6 @@ const UserRegister = () => {
                     className="custom-file-input"
                     id="image"
                     onChange={handleImageChange}
-
                   />
                   <label className="custom-file-label" htmlFor="image">
                     Choose file

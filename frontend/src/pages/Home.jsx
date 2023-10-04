@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import ChatBox from "./components/ChatBox"; // Import the ChatBox component
-import SomePosts from "./components/SomePosts"; // Import the ChatBox component
-import homeImage from "../uploads/homeImage.jpg";
+import ChatBox from "../components/ChatBox"; // Import the ChatBox component
+import SomePosts from "../components/SomePosts"; // Import the ChatBox component
+import homeImage from "../uploads/homeImage.png";
 
 const Home = () => {
   

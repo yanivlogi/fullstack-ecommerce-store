@@ -8,6 +8,8 @@ import CommentRoute from "./routes/CommentRoute.js";
 import MessagesRoute from "./routes/MessagesRoute.js";
 import cookieParser from 'cookie-parser';
 import bodyParser from "body-parser"; 
+import sendMailRouter from "./routes/sendMail.js"; 
+import confirmationRouter from './routes/confirmation.js';
 
 
 
@@ -23,11 +25,14 @@ const db_link = process.env.DB;
 const app = express();
 
 app.use(express.static('uploads/'));
+mongoose.set('strictQuery', false);
 mongoose.connect(db_link,{
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
 const db = mongoose.connection;
+
+
 
 db.on('error', (error) => console.log(error));
 db.once('open', () => console.log('Database Connected...'));
@@ -42,10 +47,13 @@ app.use(PostRoute);
 app.use(ChatBoxRoute);
 app.use(CommentRoute);
 app.use(MessagesRoute);
+app.use(sendMailRouter);
+
+app.use(confirmationRouter);
 
 
 
 
 
- 
-app.listen(port, ()=> console.log('Server up and running...'));
+
+app.listen(port, ()=> console.log('Server up and running...', port));

@@ -41,8 +41,25 @@ const UserSchema = new mongoose.Schema({
     type : Boolean,
     default : false,
     
-  }
+  },
 
-});
+  confirmationCode: {
+    type: String,
+    required: false, 
+  },
+  confirmationCodeExpiration: {
+    type: Date,
+    required: false,
+  },
+ 
+
+  isActive: {
+    type: Boolean,
+    default: false, 
+  },
+  
+
+},
+{ timestamps: true });
 
 export default mongoose.model('Users', UserSchema);

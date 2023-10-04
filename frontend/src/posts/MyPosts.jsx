@@ -3,14 +3,14 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { Card, Button, Col, Row, Form, Container } from "react-bootstrap";
-import { cities } from "../../js/cities.js";
-import { dogsList } from "../../js/dogsList.js";
-import { catsList } from "../../js/catsList.js";
-import { petsList } from "../../js/petsList.js";
-import { birdsList } from "../../js/birdsList.js";
-import { reptilesList } from "../../js/reptilesList.js";
-import { rodentsList } from "../../js/rodentsList.js";
-import "../../css/PostList.css";
+import { cities } from "../js/cities.js";
+import { dogsList } from "../js/dogsList.js";
+import { catsList } from "../js/catsList.js";
+import { petsList } from "../js/petsList.js";
+import { birdsList } from "../js/birdsList.js";
+import { reptilesList } from "../js/reptilesList.js";
+import { rodentsList } from "../js/rodentsList.js";
+import "../css/PostList.css";
 
 
 

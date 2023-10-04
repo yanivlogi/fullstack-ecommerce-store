@@ -6,27 +6,33 @@ import NoPageFound from "./pages/NoPageFound";
 
 
 //posts
-import AllPosts from "./pages/posts/AllPosts";
-import AddPost from "./pages/posts/AddPost";
-import EditPost from "./pages/posts/EditPost";
-import Post from "./pages/posts/Post";
-import SomePosts from "./pages/components/SomePosts";
-import MyPosts from "./pages/posts/MyPosts";
-import AdoptedPosts from "./pages/posts/AdoptedPosts";
+import AllPosts from "./posts/AllPosts";
+import AddPost from "./posts/AddPost";
+import EditPost from "./posts/EditPost";
+import Post from "./posts/Post";
+import SomePosts from "./components/SomePosts";
+import MyPosts from "./posts/MyPosts";
+import AdoptedPosts from "./posts/AdoptedPosts";
 
-//user
-import UserRegister from "./pages/User/UserRegister";
-import UserLogin from "./pages/User/UserLogin";
-import GetUserById from "./pages/User/UserProfile";
-import Profile from "./pages/User/MyProfile";
-import EditMyProfile from "./pages/User/EditMyProfile";
+
 
 //messages to user
-import SendMessages from "./pages/components/SendMessages";
+import SendMessages from "./components/SendMessages";
 import AllMessages from "./pages/AllMessages";
 
 
-// import Account from "./pages/User/Profile";
+import ContackUs from "./pages/ContacUs"
+import ConfirmationForm from "./service/ConfirmationForm";
+
+
+
+//user
+import UserRegister from "./User/UserRegister";
+import UserLogin from "./User/UserLogin";
+import GetUserById from "./User/UserProfile";
+import Profile from "./User/MyProfile";
+import EditMyProfile from "./User/EditMyProfile";
+
 
 
 
@@ -37,8 +43,12 @@ export default function App() {
         <Routes>
           <Route index element={<Home />} />
           <Route path="AboutUs" element={<AboutUs />} />
+          <Route path ="ContactUs" element={<ContackUs />} />
+
 
           <Route path="Register" element={<UserRegister />} />
+          <Route path="/confirm-registration" element={<ConfirmationForm />} />
+
           <Route path="userLogin" element={<UserLogin />} />
           <Route path="Profile" element={<Profile />} />
 

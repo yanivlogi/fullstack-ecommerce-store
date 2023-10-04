@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import { cities } from "../../js/cities.js";
-import { dogsList } from "../../js/dogsList.js";
-import { catsList } from "../../js/catsList.js";
-import { petsList } from "../../js/petsList.js";
-import { birdsList } from "../../js/birdsList.js";
-import { reptilesList } from "../../js/reptilesList.js";
-import { rodentsList } from "../../js/rodentsList.js";
-import "../../css/imageCss.css";
+import { cities } from "../js/cities.js";
+import { dogsList } from "../js/dogsList.js";
+import { catsList } from "../js/catsList.js";
+import { petsList } from "../js/petsList.js";
+import { birdsList } from "../js/birdsList.js";
+import { reptilesList } from "../js/reptilesList.js";
+import { rodentsList } from "../js/rodentsList.js";
+import "../css/imageCss.css";
 
 const AddPost = () => {
   const [title, setTitle] = useState("");

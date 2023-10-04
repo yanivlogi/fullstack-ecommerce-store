@@ -5,8 +5,8 @@ import jwt from 'jsonwebtoken';
 import 'dotenv/config'
 import bcrypt from 'bcryptjs'
 const jwt_key = process.env.JWT_KEY;
-import fs from 'fs'
-import path from 'path'
+import { sendConfirmationCode } from '../service/emailService.js'; 
+
 
 
 
@@ -49,9 +49,7 @@ export const userLogin = async (req, res) => {
     }
     const user = await User.findOne({ username });
 
-
-
-    if (user && (await bcrypt.compare(password, user.password))) {
+    if (user && (await bcrypt.compare(password, user.password)) && user.isActive) {
       const token = jwt.sign(
         { id: user._id },
         jwt_key,
@@ -65,7 +63,7 @@ export const userLogin = async (req, res) => {
         user
       });
     } else {
-      res.status(401).send('Invalid credentials');
+      res.status(401).send('Invalid credentials or account not activated');
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -88,19 +86,14 @@ export const userLogout = async (req, res) => {
 //__________________________________________הרשמה____________________________________________
 
 
-
 export const userRegister = async (req, res) => {
   try {
     const { username, name, email, password, gender, dateOfBirth, phone } = req.body;
 
     let image = "/maleDefaultImage.jpg"; // Set a default image path
-    if(gender=="male")
-    {
+    if (gender == "male") {
       image = "/maleDefaultImage.jpg";
-    
-    }
-    else if(gender=="female")
-    {
+    } else if (gender == "female") {
       image = "/femaleDefaultImage.jpg";
     }
 
@@ -129,6 +122,20 @@ export const userRegister = async (req, res) => {
       phone: phone,
       image: image,
     });
+
+    // Отправка кода подтверждения на email
+    const confirmationCode = await sendConfirmationCode(email);
+
+    // Установка кода подтверждения и срока действия в базе данных
+    const currentTime = new Date().getTime();
+    const expirationTime = new Date(currentTime + 30 * 60 * 1000); // Срок действия кода: 30 минут
+    await User.findOneAndUpdate(
+      { email: email },
+      {
+        confirmationCode: confirmationCode, // Сохраняем код подтверждения в базе данных
+        confirmationCodeExpiration: expirationTime, // Устанавливаем срок действия кода
+      }
+    );
 
     const token = jwt.sign({ id: user._id, email }, jwt_key, {
       expiresIn: "7 days",
