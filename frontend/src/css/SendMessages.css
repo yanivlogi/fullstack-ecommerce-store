@@ -1,0 +1,123 @@
+/* CSS for chat messages */
+#SendMessages {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Center the chat container horizontally */
+}
+#SendMessages .rounded-border-gradient
+{
+  width: 80%;
+}
+
+#SendMessages .chat-container {
+  max-height: 700px;
+  /* Increase the maximum height of the chat container */
+  overflow-y: auto;
+  width: 100%;
+  /* Make the chat container take 100% of the available width */
+  padding: 20px;
+  /* Increase padding for more space around messages */
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: white;
+}
+
+#SendMessages .chat-message {
+  margin-bottom: 10px;
+  /* Add more spacing between messages */
+  padding: 15px;
+  /* Increase padding for individual messages */
+  border-radius: 12px;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  /* Increase font size of messages */
+}
+
+#SendMessages .author-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  /* Reduce margin-bottom for author information */
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  /* Reduce padding-bottom for author information */
+}
+
+#SendMessages .chat-input {
+  width: 100%;
+  /* Make the input field and button take 100% of the available width */
+  display: flex;
+  align-items: center;
+}
+
+#SendMessages .chat-input input[type="text"] {
+  flex: 1;
+  /* Make the input field grow to take available space */
+  padding: 13px;
+  /* Increase padding for input field */
+  font-size: 16px;
+  /* Increase font size of input field */
+  border: 1px solid #ccc;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+#SendMessages .chat-input button {
+  width: 100px;
+  /* Make the button wider */
+  height: 50px;
+  /* Increase button height */
+  font-size: 16px;
+  /* Increase font size of the button */
+  background-color: #4caf50;
+  color: white;
+  border: 1px solid #ccc;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  cursor: pointer;
+}
+
+#SendMessages .chat-input button:hover {
+  background-color: #b0ecb2;
+}
+
+#SendMessages .chat-message.current-user {
+  background-color: rgba(100, 170, 0, 0.1);
+  
+  /* Set background color for messages from the current user */
+  /* Add any other styles as needed */
+}
+
+#SendMessages .chat-message.other-user {
+  background-color: rgba(0, 114, 135, 0.1);
+  direction: ltr;
+}
+#SendMessages .chat-message.other-user .author-info
+{
+  direction: ltr;
+}
+/* Responsive Styles */
+@media only screen and (min-width: 1200px) {
+  #SendMessages .chat-input button {
+    width: 120px;
+    /* Adjust button width for larger screens */
+  }
+  
+  #SendMessages .chat-input input[type="text"] {
+    padding: 15px;
+    /* Adjust input field padding for larger screens */
+  }
+
+  #SendMessages .chat-message {
+    font-size: 18px;
+    /* Increase font size of messages for larger screens */
+  }
+
+  #SendMessages .author-info {
+    font-size: 16px;
+    /* Increase font size of author info for larger screens */
+  }
+}

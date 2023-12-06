@@ -51,6 +51,13 @@ const postSchema = mongoose.Schema(
       default: false,
       required : false
     },
+    
+    isConfirmed:
+    {
+      type: Boolean,
+      default: false,
+      required : false
+    },
     isAdopted:
     {
       type: Boolean,

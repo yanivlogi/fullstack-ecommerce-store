@@ -10,6 +10,8 @@ const Header = () => {
   const [user, setUser] = useState(null);
   const [image, setImage] = useState(null);
   const [unreadMessageCount, setUnreadMessageCount] = useState(0);
+  const [server_url] = useState(process.env.REACT_APP_SERVER_URL);
+
 
   useEffect(() => {
     changeHeader();
@@ -20,12 +22,12 @@ const Header = () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) return setIsLoggedIn(false); // add check for token existence
-      const response = await axios.get('http://localhost:5000/Header', {
+      const response = await axios.get(`${server_url}/Header`, {
         headers: { Authorization: token },
       });
       console.log(response.data);
       setIsLoggedIn(true);
-      setUser(response.data.data.name);
+      setUser(response.data.data);
       setImage(response.data.data.image);
       // response.data.data contains the user name
     } catch (error) {
@@ -39,7 +41,7 @@ const Header = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      const response = await axios.get('http://localhost:5000/unreadMessageCount', {
+      const response = await axios.get(`${server_url}/unreadMessageCount`, {
         headers: { Authorization: token },
       });
       setUnreadMessageCount(response.data.count);
@@ -68,14 +70,14 @@ const Header = () => {
               className="mr-2 rounded-circle"
               style={{ width: '45px', marginLeft: 'auto', marginRight: 'auto',animation: 'slidein 3s linear 1s infinite alternate' }}
             />
-            <span style={{ fontSize: '20px', fontWeight: 'bold' }}>PetHouse</span>
+            <span style={{ fontSize: '20px', fontWeight: 'bold' , color:'white'}}>PetHouse</span>
           </a>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar-nav" />
         <Navbar.Collapse id="navbar-nav">
           <Nav className="me-auto mb-2 mb-lg-0">
               <Nav.Link href="/AboutUs">עלינו</Nav.Link>
-              <Nav.Link href="/ContactUs">ContactUs</Nav.Link>
+              <Nav.Link href="/ContactUs">צור קשר</Nav.Link>
               <Nav.Link href="/AdoptedPosts">חיות שאומצו</Nav.Link>
               <Nav.Link href="/AllPosts">כל הפוסטים</Nav.Link>
             </Nav>
@@ -88,6 +90,10 @@ const Header = () => {
                 </>
               ) : (
                 <>
+                {user.isAdmin &&(
+                  <Nav.Link href="/WaitingPosts">אישור פוסטים</Nav.Link>
+                )}
+                  
                   <Nav.Link onClick={handleLogout}>התנתק/י</Nav.Link>
                   <Nav.Link href="/Profile">הפרופיל שלי</Nav.Link>
                   <Nav.Link href="/MyPosts">הפוסטים שלי</Nav.Link>
@@ -97,9 +103,9 @@ const Header = () => {
                     )}
                     <span className="large ml">הודעות</span>
                   </Nav.Link>
-                  <Nav.Link disabled>ברוך הבא, {user}</Nav.Link>
+                  <Nav.Link disabled>ברוך הבא ,{user.name}</Nav.Link>
                   <img
-                    src={`http://localhost:5000/${image}`}
+                    src={`${server_url}/${image}`}
                     alt="Logo"
                     className="mr-2 rounded-circle"
                     style={{ width: "45px", borderStyle: 'double', borderColor: 'white' }}

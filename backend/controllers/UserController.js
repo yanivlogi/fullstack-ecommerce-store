@@ -398,3 +398,41 @@ export const updateUserImage = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
+
+
+
+export const deleteUserImage = async (req, res) => {
+  try {
+ 
+    const token = req.headers.authorization;
+    // Verify the token and get the user ID
+    const decoded = jwt.verify(token, jwt_key); // Use your jwt_key here
+
+    if (!decoded || !decoded.id) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    // Find the user by ID
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update the user's profile image based on gender
+    if (user.gender === 'male') {
+      user.image = '/maleDefaultImage.jpg';
+    } else if (user.gender === 'female') {
+      user.image = '/femaleDefaultImage.jpg';
+    }
+
+    // Save the updated user with the new image URL
+    const updatedUser = await user.save();
+
+    // Return a success response
+    res.status(200).json({ data: updatedUser, image: user.image });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};

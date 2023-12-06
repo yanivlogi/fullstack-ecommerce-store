@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import "../css/SendMessages.css"
 
 
 
@@ -8,7 +9,10 @@ const SendMessages = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [user, setUser] = useState(null);
+  const [server_url] = useState(process.env.REACT_APP_SERVER_URL);
+
   const chatContainerRef = useRef(null);
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -18,16 +22,16 @@ const SendMessages = () => {
     markMessagesAsRead(id);
   }, [id]);
 
-  
 
 
- 
+
+
 
   const fetchUser = async () => {
     try {
       const token = localStorage.getItem("token");
       if (token) {
-        const response = await axios.get("http://localhost:5000/Header", {
+        const response = await axios.get(`${server_url}/Header`, {
           headers: { Authorization: token },
         });
         setUser(response.data.data);
@@ -41,27 +45,27 @@ const SendMessages = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
-        `http://localhost:5000/${userId}/markAsRead`,
+        `${server_url}/${userId}/markAsRead`,
         null,
         {
           headers: { Authorization: token },
         }
       );
-  
+
       console.log("Response Status:", response.status);
       console.log("Response Data:", response.data);
     } catch (error) {
       console.error("Error marking messages as read:", error);
     }
   };
-  
-  
-  
+
+
+
 
   const fetchMessages = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`http://localhost:5000/messages/${id}`, {
+      const response = await axios.get(`${server_url}/messages/${id}`, {
         headers: { Authorization: token },
       });
       setMessages(response.data);
@@ -79,7 +83,7 @@ const SendMessages = () => {
           timestamp: new Date().toISOString(),
         };
 
-        await axios.post(`http://localhost:5000/message/${id}`, messageData, {
+        await axios.post(`${server_url}/message/${id}`, messageData, {
           headers: { Authorization: token },
         });
         setNewMessage("");
@@ -91,18 +95,21 @@ const SendMessages = () => {
   };
 
   return (
-    <div>
+    <div id="SendMessages">
       {user ? (
         <div className="rounded-border-gradient">
           <h2 >{messages.length} : הודעות</h2>
 
           <div className="chat-container" ref={chatContainerRef}>
-
             {messages.map((message, index) => (
-              <div key={index} className="chat-message" style={{ direction: 'rtl' }}>
+              <div
+                key={index}
+                className={`chat-message ${message.author.id === user._id ? 'current-user' : 'other-user'}`}
+                style={{ direction: 'rtl' }}
+              >
                 <div className="message-frame">
                   <div className="author-info">
-                    <img className="author-image" src={`http://localhost:5000/${message.author.image}`} alt="Profile" />
+                    <img className="author-image" src={`${server_url}/${message.author.image}`} alt="Profile" />
                     <a href={`/users/${message.author.id}`} className="message-user">{message.author.username}</a>
                   </div>
                   <span className="message-text">{message.message}</span>
@@ -111,11 +118,10 @@ const SendMessages = () => {
               </div>
             ))}
 
-
           </div>
           <div className="chat-input" >
             <input
-            
+
               type="text"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}

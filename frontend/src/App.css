@@ -3,7 +3,17 @@
     height: 4rem; /* adjust the value as needed */
   }
  
+body{
+ 
+  background: url("../src/uploads/background.png")
+ repeat
+  fixed      
+  
+  padding-box           
+  content-box    ;       
+  background-size: 500px, 300px, auto;
 
+}
   
   .custom-file-input {
     color: transparent;
@@ -16,7 +26,7 @@
   .custom-file-label {
     border: 1px solid #ced4da;
     border-radius: 5px;
-    color: #495057;
+    color: #574949;
     cursor: pointer;
     display: inline-block;
     font-weight: 400;
@@ -47,7 +57,7 @@
   }
   
   .custom-file-label:hover {
-    color: #495057;
+    color: #007bf6;
     background-color: #e9ecef;
     border-color: #adb5bd;
   }
@@ -261,11 +271,11 @@
 
 .image-container {
   position: relative;
-  border: double;
-  border-width: 10px;
+  border: solid;
+  border-width: 3px;
   border-radius: 2%;
   
-  color: #b4bdc2;
+  color: #328cf3;
   background-color: #ffffffb0;
 
 
@@ -287,11 +297,11 @@
   border: none;
   background-color: #07528b18;
   color: #131313;
-  font-size: 50px;
+  font-size: 40px;
   font: bold;
   height: 100%;
   cursor: pointer;
-  padding: 3%;
+  padding: 1%;
 }
 
 .image-buttons button:hover {
@@ -352,4 +362,23 @@
 
 .small {
   font-size: 14px;
+}
+
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgb(17, 120, 255);
+  border-radius: 0px;
+  
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(9, 157, 255, 0.661);
+  border-radius: 0px;
+  
+
 }

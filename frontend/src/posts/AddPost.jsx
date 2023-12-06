@@ -9,6 +9,7 @@ import { birdsList } from "../js/birdsList.js";
 import { reptilesList } from "../js/reptilesList.js";
 import { rodentsList } from "../js/rodentsList.js";
 import "../css/imageCss.css";
+import "../css/AddPost.css";
 
 const AddPost = () => {
   const [title, setTitle] = useState("");
@@ -28,6 +29,7 @@ const AddPost = () => {
   const [typeOptions, setTypeOptions] = useState([]);
   const [typeLabel, setTypeLabel] = useState("בחר קודם קטגוריה כדי לבחור סוג");
   const [isDragging, setIsDragging] = useState(false);
+  const [server_url] = useState(process.env.REACT_APP_SERVER_URL);
 
   const navigate = useNavigate();
 
@@ -40,7 +42,7 @@ const AddPost = () => {
     }
   }, []);
 
-  const savePost = async (e) => {
+  const AddPost = async (e) => {
     e.preventDefault();
 
     const userId = localStorage.getItem("token");
@@ -65,7 +67,7 @@ const AddPost = () => {
     });
 
     try {
-      await axios.post("http://localhost:5000/posts", formData);
+      await axios.post(`${server_url}/posts`, formData);
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -128,13 +130,13 @@ const AddPost = () => {
   return (
     <div className="container my-5">
       {isLoggedIn ? (
-        <div className="row">
+        <div className="row" id="add-post-row">
           <div className="col-md-6 mx-auto">
             <div className="card">
               <div className="card-body">
-                <h1 className="card-title text-center mb-4">Add New Post</h1>
-                <form onSubmit={savePost}>
-                  <div className="form-group">
+                <h1 className="card-title text-center mb-4" >הוספת בעל חיים</h1>
+                <form onSubmit={AddPost}>
+                  <div className="form-group" >
                     <label htmlFor="name">שם בעל החייים</label>
                     <input
                       type="text"
@@ -233,7 +235,8 @@ const AddPost = () => {
                     >
                       <option value="false">לא</option>
                       <option value="true">כן</option>
-                      
+
+
                     </select>
                   </div>
 
@@ -262,8 +265,9 @@ const AddPost = () => {
                       className="form-control"
                       id="age"
                       value={age}
-                      onChange={(e) => setAge(e.target.value)}
+                      onChange={(e) => setAge(Math.max(parseFloat(e.target.value), 0.1))}
                       placeholder="Enter age"
+                      step="0.1"
                       required
                     />
                   </div>
@@ -285,9 +289,8 @@ const AddPost = () => {
                       (You can select multiple images)
                     </small>
                     <div
-                      className={`input-group mb-3 ${
-                        isDragging ? "dragging" : ""
-                      }`}
+                      className={`input-group mb-3 ${isDragging ? "dragging" : ""
+                        }`}
                       onDrop={handleDrop}
                       onDragOver={handleDragOver}
                       onDragLeave={handleDragLeave}
@@ -308,8 +311,8 @@ const AddPost = () => {
                           {isDragging
                             ? "Drop image here 🔽"
                             : images.length === 0
-                            ? "Choose file 🖼"
-                            : "Upload more files ➕"}
+                              ? "Choose file 🖼"
+                              : "Upload more files ➕"}
                         </label>
                       </div>
                     </div>

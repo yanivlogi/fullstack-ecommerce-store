@@ -10,6 +10,7 @@ const ChatBox = () => {
   const [user, setUser] = useState(null);
   const chatContainerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [server_url] = useState(process.env.REACT_APP_SERVER_URL);
 
 
   useEffect(() => {
@@ -29,7 +30,7 @@ const ChatBox = () => {
     try {
       const token = localStorage.getItem("token");
       if (token) {
-        const response = await axios.get("http://localhost:5000/Header", {
+        const response = await axios.get(`${server_url}/Header`, {
           headers: { Authorization: token },
         });
         setUser(response.data.data);
@@ -43,7 +44,7 @@ const ChatBox = () => {
 
   const fetchMessages = async () => {
   try {
-    const response = await axios.get("http://localhost:5000/chat");
+    const response = await axios.get(`${server_url}/chat`);
     setMessages(response.data);
     setIsLoading(false); // Set loading state to false after fetching messages
   } catch (error) {
@@ -61,7 +62,7 @@ const ChatBox = () => {
           timestamp: new Date().toISOString(),
         };
 
-        await axios.post("http://localhost:5000/chatbox", messageData, {
+        await axios.post(`${server_url}/chatbox`, messageData, {
           headers: { Authorization: token },
         });
         setNewMessage("");
@@ -92,7 +93,7 @@ const ChatBox = () => {
             <div key={index} className="chat-message" style={{ direction: "rtl" }}>
               <div className="message-frame">
                 <div className="author-info">
-                  <img className="author-image" src={`http://localhost:5000/${message.author.image}`} alt="Profile" />
+                  <img className="author-image" src={`${server_url}/${message.author.image}`} alt="Profile" />
                   <a href={`/users/${message.author.id}`} className="message-user">{message.author.username}</a>
                 </div>
                 <span className="message-text">{message.message}</span>

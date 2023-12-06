@@ -8,13 +8,13 @@ const EditUser = () => {
   const [gender, setGender] = useState("Male");
   const navigate = useNavigate();
   const { id } = useParams();
- 
+  const [server_url] = useState(process.env.REACT_APP_SERVER_URL);
   useEffect(() => {
     getUserById();
   }, []);
  
   const getUserById = async () => {
-    const response = await axios.get(`http://localhost:5000/users/${id}`);
+    const response = await axios.get(`${server_url}/users/${id}`);
     setName(response.data.name);
     setEmail(response.data.email);
     setGender(response.data.gender);
@@ -23,7 +23,7 @@ const EditUser = () => {
   const updateUser = async (e) => {
     e.preventDefault();
     try {
-      await axios.patch(`http://localhost:5000/users/${id}`, {
+      await axios.patch(`${server_url}/users/${id}`, {
         name,
         email,
         gender,

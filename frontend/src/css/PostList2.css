@@ -1,0 +1,189 @@
+.search-form {
+    border: 2px solid #35a9db;
+    padding: 40px;
+    direction: rtl;
+    background-color: #8a8a8a2b;
+    
+  }
+  
+  .search-form .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .search-form .form-group {
+    flex-basis: 0;
+    flex-grow: 1;
+    margin-bottom: 0;
+  }
+  
+  .search-form .form-group .form-label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .search-form .form-group .form-select {
+    width: 100%;
+  }
+  
+  .search-form .form-group .form-control {
+    width: 100%;
+  }
+  
+  .search-form .btn-primary {
+    margin-top: 10px;
+  }
+  .search-row {
+  margin-top: 15px;
+}
+
+.search-col {
+  display: grid;
+  align-items: end;
+  justify-content: baseline;
+  width: 50%;
+ 
+}
+
+.search-col .btn {
+  margin-left: 10px;
+  width: 50%;
+}
+h2{
+color: rgb(0, 167, 209);
+text-align: center;
+
+
+}
+.small-input {
+  width: 100px; /* Adjust the width as needed */
+}
+
+.container .title-text-pets-get-live{
+  text-align: center;
+  color: rgb(255, 255, 255);
+  border: 2px solid rgb(4, 156, 239);
+  border-radius: 20px;
+  text-shadow: rgb(69, 205, 19) 1px 0 10px;
+  
+}
+
+
+
+
+
+
+
+
+
+
+.post-card {
+ 
+  position: relative;
+  cursor: pointer;
+  overflow: hidden; /* Add this line to hide overflowing child elements */
+}
+.darken-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  
+}
+
+.post-card:hover .darken-image {
+  opacity: 1;
+}
+
+.post-details {
+  z-index: 2;
+  text-align: center;
+  padding: 20px;
+  position: relative;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+
+
+.show-more-link {
+  color: white;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Ensure buttons are on top of the image */
+
+
+
+/* Ensure buttons are on top of the image */
+/* Ensure buttons are at the bottom of the image */
+.post-card-image .button-container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  object-fit: cover;
+  z-index: 1; /* Set a higher z-index value to position the buttons above the image */
+}
+
+
+
+.post-card-image .btn {
+  margin: auto; /* Add some margin to create space between the buttons */
+  width: 100%; /* Set the desired width for the buttons */
+}
+
+/* Ensure the image is below the .darken-image div */
+.post-card-image .card-img-top {
+  object-fit: cover;
+  min-height: 400px;
+  max-height: 400px; /* Ensure the image fills the entire height of the card */
+  z-index: 0; /* Set a lower z-index value for the image */
+}
+
+
+
+
+.post-name-age {
+  
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #0d6dfdb7;
+  color: white;
+  padding: 0px;
+  box-sizing: border-box;
+  transition: 0.3s ease;
+  transform: translateY(0%); /* Initially, move it down to hide it */
+  
+  z-index: 2;
+}
+.post-card:hover .post-name-age {
+  transform: translateY(100%);
+  
+}
+
+/* Add this CSS to hide the description when not hovering */
+

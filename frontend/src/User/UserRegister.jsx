@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import "../css/UserRegister.css"
+
 
 const UserRegister = () => {
   const [username, setUsername] = useState("");
@@ -13,6 +15,7 @@ const UserRegister = () => {
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
   const [validationMsg, setValidationMsg] = useState("");
+  const [server_url] = useState(process.env.REACT_APP_SERVER_URL);
   const navigate = useNavigate();
 
   const registerUser = async (e) => {
@@ -43,12 +46,12 @@ const UserRegister = () => {
       formData.append("dateOfBirth", dateOfBirth);
       formData.append("phone", phone);
       formData.append("image", image);
-      await axios.post("http://localhost:5000/users/userRegister", formData, {
+      await axios.post(`${server_url}/users/userRegister`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      navigate("/confirm-registration"); // Перенаправить на страницу подтверждения
+      navigate("/confirm-registration"); 
     } catch (error) {
       if (error.response && error.response.status === 400) {
         if (error.response.data.message.includes("username")) {
@@ -69,12 +72,33 @@ const UserRegister = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row">
-        <div className="col-md-6 mx-auto">
+    <div className="register-container">
+    <div className="form-container">
           <form onSubmit={registerUser}>
-            {error && <div className="alert alert-danger">{error}</div>}
-            {validationMsg && <div className="alert alert-danger">{validationMsg}</div>}
+             {error && <div className="error-message">{error}</div>}
+          {validationMsg && <div className="error-message">{validationMsg}</div>}
+            <div className="form-group">
+              
+              <div className="input-group mb-3" id="image-form">
+                <div className="custom-file">
+                  <input
+                    type="file"
+                    className="custom-file-input-register"
+                    id="image"
+                    onChange={handleImageChange}
+                  />
+                  <label className="custom-file-label" htmlFor="image">
+                    Choose file
+                  </label>
+                </div>
+              </div>
+              {image && (
+                <div className="mt-3">
+                  <p>Preview:</p>
+                  <img src={URL.createObjectURL(image)} alt="Preview" width="200" />
+                </div>
+              )}
+            </div>
             <div className="form-group">
               <label htmlFor="name">Name</label>
               <input
@@ -86,6 +110,7 @@ const UserRegister = () => {
                 placeholder="Name"
               />
             </div>
+            
             <div className="form-group">
               <label htmlFor="username">Username</label>
               <input
@@ -154,28 +179,7 @@ const UserRegister = () => {
                 <option value="female">Female</option>
               </select>
             </div>
-            <div className="form-group">
-              <label htmlFor="image">Image</label>
-              <div className="input-group mb-3">
-                <div className="custom-file">
-                  <input
-                    type="file"
-                    className="custom-file-input"
-                    id="image"
-                    onChange={handleImageChange}
-                  />
-                  <label className="custom-file-label" htmlFor="image">
-                    Choose file
-                  </label>
-                </div>
-              </div>
-              {image && (
-                <div className="mt-3">
-                  <p>Preview:</p>
-                  <img src={URL.createObjectURL(image)} alt="Preview" width="200" />
-                </div>
-              )}
-            </div>
+      
             <div className="form-group">
               <button type="submit" className="btn btn-success">
                 Register
@@ -184,7 +188,7 @@ const UserRegister = () => {
           </form>
         </div>
       </div>
-    </div>
+    
   );
 };
 

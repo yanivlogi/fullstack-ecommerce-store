@@ -21,7 +21,7 @@ import SendMessages from "./components/SendMessages";
 import AllMessages from "./pages/AllMessages";
 
 
-import ContackUs from "./pages/ContacUs"
+import ContactUs from "./components/ContactUs"
 import ConfirmationForm from "./service/ConfirmationForm";
 
 
@@ -34,6 +34,9 @@ import Profile from "./User/MyProfile";
 import EditMyProfile from "./User/EditMyProfile";
 
 
+//admin
+import WaitingPosts from "./adminPanel/WaitingPosts";
+
 
 
 export default function App() {
@@ -43,7 +46,7 @@ export default function App() {
         <Routes>
           <Route index element={<Home />} />
           <Route path="AboutUs" element={<AboutUs />} />
-          <Route path ="ContactUs" element={<ContackUs />} />
+          <Route path ="ContactUs" element={<ContactUs />} />
 
 
           <Route path="Register" element={<UserRegister />} />
@@ -57,6 +60,8 @@ export default function App() {
 
           <Route path="sendMessage/:id" element={<SendMessages />} />
           <Route path="AllMessages" element={<AllMessages />} />
+
+          <Route path="WaitingPosts" element={<WaitingPosts />} />
 
 
           <Route path="posts/:id" element={<Post />} />

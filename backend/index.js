@@ -8,8 +8,9 @@ import CommentRoute from "./routes/CommentRoute.js";
 import MessagesRoute from "./routes/MessagesRoute.js";
 import cookieParser from 'cookie-parser';
 import bodyParser from "body-parser"; 
-import sendMailRouter from "./routes/sendMail.js"; 
+import sendMailRouter from "./routes/SendMailRoute.js"; 
 import confirmationRouter from './routes/confirmation.js';
+import AdminRoute from './routes/AdminRoute.js';
 
 
 
@@ -48,6 +49,7 @@ app.use(ChatBoxRoute);
 app.use(CommentRoute);
 app.use(MessagesRoute);
 app.use(sendMailRouter);
+app.use(AdminRoute);
 
 app.use(confirmationRouter);
 

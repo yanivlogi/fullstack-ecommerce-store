@@ -10,7 +10,83 @@ const jwt_key = process.env.JWT_KEY;
 
 
 //הצגת כל הפוסטים
-export const getPosts = async (req, res) => {
+export const getAllPosts = async (req, res) => {
+  try {
+    const { search, category, gender, location, type, isEducated, isImmune, isCastrated, minAge, maxAge, myPosts } = req.query;
+
+    let query = {};
+
+    query.isConfirmed = true;
+    if (myPosts) {
+
+      const token = myPosts;
+        const decoded = jwt.verify(token, jwt_key);
+        const userId = decoded.id;
+        
+        
+      query.author = userId;
+    }
+
+    if (search) {
+      query.name = { $regex: search, $options: "i" };
+    }
+
+    if (category) {
+      query.category = category;
+    }
+
+    if (gender) {
+      query.gender = gender;
+    }
+
+    if (location) {
+      query.location = location;
+    }
+
+    if (type) {
+      query.type = type;
+    }
+
+    if (isEducated) {
+      query.isEducated = isEducated;
+    }
+
+    if (isImmune) {
+      query.isImmune = isImmune;
+    }
+
+    if (isCastrated) {
+      query.isCastrated = isCastrated;
+    }
+
+
+    if (minAge && maxAge) {
+      const minAgeNumber = parseInt(minAge);
+      const maxAgeNumber = parseInt(maxAge);
+
+      if (minAgeNumber > maxAgeNumber) {
+        return res.status(400).json({ message: "Invalid age range. Minimum age should be less than or equal to maximum age." });
+      }
+
+      // Add age range condition to the query
+      query.age = {
+        $gte: minAgeNumber,
+        $lte: maxAgeNumber
+      };
+    }
+
+    let posts = await Post.find(query);
+
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+
+
+export const getMyPosts = async (req, res) => {
   try {
     const { search, category, gender, location, type, isEducated, isImmune, isCastrated, minAge, maxAge, myPosts } = req.query;
 
@@ -59,6 +135,7 @@ export const getPosts = async (req, res) => {
       query.isCastrated = isCastrated;
     }
 
+
     if (minAge && maxAge) {
       const minAgeNumber = parseInt(minAge);
       const maxAgeNumber = parseInt(maxAge);
@@ -81,6 +158,75 @@ export const getPosts = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+export const adoptedPosts = async (req, res) => {
+  try {
+    const { search, category, gender, location, type, isEducated, isImmune, isCastrated, minAge, maxAge, } = req.query;
+
+    let query = {};
+    query.isAdopted = true;
+    query.isConfirmed = true;
+ 
+    if (search) {
+      query.name = { $regex: search, $options: "i" };
+    }
+
+    if (category) {
+      query.category = category;
+    }
+
+    if (gender) {
+      query.gender = gender;
+    }
+
+    if (location) {
+      query.location = location;
+    }
+
+    if (type) {
+      query.type = type;
+    }
+
+    if (isEducated) {
+      query.isEducated = isEducated;
+    }
+
+    if (isImmune) {
+      query.isImmune = isImmune;
+    }
+
+    if (isCastrated) {
+      query.isCastrated = isCastrated;
+    }
+
+
+    if (minAge && maxAge) {
+      const minAgeNumber = parseInt(minAge);
+      const maxAgeNumber = parseInt(maxAge);
+
+      if (minAgeNumber > maxAgeNumber) {
+        return res.status(400).json({ message: "Invalid age range. Minimum age should be less than or equal to maximum age." });
+      }
+
+      // Add age range condition to the query
+      query.age = {
+        $gte: minAgeNumber,
+        $lte: maxAgeNumber
+      };
+    }
+
+    let posts = await Post.find(query);
+
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+
+
 
   // Server controller
 export const adoptPost = async (req, res) => {
@@ -156,7 +302,18 @@ export const savePost = async (req, res) => {
             author: userId,
             
         });
+        console.log("req.files : ",req.files)
 
+
+        const uploadPromises = req.files.map(file => file.path);
+        const uploadedPaths = await Promise.all(uploadPromises);
+
+        if (uploadedPaths.length > 0) {
+            post.image = uploadedPaths.join(',');
+        } else {
+            post.image = '/defaultImage.png';
+        }
+        
         if(req.files) {
           let path = ''
           req.files.forEach(function(files, index, arr) {
@@ -193,62 +350,82 @@ export const savePost = async (req, res) => {
 
 
 export const updatePost = async (req, res) => {
-    try {
-        let image;
-        if (req.file) {
-            image = req.file.path.replace('uploads\\', "/");
-          }
-        const token = req.body.userId;
-        const postId = req.params.id;
-        
-        console.log("image : ",image)
-        // Find the post by ID
-        const post = await Post.findById(postId);
-        if (!post) {
-            return res.status(404).json({ message: 'Post not found' });
-        }
+  try {
+    const token = req.body.userId;
+    const decoded = jwt.verify(token, jwt_key);
+    const userId = decoded.id;
+    const user = await User.findById(decoded.id);
 
-        const idUserPost = post.author;
-        
-        // Verify the token and get the user ID
-        const decoded = jwt.verify(token, jwt_key);
-        const userId = decoded.id;
-        console.log("userId : " + userId)
-        console.log("idUserPost : " + idUserPost)
 
-        if (idUserPost && idUserPost == userId) {
-       
+    const postById = await Post.findById(req.params.id);
 
-            // Set the update object to all fields except the userId field
-            const updateData = {
-                title: req.body.title,
-                category: req.body.category,
-                gender: req.body.gender,
-                location: req.body.location,
-                type: req.body.type,
-                age: req.body.age,
-                description: req.body.description,
-                name: req.body.name,
-                author: userId,
-                image: image
-
-             };
-            if(!image)
-            {
-                delete updateData.image;
-            }
-            delete updateData.author;
-
-            // Update the post
-            const updatedPost = await Post.findByIdAndUpdate(postId, { $set: updateData });
-            res.status(200).json({ post: updatedPost });
-        } else {
-            res.status(403).json({ message: 'You are not authorized to perform this action' });
-        }
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: 'Server Error' });
+    if (userId != postById.author || !user.isAdmin) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
+   
+
+    console.log("Received files:", req.files);
+    const { title, category, gender, location, type, age, description, name, isImmune, isEducated, isCastrated } = req.body;
+
+    // Get existing post data from the database
+    const existingPost = await Post.findById(req.params.id);
+    if (!existingPost) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+    let remainingImagePaths = existingPost.image.split(',');
+
+    const removedImageIndices = JSON.parse(req.body.removedImageIndices) || [];
+    removedImageIndices.sort((a, b) => b - a); // Sort indices in descending order
+    removedImageIndices.forEach((index) => {
+      if (index >= 0 && index < remainingImagePaths.length) {
+        remainingImagePaths.splice(index, 1);
+      }
+    });
+    let finalImagePaths = remainingImagePaths.join(','); // Join remaining paths
+    // Add new images to the final image paths
+    if (req.files) {
+      const uploadedPaths = req.files.map((file) => file.path);
+      uploadedPaths.forEach((path) => {
+        // Check if the path is not the default image and not in finalImagePaths
+        if (path !== '/defaultImage.png' && !finalImagePaths.includes(path)) {
+          finalImagePaths = finalImagePaths.length > 0 ? `${finalImagePaths},${path}` : path;
+        }
+      });
+    }
+
+    // If there are no images at all, set the image to the default image path
+    if (!finalImagePaths) {
+      finalImagePaths = '/defaultImage.png';
+    } else {
+      // Remove the default image if present among the images
+      finalImagePaths = finalImagePaths.replace('/defaultImage.png,', '');
+    }
+
+    // Update the post with new data and appended images
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.id,
+      {
+        title,
+        category,
+        gender,
+        location,
+        type,
+        age,
+        description,
+        name,
+        isImmune,
+        isEducated,
+        isCastrated,
+        image: finalImagePaths, // Update the image field with finalImagePaths
+      },
+      { new: true }
+    );
+
+    res.status(200).json({ post: updatedPost });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
 };
 
  
@@ -259,9 +436,10 @@ export const deletePost = async (req, res) => {
     const postId = req.params.id;
     const token = req.headers.authorization; // Retrieve the entire Authorization header
     const decoded = jwt.verify(token, jwt_key);
+    const user = await User.findById(decoded.id);
 
     const post = await Post.findById(postId);
-    if (post.author.toString() == decoded.id) {
+    if (post.author.toString() == decoded.id || user.isAdmin ) {
       await Post.findByIdAndDelete(postId);
       return res.status(200).json({ message: 'Post deleted' });
     }
@@ -303,3 +481,12 @@ export const somePosts = async (req, res) => {
   }
 
 
+  export const deleteImage = async (req, res) => {
+    try {
+      const posts = await Post.find().limit(6); // Retrieve only the top 5 posts
+      
+      return res.json(posts);
+    } catch (error) {
+      return res.status(401).send('Unauthorized');
+    }
+  };

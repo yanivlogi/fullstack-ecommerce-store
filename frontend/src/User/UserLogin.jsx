@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Alert, Button, Form } from "react-bootstrap";
-
+import { Alert, Button, Form, Container, Row, Col } from "react-bootstrap";
+import "../css/UserLogin.css"
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
-  const [isActivated, setIsActivated] = useState(false); // Добавляем состояние для статуса активации
+  const [isActivated, setIsActivated] = useState(false);
+  const [server_url] = useState(process.env.REACT_APP_SERVER_URL);
   const navigate = useNavigate();
 
   const handleLoginFormSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/users/userLogin", {
+      const response = await axios.post(`${server_url}/users/userLogin`, {
         username,
         password,
       });
@@ -23,7 +24,7 @@ const Login = () => {
       if (response.status === 200) {
         const token = response.data.token;
         const name = response.data.user.name;
-        const isActive = response.data.user.isActive; // Получаем статус активации
+        const isActive = response.data.user.isActive;
         localStorage.setItem("token", token);
         localStorage.setItem("name", name);
         setUsername("");
@@ -32,7 +33,7 @@ const Login = () => {
         setLoggedIn(true);
 
         if (!isActive) {
-          // Если пользователь не активирован, перенаправляем на страницу активации
+        
           navigate("/activate");
         } else {
           navigate("/");
@@ -52,13 +53,13 @@ const Login = () => {
       navigate("/userLogin");
     } else {
       try {
-        const response = await axios.post("http://localhost:5000/users/checkIfLoggedIn", {
+        const response = await axios.post(`${server_url}/users/checkIfLoggedIn`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.status === 200) {
           const user = response.data;
           setUsername(user.username);
-          setIsActivated(user.isActive); // Устанавливаем статус активации
+          setIsActivated(user.isActive); 
           setLoggedIn(true);
         } else {
           navigate("/");
@@ -74,28 +75,42 @@ const Login = () => {
   }, []);
 
   return (
-    <div className="container">
-      <h1>Login Page</h1>
-      <Form onSubmit={handleLoginFormSubmit}>
-        <Form.Group controlId="formBasicUsername">
-          <Form.Label>Username:</Form.Label>
-          <Form.Control type="text" placeholder="Enter username" value={username} onChange={(event) => setUsername(event.target.value)} />
-        </Form.Group>
+    <div className="login-container">
+      <div className="form-container">
+        <h1 className="text-center mb-4">התחברות</h1>
+        <form onSubmit={handleLoginFormSubmit}>
+          <div className="form-group">
+            <label>שם משתמש</label>
+            <input
+              type="text"
+              placeholder="Enter username"
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+            />
+          </div>
 
-        <Form.Group controlId="formBasicPassword">
-          <Form.Label>Password:</Form.Label>
-          <Form.Control type="password" placeholder="Enter password" value={password} onChange={(event) => setPassword(event.target.value)} />
-        </Form.Group>
+          <div className="form-group">
+            <label>סיסמה</label>
+            <input
+              type="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </div>
 
-        <Button variant="primary" type="submit">
-          Login
-        </Button>
-      </Form>
+          <button type="submit" className="login-button">
+            Login
+          </button>
+        </form>
 
-      {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+        {errorMessage && <p className="error-message mt-3">{errorMessage}</p>}
 
-      {loggedIn && isActivated && <p>You are logged in.</p>} {/* Проверяем, активирован ли пользователь */}
-      {loggedIn && !isActivated && <p>Your account is not activated. Please check your email.</p>}
+        {loggedIn && isActivated && <p className="success-message mt-3">You are logged in.</p>}
+        {loggedIn && !isActivated && (
+          <p className="error-message mt-3">Your account is not activated. Please check your email.</p>
+        )}
+      </div>
     </div>
   );
 };

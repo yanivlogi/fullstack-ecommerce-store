@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import developerImage from '../uploads/developerImage.png';
 
 const AboutUs = () => {
   return (
@@ -15,7 +16,7 @@ const AboutUs = () => {
       <Row>
         <Col md={6}>
           <Card>
-            <Card.Img variant="top" src="https://www.seekpng.com/png/full/202-2024994_profile-icon-profile-logo-no-background.png" />
+            <Card.Img variant="top" src={developerImage} />
             <Card.Body>
               <Card.Title>Viktor Brusilovsky</Card.Title>
               <Card.Text>
@@ -26,7 +27,7 @@ const AboutUs = () => {
         </Col>
         <Col md={6}>
           <Card>
-            <Card.Img variant="top" src="https://www.seekpng.com/png/full/202-2024994_profile-icon-profile-logo-no-background.png" />
+            <Card.Img variant="top" src={developerImage} />
             <Card.Body>
               <Card.Title>Yaniv Logi</Card.Title>
               <Card.Text>

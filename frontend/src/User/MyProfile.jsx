@@ -7,8 +7,7 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import "../css/MyProfile.css";
 
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
-const IMAGE_BASE_URL = process.env.IMAGE_BASE_URL || 'http://localhost:5000';
+
 
 const Profile = () => {
   const [isPasswordConfirmed, setIsPasswordConfirmed] = useState(false);
@@ -24,7 +23,7 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [verifyPassword, setVerifyPassword] = useState(''); // Add this line
-
+  const [server_url] = useState(process.env.REACT_APP_SERVER_URL);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -42,7 +41,7 @@ const Profile = () => {
     const getUserProfile = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${API_BASE_URL}/userProfile`, {
+        const response = await axios.get(`${server_url}/userProfile`, {
           headers: { Authorization: token },
         });
         setUser(response.data.data);
@@ -116,7 +115,7 @@ const Profile = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `${API_BASE_URL}/verifyPassword`,
+        `${server_url}/verifyPassword`,
         {
           "password": password,
           "token": token
@@ -138,7 +137,8 @@ const Profile = () => {
 
   const handleSave = async (e) => {
     e.preventDefault();
-
+    const confirmation = window.confirm('Are you sure you want to save the changes?');
+    if (confirmation) {
     const token = localStorage.getItem('token');
     const config = {
       headers: {
@@ -160,18 +160,18 @@ const Profile = () => {
 
       // Create an object with the data to send to the server
       const requestData = {
-        name:formData.name,
-        email:formData.email,
-        gender:formData.gender,
-        dateOfBirth:formData.dateOfBirth,
-        phone:formData.phone,
+        name: formData.name,
+        email: formData.email,
+        gender: formData.gender,
+        dateOfBirth: formData.dateOfBirth,
+        phone: formData.phone,
         newPassword: newPassword,
         verifyPassword: verifyPassword,
         token: token,
       };
 
       // Use axios to send the requestData object with the Authorization header
-      const response = await axios.put(`${API_BASE_URL}/updateMyProfile`, requestData, config);
+      const response = await axios.put(`${server_url}/updateMyProfile`, requestData, config);
 
       if (response.status === 200) {
         console.log("User data updated successfully.");
@@ -185,13 +185,26 @@ const Profile = () => {
     } catch (error) {
       console.error(error);
       // Handle other client-side errors, if any
+    }}
+    else {
+      // Handle cancel action (optional)
+      console.log('Save changes cancelled.');
     }
   };
-  
+
 
   const handleCancel = () => {
-    setEditMode(false);
-    setFormData(user);
+    const confirmation = window.confirm('Are you sure you want to cancel the changes?');
+  
+    if (confirmation) {
+      // Reset form data or navigate away, etc. (whatever cancel action you want)
+      setEditMode(false);
+      setFormData(user);
+      console.log('Changes cancelled.');
+    } else {
+      // Handle cancel action (optional)
+      console.log('Cancel action cancelled.');
+    }
   };
 
   const handleLogout = () => {
@@ -228,6 +241,9 @@ const Profile = () => {
   };
 
   const handleSaveNewImage = async () => {
+    const confirmation = window.confirm('Are you sure you want to save the new image?');
+    if (confirmation) {
+
     try {
       const token = localStorage.getItem('token');
       const formData = new FormData();
@@ -243,7 +259,7 @@ const Profile = () => {
       formData.append('token', token);
 
       const response = await axios.put(
-        `${API_BASE_URL}/userProfile/image`,
+        `${server_url}/userProfile/image`,
         formData,
         {
           headers: {
@@ -258,6 +274,10 @@ const Profile = () => {
     } catch (error) {
       console.error(error);
     }
+  } else {
+    // Handle cancel action (optional)
+    console.log('Image upload cancelled.');
+  }
   };
 
   const showFullSizeImage = (imageUrl) => {
@@ -265,30 +285,42 @@ const Profile = () => {
     setShowImageModal(true);
   };
 
+
+
   const handleDeleteImage = async () => {
+    const confirmation = window.confirm('Are you sure you want to delete the image?');
+    if (confirmation) {
     try {
+
       const token = localStorage.getItem('token');
+  
       const response = await axios.delete(
-        'http://localhost:5000/userProfile/image',
+        `${server_url}/userProfile/deleteUserImage`,
         {
           headers: {
             Authorization: token,
           },
         }
       );
+  
       setUser(response.data.data);
       setShowOptions(false);
     } catch (error) {
       console.error(error);
     }
+  } else {
+    // Handle cancel action (optional)
+    console.log('Image deletion cancelled.');
+  }
   };
+  
 
 
   return (
     <Container>
       {user ? (
         <Card className="p-3 mb-3" style={{ marginTop: "20px" }}>
-          <h1 className="text-center mt-4 mb-4">{user.username}</h1>
+          <h1 className="text-center mt-4 mb-4">הפרופיל שלי</h1>
           {editMode && isPasswordConfirmed ? (
             <Form>
               <Form.Group controlId="name">
@@ -343,23 +375,23 @@ const Profile = () => {
 
 
               <Form.Group controlId="password">
-  <Form.Label>New Password</Form.Label>
-  <Form.Control
-    type="password" // Change the type to password for secure input
-    name="newPassword"
-    value={newPassword}
-    onChange={(e) => setNewPassword(e.target.value)} // Update the state when the input changes
-  />
-</Form.Group>
-<Form.Group controlId="verifyPassword">
-  <Form.Label>Verify Password</Form.Label>
-  <Form.Control
-    type="password" // Change the type to password for secure input
-    name="verifyPassword"
-    value={verifyPassword}
-    onChange={(e) => setVerifyPassword(e.target.value)} // Update the state when the input changes
-  />
-</Form.Group>
+                <Form.Label>New Password</Form.Label>
+                <Form.Control
+                  type="password" // Change the type to password for secure input
+                  name="newPassword"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)} // Update the state when the input changes
+                />
+              </Form.Group>
+              <Form.Group controlId="verifyPassword">
+                <Form.Label>Verify Password</Form.Label>
+                <Form.Control
+                  type="password" // Change the type to password for secure input
+                  name="verifyPassword"
+                  value={verifyPassword}
+                  onChange={(e) => setVerifyPassword(e.target.value)} // Update the state when the input changes
+                />
+              </Form.Group>
 
               <Button variant="primary" onClick={handleSave} className="mr-2">
                 Save
@@ -373,12 +405,12 @@ const Profile = () => {
 
 
               <div className="profile-image-container text-center">
-                <div className="image-frame" onClick={() => openFullSizeModal(`${API_BASE_URL}/${user.image}`)}>
+                <div className="image-frame" onClick={() => openFullSizeModal(`${server_url}/${user.image}`)}>
                   <div className="rounded-circle d-inline-block position-relative">
                     {newImage ? (
                       <Image src={newImage} alt="User Image" className="profile-image-inner" />
                     ) : (
-                      <Image src={`${API_BASE_URL}/${user.image}`} alt="User Image" className="profile-image-inner" />
+                      <Image src={`${server_url}/${user.image}`} alt="User Image" className="profile-image-inner" />
                     )}
                     {/* Add an options menu */}
                     <div
@@ -388,7 +420,6 @@ const Profile = () => {
                       <ul>
                         <li onClick={() => { handleUploadImage(); setShowOptions(false); }}>Upload Image</li>
                         <li onClick={() => { handleDeleteImage(); setShowOptions(false); }}>Remove Image</li>
-                        <li onClick={() => { showFullSizeImage(`${API_BASE_URL}/${user.image}`); setShowOptions(false); }}>Full Size</li>
                       </ul>
                     </div>
                     {/* Edit button */}

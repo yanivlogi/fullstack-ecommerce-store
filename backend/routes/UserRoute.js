@@ -13,7 +13,8 @@ import {
     Header,
     verifyPassword,
     getUnreadMessageCount,
-    updateUserImage
+    updateUserImage,
+    deleteUserImage
     //
     
 } from "../controllers/UserController.js";
@@ -35,6 +36,7 @@ router.get('/userprofile', getMyProfile );
 router.put('/updateMyProfile', updateMyProfile );
 router.post('/users/userRegister', upload.single('image'), userRegister);
 router.put('/userProfile/image', upload.single('image'), updateUserImage);
+router.delete('/userProfile/deleteUserImage', deleteUserImage);
 
 router.post('/verifyPassword', verifyPassword);
 router.post('/users/userLogin', userLogin);

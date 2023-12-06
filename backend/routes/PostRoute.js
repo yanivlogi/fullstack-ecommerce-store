@@ -1,16 +1,17 @@
 import express from "express"; 
-//import upload from '../upload.js'
 import upload from '../upload.js'
 
 
 import {
-    getPosts, 
+    getAllPosts, 
+    getMyPosts,
     getPostById,
     savePost,
     updatePost,
     deletePost,
     somePosts,
-    adoptPost
+    adoptPost,
+    adoptedPosts
      
     
    
@@ -21,12 +22,14 @@ import {
 
 
 
-router.get('/posts', getPosts);
+router.get('/posts', getAllPosts);
+router.get('/adoptedPosts', adoptedPosts);
+router.get('/getMyPosts', getMyPosts);
 router.get('/somePosts', somePosts);
 router.get('/posts/:id', getPostById);
 router.post(`/posts/:id/adopt`, adoptPost);
 router.post('/posts', upload.array('image[]',10),savePost);
-router.put('/posts/:id' ,  upload.single('image'),updatePost);
+router.put('/posts/:id' , upload.array('image[]',10),updatePost);
 router.delete('/posts/:id', deletePost);
 
 

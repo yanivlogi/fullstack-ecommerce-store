@@ -15,7 +15,7 @@ const Post = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [updatedCommentContent, setUpdatedCommentContent] = useState("");
-
+  const [server_url] = useState(process.env.REACT_APP_SERVER_URL);
 
 
 
@@ -35,7 +35,7 @@ const Post = () => {
 
   const getPost = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/posts/${id}`);
+      const response = await axios.get(`${server_url}/posts/${id}`);
       const postData = response.data;
 
       // Splitting the image paths into an array and replacing backslashes with forward slashes
@@ -73,7 +73,7 @@ const Post = () => {
         },
       };
       await axios.put(
-        `http://localhost:5000/comment/${commentId}`,
+        `${server_url}/comment/${commentId}`,
         {
           content: updatedCommentContent,
         },
@@ -94,7 +94,7 @@ const Post = () => {
           Authorization: token,
         },
       };
-      await axios.delete(`http://localhost:5000/comment/${commentId}`, config);
+      await axios.delete(`${server_url}/comment/${commentId}`, config);
       getComments(); // Refresh the comments after deletion
     } catch (error) {
       console.log(error);
@@ -112,7 +112,7 @@ const Post = () => {
           Authorization: token,
         },
       };
-      await axios.delete(`http://localhost:5000/posts/${id}`, config);
+      await axios.delete(`${server_url}/posts/${id}`, config);
       navigate('/posts')
     } catch (error) {
       console.log(error);
@@ -143,7 +143,7 @@ const Post = () => {
   const getComments = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/posts/${id}/comments`
+        `${server_url}/posts/${id}/comments`
       );
       setComments(response.data);
     } catch (error) {
@@ -164,7 +164,7 @@ const Post = () => {
     const userId = localStorage.getItem("token");
 
     try {
-      const response = await axios.post(`http://localhost:5000/comment/${id}`, {
+      const response = await axios.post(`${server_url}/comment/${id}`, {
         content: content,
         userId: userId,
       });
@@ -181,14 +181,14 @@ const Post = () => {
         <div className="col-md-8">
           {post ? (
             <>
-                  <h2>{post.name}</h2>
               <div className="card post-card">
+                <h2 style={{ padding: '20px' }}>{post.name}</h2>
                 <div className="card-body">
                   <div className="post-header" style={{ direction: 'rtl' }}>
-                    
+
                     <table className="table">
                       <tbody>
-                        
+
                         <tr>
                           <td>קטגוריה</td>
                           <td>
@@ -229,16 +229,28 @@ const Post = () => {
                         </tr>
                         <tr>
                           <td>קצת על בעל החיים</td>
-                          <td>{post.description}</td>
+                          <td style={{ maxWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "normal" }}>
+                            {post.description}
+                          </td>
                         </tr>
+
                         <tr>
                           <td>מעלה הפוסט</td>
                           <td>
                             <a href={`/users/${post.author.id}`} className="post-field-value">
                               {post.author.username}
-                              <img style={{ height: "50px", width: "50px", borderRadius: "50%", padding: '5px' }} src={`http://localhost:5000/${post.author.image}`} alt="" />
+                              <img style={{ height: "50px", width: "50px", borderRadius: "50%", padding: '5px' }} src={`${server_url}/${post.author.image}`} alt="" />
                             </a>
+                            <Link to={`/sendmessage/${post.author.id}`}>
+                              <button>
+                                שלח הודעה📩
+                              </button>
+                            </Link>
                           </td>
+
+                        </tr>
+                        <tr>
+
                         </tr>
                       </tbody>
                     </table>
@@ -246,7 +258,7 @@ const Post = () => {
                   <div className="post-image-container">
                     <div className="image-container">
                       <img
-                        src={`http://localhost:5000/${post.image[currentImageIndex]}`}
+                        src={`${server_url}/${post.image[currentImageIndex]}`}
                         alt=""
                         className="post-image"
                       />
@@ -260,7 +272,7 @@ const Post = () => {
                       </div>
                     </div>
                   </div>
-                  {decoded && decoded.id && post.author.id === decoded.id && (
+                  {decoded && decoded.id && post.author.id === decoded.id && !post.isAdopted && (
                     <div className="post-actions">
                       <Link to={`/edit/${id}`} className="btn btn-info mr-2">
                         Edit
@@ -268,6 +280,7 @@ const Post = () => {
                       <button onClick={deletePost} className="btn btn-danger">Delete</button>
                     </div>
                   )}
+
 
                   <div className="comment-section">
                     <h2 className="mt-5">Comments: {comments.length}</h2>
@@ -308,17 +321,17 @@ const Post = () => {
                           <div key={comment._id} className="comment">
                             <div className="comment-header">
                               <Link
-                                to={`http://localhost:3000/users/${comment.author.id}`}
+                                to={`/users/${comment.author.id}`}
                               >
                                 <img
-                                  src={`http://localhost:5000${comment.author.image}`}
+                                  src={`${server_url}${comment.author.image}`}
                                   alt=""
                                   className="comment-author-img"
                                 />
                               </Link>
                               <div className="comment-author-details">
                                 <Link
-                                  to={`http://localhost:3000/users/${comment.author.id}`}
+                                  to={`/users/${comment.author.id}`}
                                 >
                                   <p className="comment-author-username">
                                     {comment.author.username}
@@ -378,7 +391,6 @@ const Post = () => {
                                     </button>
                                   </>
                                 )}
-
                               </div>
                             )}
                           </div>

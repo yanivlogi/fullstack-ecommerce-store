@@ -58,6 +58,10 @@ const UserSchema = new mongoose.Schema({
     default: false, 
   },
   
+  isNumberShow: {
+    type: Boolean,
+    default: false, 
+  },
 
 },
 { timestamps: true });
