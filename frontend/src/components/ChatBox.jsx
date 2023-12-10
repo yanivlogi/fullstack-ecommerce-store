@@ -75,6 +75,7 @@ const ChatBox = () => {
 
   return (
     <div style={{ backgroundColor: 'white', border: 'thick double #32a1ce' }}>
+<h2>🗨 צ'אט</h2>
 
       {isLoading  ? (
           <div className="px-3">
@@ -85,8 +86,7 @@ const ChatBox = () => {
         </div>)
       : user ? (
         <div className="all-chatBox">
-        <h2>🗨 צ'אט</h2>
-
+        
         <div className="chat-container" ref={chatContainerRef}>
 
           {messages.map((message, index) => (
@@ -117,18 +117,13 @@ const ChatBox = () => {
       
        
       ) : (
-        <div>
-        
-        <p>
-          you should login to watch the chat...  
-            <Link to="/userLogin" className="btn-primary">
-                login
-              </Link>
-        </p>
-        
-
+        <div style={{ direction: "rtl", color: "#555", marginBottom: "10px", fontSize: "14px", textAlign: "center" }}>
+        <p style={{ marginBottom: "10px" }}>גישה למשתמשים רשומים בלבד</p>
+        <div style={{ margin: "5px" }}>
+          <Link to={"/userLogin"} className="btn btn-primary" style={{ marginRight: "5px", margin: "5px" }}>התחברות</Link>
+          <Link to={"/register"} className="btn btn-primary" style={{ margin: "5px" }}>הרשמה</Link>
         </div>
-          
+      </div>
        
 
       )}

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams , Link} from 'react-router-dom';
 import { Container, Card, Button, Form, Modal } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLock, faGlobe, faEnvelope , faPhone , faCakeCandles } from '@fortawesome/free-solid-svg-icons';
+
 import "../css/UserProfile.css"
 
 const UserProfile = () => {
@@ -64,7 +67,7 @@ const UserProfile = () => {
        <Container className="user-profile-container">
     <Card className="user-profile-card">
       <Card.Body className="user-profile-card-body">
-        <Card.Title className="user-profile-card-title">User Profile</Card.Title>
+        <Card.Title className="user-profile-card-title">{user.username}</Card.Title>
         <div className="user-profile-image-container" onClick={handleImageClick}>
           <div className="user-profile-image-overlay"></div>
           <img src={`${server_url}${user.image}`} alt="Profile" className="user-profile-card-img" />
@@ -72,20 +75,74 @@ const UserProfile = () => {
         <table className="user-profile-table">
             <tbody>
               <tr>
-                <td><strong>Name:</strong></td>
-                <td>{user.name}</td>
+                <td style={{textAlign:'center'}}>{user.name}</td>
+                <td><strong> : שם </strong></td>
               </tr>
               <tr>
-                <td><strong>Phone:</strong></td>
-                <td>{user.phone}</td>
-              </tr>
+              <td>
+  {user.phone ? (
+    <>
+      {user.isNumberShow ? (
+        <span className="public-phone">
+          <FontAwesomeIcon icon={faPhone} />&nbsp;
+           {user.phone}
+        </span>
+      ) : (
+        <span className="private-phone">
+          <FontAwesomeIcon icon={faLock} />&nbsp;
+          מספר פרטי
+        </span>
+      )}
+    </>
+  ) : (
+    'N/A'
+  )}
+</td>
+
+        <td><strong> : פלאפון</strong></td>
+      </tr>
               <tr>
-                <td><strong>Email:</strong></td>
-                <td>{user.email}</td>
-              </tr>
+               
+                <td>
+  {user.email ? (
+    <>
+      {user.isEmailShow ? (
+        <span className="public-phone">
+          <FontAwesomeIcon icon={faEnvelope} />&nbsp;
+            {user.email}
+        </span>
+      ) : (
+        <span className="private-phone">
+          <FontAwesomeIcon icon={faLock} />&nbsp;
+          דוא"ל פרטי
+        </span>
+      )}
+    </>
+  ) : (
+    'N/A'
+  )}
+</td>         
+<td><strong> : אימייל</strong></td>     
+</tr>
               <tr>
-                <td><strong>Date of Birth:</strong></td>
-                <td>{formatDate(user.dateOfBirth)}</td>
+              
+                <td>
+  {user.dateOfBirth ? (
+    <>
+      {user.isBirthDateShow ? (
+        <span className="public-phone">  <FontAwesomeIcon icon={faCakeCandles} />&nbsp; {formatDate(user.dateOfBirth)}</span>
+      ) : (
+        <span className="private-phone">
+          <FontAwesomeIcon icon={faLock} />&nbsp;
+          תאריך לידה פרטי
+        </span>
+      )}
+    </>
+  ) : (
+    'N/A'
+  )}
+</td>
+<td><strong> : תאריך לידה</strong></td>
               </tr>
             </tbody>
           </table>

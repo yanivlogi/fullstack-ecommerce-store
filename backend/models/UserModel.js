@@ -60,7 +60,15 @@ const UserSchema = new mongoose.Schema({
   
   isNumberShow: {
     type: Boolean,
-    default: false, 
+    default: true, 
+  },
+  isEmailShow: {
+    type: Boolean,
+    default: true, 
+  },
+  isBirthDateShow: {
+    type: Boolean,
+    default: true, 
   },
 
 },

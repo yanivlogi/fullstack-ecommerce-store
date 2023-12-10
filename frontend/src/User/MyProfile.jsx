@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Card, Button, Form, Table, Image, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faLock, faGlobe } from '@fortawesome/free-solid-svg-icons';
+
 import "../css/MyProfile.css";
 
 
@@ -32,6 +34,9 @@ const Profile = () => {
     phone: '',
     password: '',
     verifyPassword: '',
+    isNumberShow:'',
+    isEmailShow:'',
+    isBirthDateShow:'',
     image: ''
   });
 
@@ -165,6 +170,9 @@ const Profile = () => {
         gender: formData.gender,
         dateOfBirth: formData.dateOfBirth,
         phone: formData.phone,
+        isNumberShow:formData.isNumberShow,
+        isEmailShow:formData.isEmailShow,
+        isBirthDateShow:formData.isBirthDateShow,
         newPassword: newPassword,
         verifyPassword: verifyPassword,
         token: token,
@@ -213,10 +221,12 @@ const Profile = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
+    const updatedValue = type === 'checkbox' ? checked : value;
+
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: value,
+      [name]: updatedValue,
     }));
   };
 
@@ -285,6 +295,11 @@ const Profile = () => {
     setShowImageModal(true);
   };
 
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+    const formattedDate = new Date(dateString).toLocaleDateString(undefined, options);
+    return formattedDate;
+  };
 
 
   const handleDeleteImage = async () => {
@@ -320,7 +335,7 @@ const Profile = () => {
     <Container>
       {user ? (
         <Card className="p-3 mb-3" style={{ marginTop: "20px" }}>
-          <h1 className="text-center mt-4 mb-4">הפרופיל שלי</h1>
+          <h1 className="text-center mt-4 mb-4" style={{color:'#0d6efd'}}>פרופיל אישי - {user.name}</h1>
           {editMode && isPasswordConfirmed ? (
             <Form>
               <Form.Group controlId="name">
@@ -341,6 +356,15 @@ const Profile = () => {
                   onChange={handleChange}
                 />
               </Form.Group>
+              <Form.Group controlId="isEmailShow">
+  <Form.Check
+    type="checkbox"
+    label="הצג כתובת אימייל"
+    name="isEmailShow"
+    checked={formData.isEmailShow}
+    onChange={handleChange}
+  />
+</Form.Group>
               <Form.Group controlId="gender">
                 <Form.Label>Gender</Form.Label>
                 <Form.Control
@@ -353,6 +377,8 @@ const Profile = () => {
                   <option value="female">Female</option>
                 </Form.Control>
               </Form.Group>
+ 
+
               <Form.Group controlId="dateOfBirth">
                 <Form.Label>Date of Birth</Form.Label>
                 <Form.Control
@@ -362,6 +388,15 @@ const Profile = () => {
                   onChange={handleChange}
                 />
               </Form.Group>
+              <Form.Group controlId="isBirthDateShow">
+  <Form.Check
+    type="checkbox"
+    label="הצג תאריך לידה"
+    name="isBirthDateShow"
+    checked={formData.isBirthDateShow}
+    onChange={handleChange}
+  />
+</Form.Group>
               <Form.Group controlId="phone">
                 <Form.Label>Phone</Form.Label>
                 <Form.Control
@@ -371,7 +406,15 @@ const Profile = () => {
                   onChange={handleChange}
                 />
               </Form.Group>
-
+              <Form.Group controlId="isNumberShow">
+  <Form.Check
+    type="checkbox"
+    label="הצג מספר פלאפון"
+    name="isNumberShow"
+    checked={formData.isNumberShow}
+    onChange={handleChange}
+  />
+</Form.Group>
 
 
               <Form.Group controlId="password">
@@ -486,14 +529,31 @@ const Profile = () => {
                       <td>מין</td>
                     </tr>
                     <tr>
-                      <td>{user.dateOfBirth || 'N/A'}</td>
+                    <td>{formatDate(user.dateOfBirth)}</td>
+
                       <td>תאריך לידה</td>
                     </tr>
                     <tr>
-                      <td>{user.phone || 'N/A'}</td>
-                      <td>פלאפון</td>
-                    </tr>
-
+        <td>
+          {user.phone ? (
+            <>
+              {user.phone}{' '}
+              {user.isNumberShow ? (
+                <span style={{ color: 'green' }}>
+                  <FontAwesomeIcon icon={faGlobe} /> מספר ציבורי
+                </span>
+              ) : (
+                <span style={{ color: 'red' }}>
+                  <FontAwesomeIcon icon={faLock} /> מספר פרטי
+                </span>
+              )}
+            </>
+          ) : (
+            'N/A'
+          )}
+        </td>
+        <td>פלאפון</td>
+      </tr>
                   </tbody>
                 </Table>
               </div>

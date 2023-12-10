@@ -23,7 +23,9 @@ export const getWaitingPosts = async (req, res) => {
     res.json(posts);
   } catch (error) {
     res.status(500).json({ message: error.message });
-  }
+  }  
+
+  //asdasda
 };
 
 

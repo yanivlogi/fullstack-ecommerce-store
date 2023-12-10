@@ -48,14 +48,14 @@
 }
 
 .user-profile-link {
-    border-radius: 1%;
+  
   font-size: 20px;
   text-decoration: none;
   color: #007bff;
   font-weight: bold;
   transition: all 0.3s ease;
   border-style: solid;
-  padding: 5px;
+  padding: 10px;
   background-color:#0095ffa0 ;
 
 }
@@ -127,3 +127,36 @@
 
   }
   
+
+
+
+
+  /* Add these styles to your CSS file or style section */
+
+/* Style for public phone number */
+.public-phone {
+  color: #28a745; /* Green color */
+  display: flex;
+  align-items: center;
+
+
+}
+
+/* Style for private phone number button */
+.private-phone {
+  color: #dc3545; /* Red color */
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.private-phone:focus {
+  outline: none;
+}
+
+/* Add margin between icon and text */
+.private-phone svg {
+  margin-right: 5px;
+}

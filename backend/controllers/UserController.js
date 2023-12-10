@@ -336,6 +336,9 @@ export const updateMyProfile = async (req, res) => {
       email: req.body.email,
       gender: req.body.gender,
       phone: req.body.phone,
+      isNumberShow: req.body.isNumberShow,
+      isEmailShow: req.body.isEmailShow,
+      isBirthDateShow: req.body.isBirthDateShow,
       dateOfBirth:req.body.dateOfBirth,
       password: hashedPassword, // Use the hashed password
     };
