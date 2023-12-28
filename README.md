@@ -6,4 +6,4 @@ to run the server :
 
 to run the client :
   - cd frontend
-  - npm start
+  - ($env:REACT_APP_SERVER_URL = "http://localhost:5000") -and (npm start)
