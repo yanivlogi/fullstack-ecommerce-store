@@ -3,13 +3,6 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { Card, Button, Col, Row, Form, Container } from "react-bootstrap";
-import { cities } from "../js/cities.js";
-import { dogsList } from "../js/dogsList.js";
-import { catsList } from "../js/catsList.js";
-import { petsList } from "../js/petsList.js";
-import { birdsList } from "../js/birdsList.js";
-import { reptilesList } from "../js/reptilesList.js";
-import { rodentsList } from "../js/rodentsList.js";
 import "../css/MyPosts.css";
 
 
@@ -18,23 +11,8 @@ import "../css/MyPosts.css";
 const AdoptedPost = () => {
   const [posts, setPosts] = useState([]);
   const [decoded, setDecoded] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedGender, setSelectedGender] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState("");
-  const [typeOptions, setTypeOptions] = useState([]);
-  const [typeLabel, setTypeLabel] = useState("בחר קודם קטגוריה כדי לבחור סוג");
-  const [category, setCategory] = useState("");
-  const [type, setType] = useState("");
   const [image, setImage] = useState("");
-  const [isImmune, setIsImmune] = useState("");
-  const [isEducated, setIsEducated] = useState("");
-  const [isCastrated, setIsCastrated] = useState("");
   const [isAdopted, setisAdopted] = useState("");
-  const [minAge, setMinAge] = useState(0);
-  const [maxAge, setMaxAge] = useState(99);
-  const [selectedPost, setSelectedPost] = useState(null);
-  const [showOptions, setShowOptions] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [server_url] = useState(process.env.REACT_APP_SERVER_URL);
 
@@ -48,7 +26,7 @@ const AdoptedPost = () => {
       const decodedToken = jwt_decode(token);
       setDecoded(decodedToken);
     }
-  }, [minAge, maxAge]);
+  }, []);
 
   let navigate = useNavigate();
 
@@ -56,20 +34,7 @@ const AdoptedPost = () => {
     const orderBy = 'asc';
     const response = await axios.get(`${server_url}/adoptedPosts`, {
       params: {
-        search: searchQuery,
-        category: category,
-        type: type,
-        gender: selectedGender,
-        location: selectedLocation,
-        isImmune: isImmune,
-        isEducated: isEducated,
-        isCastrated: isCastrated,
         isAdopted: isAdopted,
-        minAge,
-        maxAge,
-
-
-
       },
     });
     const postsWithVisibility = response.data.map(post => ({ ...post, isOptionsVisible: false }));

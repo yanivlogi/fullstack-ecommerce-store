@@ -31,9 +31,9 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-dark text-center text-white py-5">
+    <footer className="bg-dark text-center text-light py-3">
       <div className="container">
-        <section className="mb-4">
+        <section className="mb-2">
           <p>
             We are dedicated to helping animals find their forever homes. Our mission is to connect
             adoptable pets with loving families and provide the support and resources necessary to
@@ -108,9 +108,7 @@ const Footer = () => {
           </a>
         </section>
       </div>
-      <div className="text-center p-3" style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}>
-        <p>&copy; {new Date().getFullYear()} Our Business: Animal Adoption</p>
-      </div>
+    
     </footer>
   );
 };

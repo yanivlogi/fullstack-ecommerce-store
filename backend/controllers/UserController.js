@@ -20,7 +20,7 @@ import { sendConfirmationCode } from '../service/emailService.js';
 
 export const getUserProfile = async (req, res) => {
   try {
-    const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization;
     const userIdFromURL = req.params.id;
     const decoded = jwt.verify(token, jwt_key);
     const userId = decoded.id;

@@ -5,10 +5,12 @@ import "../css/SendMessages.css"
 
 
 
+
 const SendMessages = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [user, setUser] = useState(null);
+  const [otherUser, setOtherUser] = useState({});
   const [server_url] = useState(process.env.REACT_APP_SERVER_URL);
 
   const chatContainerRef = useRef(null);
@@ -36,6 +38,20 @@ const SendMessages = () => {
         });
         setUser(response.data.data);
       }
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
+    try {
+      const token = localStorage.getItem("token");
+
+        const response = await axios.get(`${server_url}/users/${id}`, {
+          headers: { Authorization: token },
+        });
+        console.log("fetch user data : ",response.data)
+        setOtherUser({username:response.data.username,
+        image:response.data.image})
+        
+      
     } catch (error) {
       console.error("Error fetching user:", error);
     }
@@ -96,9 +112,17 @@ const SendMessages = () => {
 
   return (
     <div id="SendMessages">
-      {user ? (
+       {user ? (
         <div className="rounded-border-gradient">
-          <h2 >{messages.length} : הודעות</h2>
+          {otherUser.image && (
+            <img
+              src={`${server_url}${otherUser.image}`}
+              alt="Profile"
+              id="profile-image"
+            />
+          )}
+          <h2>{otherUser.username}</h2>
+
 
           <div className="chat-container" ref={chatContainerRef}>
             {messages.map((message, index) => (

@@ -48,7 +48,7 @@ const MyPostList = () => {
       const decodedToken = jwt_decode(token);
       setDecoded(decodedToken);
     }
-  }, [minAge, maxAge]);
+  }, [minAge, maxAge, category, isCastrated, searchQuery, selectedGender, isImmune, type, isEducated]);
 
   let navigate = useNavigate();
 
@@ -202,22 +202,18 @@ const MyPostList = () => {
 
   return (
     <div className="container mt-5 mb-5">
-      {posts.length === 0 ? (
-        <div className="text-center mt-5">
-          <h3>.לא העלת עדיין אף פוסט</h3>
-          <Link
-            style={{ marginBottom: '80px', height: "60px", fontSize: "26px" }}
-            to="/addPost"
-            className="btn btn-primary"
-          >
-            ➕ הוסף פוסט חדש
-          </Link>
-        </div>
-      ) : (
-        <>
+      
           <Row>
             <Col>
-              <Form style={{ backgroundImage: `url(${searchBackgroundImage})`, backgroundRepeat: "no-repeat", backgroundSize: "cover" }} className="search-form" onSubmit={handleSearch}>
+              <Form
+                style={{
+                  backgroundImage: `url(${searchBackgroundImage})`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "cover",
+                }}
+                className="search-form"
+                onSubmit={handleSearch}
+              >
                 <Container>
                   <h2>חיפוש</h2>
                   <Row>
@@ -240,7 +236,10 @@ const MyPostList = () => {
                     <Col xs={12} md={3}>
                       <Form.Group controlId="type">
                         <Form.Label>סוג:</Form.Label>
-                        <Form.Select value={type} onChange={(e) => setType(e.target.value)}>
+                        <Form.Select
+                          value={type}
+                          onChange={(e) => setType(e.target.value)}
+                        >
                           <option value="">בחר סוג</option>
                           {typeOptions.map((type) => (
                             <option key={type} value={type}>
@@ -279,7 +278,17 @@ const MyPostList = () => {
                         </Form.Select>
                       </Form.Group>
                     </Col>
-                    <Col xs={12} md={3}>
+                    <Col xs={12} md={3} >
+                      <Form.Group controlId="search">
+                        <Form.Label>חיפוש לפי שם:</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col xs={12} md={2}>
                       <Form.Group controlId="isEducated">
                         <Form.Label>מחונך לצרכים :</Form.Label>
                         <Form.Select
@@ -292,9 +301,9 @@ const MyPostList = () => {
                         </Form.Select>
                       </Form.Group>
                     </Col>
-                    <Col xs={12} md={3}>
+                    <Col xs={12} md={2}>
                       <Form.Group controlId="isCastrated">
-                        <Form.Label>  מסורס / מעוקרת :</Form.Label>
+                        <Form.Label> מסורס / מעוקרת :</Form.Label>
                         <Form.Select
                           value={isCastrated}
                           onChange={(e) => setIsCastrated(e.target.value)}
@@ -305,7 +314,7 @@ const MyPostList = () => {
                         </Form.Select>
                       </Form.Group>
                     </Col>
-                    <Col xs={12} md={3}>
+                    <Col xs={12} md={2}>
                       <Form.Group controlId="isImmune">
                         <Form.Label>מחוסן/ת:</Form.Label>
                         <Form.Select
@@ -318,62 +327,42 @@ const MyPostList = () => {
                         </Form.Select>
                       </Form.Group>
                     </Col>
-                    <Row className="align-items-center">
-                      <Col xs={12} md={6}>
-                        <Form.Group controlId="minAge">
-                          <Form.Label>גיל מינימלי:</Form.Label>
-                          <Form.Control
-                            type="number"
-                            value={minAge}
-                            onChange={(e) => {
-                              const value = parseInt(e.target.value);
-                              if (!isNaN(value) && value >= 0) {
-                                setMinAge(value);
-                              }
-                            }}
-                            className="small-input" // Custom CSS class for smaller input width
-                          />
-                        </Form.Group>
-                      </Col>
-                      <Col xs={12} md={6}>
-                        <Form.Group controlId="maxAge">
-                          <Form.Label>גיל מקסימלי:</Form.Label>
-                          <Form.Control
-                            type="number"
-                            value={maxAge}
-                            onChange={(e) => {
-                              const value = parseInt(e.target.value);
-                              if (!isNaN(value) && value >= 0) {
-                                setMaxAge(value);
-                              }
-                            }}
-                            className="small-input" // Custom CSS class for smaller input width
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-
-                  </Row>
-
-                  <Row className="search-row">
-                    <Col className="search-col">
-                      <Form.Group controlId="search">
-                        <Form.Label>חיפוש:</Form.Label>
+                    <Col xs={12} md={1}>
+                      <Form.Group controlId="minAge">
+                        <Form.Label>מגיל :</Form.Label>
                         <Form.Control
-                          type="text"
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
+                          type="number"
+                          value={minAge}
+                          onChange={(e) => {
+                            const value = parseInt(e.target.value);
+                            if (!isNaN(value) && value >= 0) {
+                              setMinAge(value);
+                            }
+                          }}
+                          className="small-input"
                         />
                       </Form.Group>
                     </Col>
-                    <Col className="search-col">
-                      <Button variant="primary" type="submit">
-                        חיפוש
-                      </Button>
+                    <Col xs={12} md={1}>
+                      <Form.Group controlId="maxAge">
+                        <Form.Label>עד גיל :</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={maxAge}
+                          onChange={(e) => {
+                            const value = parseInt(e.target.value);
+                            if (!isNaN(value) && value >= 0) {
+                              setMaxAge(value);
+                            }
+                          }}
+                          className="small-input"
+                        />
+                      </Form.Group>
                     </Col>
-                  </Row>
-                </Container>
 
+                  </Row>
+
+                </Container>
               </Form>
             </Col>
             <Link
@@ -385,6 +374,19 @@ const MyPostList = () => {
             </Link>
           </Row>
           <h2>הפוסטים שלי</h2>
+          {posts.length === 0 ? (
+        <div className="text-center mt-5">
+          <h3>.לא נמצאו פוסטים</h3>
+          <Link
+            style={{ marginBottom: '80px', height: "60px", fontSize: "26px" }}
+            to="/addPost"
+            className="btn btn-primary"
+          >
+            ➕ הוסף פוסט חדש
+          </Link>
+        </div>
+      ) : (
+        <>
           <Row xs={1} md={2} lg={3} className="g-4">
             {posts.map((post, index) => (
               <Col key={post._id} className="post-card-container">

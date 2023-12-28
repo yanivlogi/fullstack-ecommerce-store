@@ -9,10 +9,14 @@
 #SendMessages .rounded-border-gradient
 {
   width: 80%;
-}
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center children horizontally */
+  justify-content: center; /* Center children vertically */
+  padding: 20px; /* Add some padding around the content */}
 
 #SendMessages .chat-container {
-  max-height: 700px;
+  max-height: 400px;
   /* Increase the maximum height of the chat container */
   overflow-y: auto;
   width: 100%;
@@ -120,4 +124,14 @@
     font-size: 16px;
     /* Increase font size of author info for larger screens */
   }
+}
+
+#profile-image {
+  width: 100px; /* Adjust the width as needed */
+  height: 100px; /* Adjust the height as needed */
+  border-radius: 50%; /* Make it round */
+  object-fit: cover; /* Ensure the image covers the entire container */
+  margin: 10px auto; /* Center the image horizontally and add some spacing */
+  display: block; /* Ensure it behaves as a block element */
+  
 }

@@ -26,7 +26,7 @@ const UserProfile = () => {
       const token = localStorage.getItem('token');
       const response = await axios.get(`${server_url}/users/${id}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `${token}`,
         },
       });
 

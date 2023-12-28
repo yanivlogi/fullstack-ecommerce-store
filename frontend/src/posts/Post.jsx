@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate, redirect } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import InputEmoji from 'react-input-emoji';
+import { Button } from "react-bootstrap";
 
 const Post = () => {
   const [decoded, setDecoded] = useState(null);
@@ -64,6 +65,26 @@ const Post = () => {
     setUpdatedCommentContent("");
   };
 
+  const iAmInterested = async () => {
+    try {
+      const token = localStorage.getItem("token");
+     
+        const messageData = {
+          content: "אשמח לשמוע פרטים😀",
+          timestamp: new Date().toISOString(),
+        };
+
+        await axios.post(`${server_url}/message/${post.author.id}`, messageData, {
+          headers: { Authorization: token },
+        });
+        navigate(`/sendmessage/${post.author.id}`)
+      
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
+
+  
   const updateComment = async (commentId) => {
     try {
       const token = localStorage.getItem("token");
@@ -241,11 +262,21 @@ const Post = () => {
                               {post.author.username}
                               <img style={{ height: "50px", width: "50px", borderRadius: "50%", padding: '5px' }} src={`${server_url}/${post.author.image}`} alt="" />
                             </a>
-                            <Link to={`/sendmessage/${post.author.id}`}>
-                              <button>
-                                שלח הודעה📩
-                              </button>
-                            </Link>
+                            {decoded && decoded.id && post.author.id != decoded.id && !post.isAdopted && (
+                    <div> 
+                     
+                      <Link style={{margin:'5px'}} to={`/sendmessage/${post.author.id}`} className="btn btn-warning mr-2">
+                      שלח הודעה📩
+
+                      </Link>
+                      <Button style={{margin:'5px'}} onClick={iAmInterested} className="btn btn-success mr-2">
+                      אני מעונין✔️
+
+                      </Button>                      
+                    </div>
+                  )}
+                            
+                  
                           </td>
 
                         </tr>
