@@ -45,8 +45,8 @@ const ConfirmationForm = () => {
       <h2>אימות הרשמה</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
+          <label style={{color:"black"}} htmlFor="email">Email:</label>
+          <input 
             type="email"
             className="form-control"
             id="email"
@@ -55,7 +55,7 @@ const ConfirmationForm = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="code">verification code:</label>
+          <label style={{color:"black"}} htmlFor="code">verification code:</label>
           <input
             type="text"
             className="form-control"
@@ -68,7 +68,7 @@ const ConfirmationForm = () => {
         verify
         </button>
       </form>
-      {message && <p>{message}</p>}
+      {message && <h1>{message}Email or code is not valid</h1>}
     </div>
   );
 };

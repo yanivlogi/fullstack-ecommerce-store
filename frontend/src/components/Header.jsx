@@ -84,6 +84,7 @@ const Header = () => {
             <Nav className="ms-auto mb-2 mb-lg-0">
               {!isLoggedIn ? (
                 <>
+             
                   <Nav.Link href="/confirm-registration">בדיקה</Nav.Link>
                   <Nav.Link href="/register">הרשמה</Nav.Link>
                   <Nav.Link href="/userLogin">התחבר/י</Nav.Link>

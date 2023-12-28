@@ -1,13 +1,7 @@
 import User from '../models/UserModel.js';
 import ConfirmationCode from '../models/ConfirmationCodeModel.js';
-const confirmationCodes = {};
 import bcrypt from 'bcrypt';
 
-/**
- * @param {string} email - Адрес электронной почты пользователя.
- * @param {string} code - Код подтверждения.
- * @returns {boolean} - Возвращает true, если регистрация успешно подтверждена, и false в противном случае.
- */
 export const confirmRegistration = async (email, code) => {
   try {
     const storedCodeData = await ConfirmationCode.findOne({ email });
@@ -18,8 +12,11 @@ export const confirmRegistration = async (email, code) => {
     }
 
     const currentTime = new Date().getTime();
-    console.log('Current time:', new Date(currentTime));
-    console.log('Code expiration time:', new Date(storedCodeData.expirationTime));
+
+    if (storedCodeData.used) {
+      console.log('Code has already been used for email:', email);
+      return false;
+    }
 
     if (storedCodeData.expirationTime < currentTime) {
       console.log('Code has expired for email:', email);
@@ -27,12 +24,20 @@ export const confirmRegistration = async (email, code) => {
     }
 
     const isCodeValid = await bcrypt.compare(code, storedCodeData.code);
-    console.log('User input code:', code);
-    console.log('Stored code in database:', storedCodeData.code);
-    
+
     if (isCodeValid) {
       console.log('Code is valid for email:', email);
-      delete confirmationCodes[email];
+      storedCodeData.used = true; // Отмечаем код как использованный
+      await storedCodeData.save(); // Сохраняем изменения в базе данных
+
+      // Удаляем код из базы данных через 2 часа после использования
+    // Удаляем код из базы данных через 2 минуты после использования
+const deletionTime = storedCodeData.timestamp.getTime() + 2 * 60 * 1000; // 2 минуты в миллисекундах
+if (currentTime > deletionTime) {
+  console.log('Deleting code from the database:', storedCodeData._id);
+  await ConfirmationCode.deleteOne({ _id: storedCodeData._id }); // Используем deleteOne для удаления записи по _id
+}
+
 
       const user = await User.findOne({ email });
 
