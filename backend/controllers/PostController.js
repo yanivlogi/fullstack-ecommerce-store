@@ -28,8 +28,10 @@ export const getAllPosts = async (req, res) => {
     }
 
     if (search) {
-      query.name = { $regex: search, $options: "i" };
+      var regexp = new RegExp("^" + search, "i");
+      query.name = { $regex: regexp };
     }
+    
 
     if (category) {
       query.category = category;
@@ -104,7 +106,8 @@ export const getMyPosts = async (req, res) => {
     }
 
     if (search) {
-      query.name = { $regex: search, $options: "i" };
+      var regexp = new RegExp("^" + search, "i");
+      query.name = { $regex: regexp };
     }
 
     if (category) {
@@ -169,7 +172,8 @@ export const adoptedPosts = async (req, res) => {
     query.isConfirmed = true;
  
     if (search) {
-      query.name = { $regex: search, $options: "i" };
+      var regexp = new RegExp("^" + search, "i");
+      query.name = { $regex: regexp };
     }
 
     if (category) {
