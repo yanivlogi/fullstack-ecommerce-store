@@ -14,7 +14,7 @@ import SomePosts from "./components/SomePosts";
 import MyPosts from "./posts/MyPosts";
 import AdoptedPosts from "./posts/AdoptedPosts";
 
-
+import Loader from  "./pages/Loader"
 
 //messages to user
 import SendMessages from "./components/SendMessages";
@@ -47,6 +47,8 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="AboutUs" element={<AboutUs />} />
           <Route path ="ContactUs" element={<ContactUs />} />
+
+          <Route path="loader" element={<Loader />} />
 
 
           <Route path="Register" element={<UserRegister />} />

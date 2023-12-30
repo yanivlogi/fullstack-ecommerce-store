@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Alert, Button, Form, Container, Row, Col } from "react-bootstrap";
+import Nav from 'react-bootstrap/Nav';
+
 import "../css/UserLogin.css"
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -101,6 +103,9 @@ const Login = () => {
 
           <button type="submit" className="login-button">
             Login
+          </button>
+          <button type="submit" className="login-button">
+          <Nav.Link href="/register">הרשמה</Nav.Link>
           </button>
         </form>
 

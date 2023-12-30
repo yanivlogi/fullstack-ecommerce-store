@@ -70,7 +70,7 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: true, 
   },
-  resetToken: String,
+  
 
 },
 { timestamps: true });

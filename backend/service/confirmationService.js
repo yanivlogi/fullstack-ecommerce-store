@@ -33,9 +33,9 @@ export const confirmRegistration = async (email, code) => {
       // Удаляем код из базы данных через 2 часа после использования
     // Удаляем код из базы данных через 2 минуты после использования
 const deletionTime = storedCodeData.timestamp.getTime() + 2 * 60 * 1000; // 2 минуты в миллисекундах
-if (currentTime > deletionTime) {
+if (currentTime < deletionTime) {
   console.log('Deleting code from the database:', storedCodeData._id);
-  await ConfirmationCode.deleteOne({ _id: storedCodeData._id }); // Используем deleteOne для удаления записи по _id
+  await ConfirmationCode.deleteOne({ _id: storedCodeData._id });
 }
 
 
@@ -61,3 +61,4 @@ if (currentTime > deletionTime) {
     return false;
   }
 };
+

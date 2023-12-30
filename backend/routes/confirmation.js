@@ -1,7 +1,7 @@
 // routes/confirmation.js
 
 import express from 'express';
-import { sendConfirmationCode } from '../service/emailService.js';
+import { sendConfirmationCode,resendConfirmationCode } from '../service/emailService.js';
 import { confirmRegistration } from '../service/confirmationService.js';
 
 const router = express.Router();
@@ -45,5 +45,23 @@ router.post('/confirm-registration', async (req, res) => {
       res.status(500).json({ message: 'Error confirming registration' });
     }
   });
+
+  router.post('/resend-confirmation-code', async (req, res) => {
+    try {
+      const { email } = req.body;
+      if (!email) {
+        return res.status(400).json({ message: 'Email is required' });
+      }
+  
+      // Повторно отправляем код подтверждения
+      const confirmationCode = await resendConfirmationCode(email);
+  
+      res.status(200).json({ confirmationCode });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error resending confirmation code' });
+    }
+  });
+  
 
 export default router;

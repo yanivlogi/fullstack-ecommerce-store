@@ -34,9 +34,24 @@ const ConfirmationForm = () => {
       } else {
         setMessage("Registration confirmation error.");
       }
-      
     } catch (error) {
       setMessage("Registration confirmation error.");
+    }
+  };
+
+  const handleResendCode = async () => {
+    try {
+      const response = await axios.post(`${server_url}/resend-confirmation-code`, {
+        email,
+      });
+
+      if (response.data.confirmationCode) {
+        setMessage("Confirmation code resent successfully!");
+      } else {
+        setMessage("Error resending confirmation code.");
+      }
+    } catch (error) {
+      setMessage("Error resending confirmation code.");
     }
   };
 
@@ -55,7 +70,7 @@ const ConfirmationForm = () => {
           />
         </div>
         <div className="form-group">
-          <label style={{color:"black"}} htmlFor="code">verification code:</label>
+          <label style={{color:"black"}} htmlFor="code">Code:</label>
           <input
             type="text"
             className="form-control"
@@ -65,10 +80,13 @@ const ConfirmationForm = () => {
           />
         </div>
         <button type="submit" className="btn btn-primary">
-        verify
+          Verify
         </button>
       </form>
-      {message && <h1>{message}Email or code is not valid</h1>}
+      <button className="btn btn-secondary" onClick={handleResendCode}>
+        Resend Confirmation Code
+      </button>
+      {message && <h1>{message}</h1>}
     </div>
   );
 };

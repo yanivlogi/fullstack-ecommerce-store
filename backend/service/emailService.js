@@ -1,4 +1,3 @@
-// emailService.js
 import nodemailer from 'nodemailer';
 import ConfirmationCode from '../models/ConfirmationCodeModel.js';
 import bcrypt from 'bcryptjs';
@@ -63,5 +62,18 @@ export const sendConfirmationCode = async (email) =>  {
         }
       });
     });
+};
+
+  export const resendConfirmationCode = async (email) => {
+    try {
+        // Отправляем новый код подтверждения
+        const confirmationCode = await sendConfirmationCode(email);
+        console.log('Resending confirmation code to:', email);
+        return confirmationCode;
+    } catch (error) {
+        console.error('Error in resendConfirmationCode:', error);
+        throw error;
+    }
   };
+  
   

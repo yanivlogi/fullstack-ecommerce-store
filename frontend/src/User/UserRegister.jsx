@@ -51,7 +51,7 @@ const UserRegister = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      navigate("/confirm-registration"); 
+      navigate("/loader"); 
     } catch (error) {
       if (error.response && error.response.status === 400) {
         if (error.response.data.message.includes("username")) {
