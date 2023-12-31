@@ -40,18 +40,23 @@ const ConfirmationForm = () => {
   };
 
   const handleResendCode = async () => {
+    if (!email) {
+      setMessage("Пожалуйста, введите свой email для отправки кода.");
+      return;
+    }
+    console.log("Email for Resend:", email);  // Добавьте эту строку
     try {
       const response = await axios.post(`${server_url}/resend-confirmation-code`, {
         email,
       });
 
       if (response.data.confirmationCode) {
-        setMessage("Confirmation code resent successfully!");
+        setMessage("Код подтверждения успешно отправлен!");
       } else {
-        setMessage("Error resending confirmation code.");
+        setMessage("Ошибка при повторной отправке кода подтверждения. Возможно, такой email не зарегистрирован.");
       }
     } catch (error) {
-      setMessage("Error resending confirmation code.");
+      setMessage("Ошибка при повторной отправке кода подтверждения. Проверьте свое соединение с интернетом и попробуйте снова.");
     }
   };
 
@@ -60,7 +65,7 @@ const ConfirmationForm = () => {
       <h2>אימות הרשמה</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label style={{color:"black"}} htmlFor="email">Email:</label>
+          <label style={{color:"red",fontWeight:"bold"}} htmlFor="email">Email:</label>
           <input 
             type="email"
             className="form-control"
@@ -70,7 +75,7 @@ const ConfirmationForm = () => {
           />
         </div>
         <div className="form-group">
-          <label style={{color:"black"}} htmlFor="code">Code:</label>
+          <label style={{color:"red",fontWeight:"bold"}} htmlFor="code">Code:</label>
           <input
             type="text"
             className="form-control"
@@ -79,13 +84,14 @@ const ConfirmationForm = () => {
             onChange={handleCodeChange}
           />
         </div>
-        <button type="submit" className="btn btn-primary">
-          Verify
+        <button type="submit" className="btn-secondary">
+        שלח קוד
         </button>
+        <button className="btn-secondary"  onClick={handleResendCode}>
+        לא קיבלתי את הקוד
+         </button>
       </form>
-      <button className="btn btn-secondary" onClick={handleResendCode}>
-        Resend Confirmation Code
-      </button>
+     
       {message && <h1>{message}</h1>}
     </div>
   );

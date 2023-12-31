@@ -59,7 +59,7 @@ const ContactUs = () => {
   return (
     <div className="containercontack">
       <form className="formContact" onSubmit={handleSubmit}>
-        <div className="descr">Contact us</div>
+        <div className="descr">צור קשר</div>
         {validationError && <Alert variant="danger">{validationError}</Alert>}
 
         <div className="inputContact">

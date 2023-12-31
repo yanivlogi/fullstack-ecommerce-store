@@ -3,6 +3,7 @@
 import express from 'express';
 import { sendConfirmationCode,resendConfirmationCode } from '../service/emailService.js';
 import { confirmRegistration } from '../service/confirmationService.js';
+import  User from'../models/UserModel.js';
 
 const router = express.Router();
 // POST запрос для отправки кода подтверждения
@@ -45,12 +46,17 @@ router.post('/confirm-registration', async (req, res) => {
       res.status(500).json({ message: 'Error confirming registration' });
     }
   });
-
   router.post('/resend-confirmation-code', async (req, res) => {
     try {
       const { email } = req.body;
       if (!email) {
         return res.status(400).json({ message: 'Email is required' });
+      }
+  
+      // Проверяем наличие email в базе данных
+      const userExists = await User.findOne({ email });
+      if (!userExists) {
+        return res.status(404).json({ message: 'Email not found in the database' });
       }
   
       // Повторно отправляем код подтверждения

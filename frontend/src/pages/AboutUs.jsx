@@ -8,10 +8,9 @@ import developerImage from '../uploads/developerImage.png';
 const AboutUs = () => {
   return (
     <Container>
-      <h1 style={{direction:'rtl' ,padding:'20px'}}>קצת עלינו</h1>
-      <p style={{ textShadow: '1px 1px 2px pink'}}>
-        At Pet Delivery, we're passionate about connecting animals with loving homes. We know that finding the perfect pet can be a challenge, which is why we've made it our mission to simplify the process. Our platform allows you to browse adoptable pets from the comfort of your own home, and we offer fast and reliable delivery services to get your new furry friend to you as quickly as possible.
-      </p>
+      <h1 style={{direction:'rtl' ,padding:'20px',textAlign:'center',color:'rgb(225, 13, 13)',fontWeight:"bold"}}>קצת עלינו</h1>
+      <p style={{ textShadow: '1px 1px 2px pink',fontSize:'18px',textAlign:'center' }}>
+      במשלוח חיות מחמד, אנו נלהבים לחבר בין בעלי חיים לבתים אוהבים. אנו יודעים שמציאת חיית המחמד המושלמת יכולה להיות אתגר, וזו הסיבה שהפכנו את המשימה שלנו לפשט את התהליך. הפלטפורמה שלנו מאפשרת לך לגלוש חיות מחמד לאימוץ מן הנוחות של הבית שלך, ואנחנו מציעים שירותי משלוח מהיר ואמין כדי לקבל את החבר החדש שלך פרוותי לך מהר ככל האפשר. </p>
       <h2>הצוות שלנו</h2>
       <Row>
         <Col md={6}>

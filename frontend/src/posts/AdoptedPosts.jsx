@@ -65,7 +65,7 @@ const AdoptedPost = () => {
 
   return (
     <div className="container mt-5 mb-5">
-      <h2 style={{margin:"20px"}}>❤...בעלי חיים שקיבלו הזדמנות שניה❤ </h2>
+      <h2 style={{margin:"20px",fontWeight:"bold",color:"red"}}>❤...בעלי חיים שקיבלו הזדמנות שניה❤ </h2>
       {posts.length === 0 ? (
         <div className="text-center mt-5">
           <h3>אין עדיין חיות שאומצו</h3>

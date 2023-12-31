@@ -102,7 +102,7 @@ const Login = () => {
           </div>
 
           <button type="submit" className="login-button">
-            Login
+          כניסה
           </button>
           <button type="submit" className="login-button">
           <Nav.Link href="/register">הרשמה</Nav.Link>

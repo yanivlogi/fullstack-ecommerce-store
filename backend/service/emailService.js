@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import ConfirmationCode from '../models/ConfirmationCodeModel.js';
 import bcrypt from 'bcryptjs';
+import User from '../models/UserModel.js';
 
 
 const transporter = nodemailer.createTransport({
@@ -64,16 +65,22 @@ export const sendConfirmationCode = async (email) =>  {
     });
 };
 
-  export const resendConfirmationCode = async (email) => {
-    try {
-        // Отправляем новый код подтверждения
-        const confirmationCode = await sendConfirmationCode(email);
-        console.log('Resending confirmation code to:', email);
-        return confirmationCode;
-    } catch (error) {
-        console.error('Error in resendConfirmationCode:', error);
-        throw error;
+export const resendConfirmationCode = async (email) => {
+  try {
+    // Проверяем наличие email в базе данных
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new Error('User not found with the provided email');
     }
-  };
-  
+
+    // Отправляем новый код подтверждения
+    const confirmationCode = await sendConfirmationCode(email);
+    console.log('Resending confirmation code to:', email);
+    return confirmationCode;
+  } catch (error) {
+    console.error('Error in resendConfirmationCode:', error);
+    throw error;
+  }
+};
+
   
