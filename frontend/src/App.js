@@ -47,6 +47,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="AboutUs" element={<AboutUs />} />
           <Route path ="ContactUs" element={<ContactUs />} />
+          
 
           <Route path="loader" element={<Loader />} />
 

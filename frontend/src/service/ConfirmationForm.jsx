@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import './style.css';
@@ -7,8 +7,9 @@ const ConfirmationForm = () => {
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [message, setMessage] = useState("");
+  const [isResendDisabled, setIsResendDisabled] = useState(false); // Состояние, чтобы отслеживать разрешено ли нажимать кнопку
+  const [timeLeft, setTimeLeft] = useState(0); // Время задержки
   const [server_url] = useState(process.env.REACT_APP_SERVER_URL);
-
   const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
@@ -40,25 +41,53 @@ const ConfirmationForm = () => {
   };
 
   const handleResendCode = async () => {
-    if (!email) {
+    if (!email || isResendDisabled) {
       setMessage("Пожалуйста, введите свой email для отправки кода.");
       return;
     }
-    console.log("Email for Resend:", email);  // Добавьте эту строку
+  
+    setIsResendDisabled(true); // Заблокируем кнопку
+  
     try {
       const response = await axios.post(`${server_url}/resend-confirmation-code`, {
         email,
       });
-
+  
+      setMessage(response.data.message); // Отображаем сообщение из ответа сервера
+  
       if (response.data.confirmationCode) {
-        setMessage("Код подтверждения успешно отправлен!");
+        startTimer(); // Запускаем таймер после успешной отправки
       } else {
-        setMessage("Ошибка при повторной отправке кода подтверждения. Возможно, такой email не зарегистрирован.");
+        setIsResendDisabled(false); // Разблокируем кнопку при ошибке
       }
     } catch (error) {
-      setMessage("Ошибка при повторной отправке кода подтверждения. Проверьте свое соединение с интернетом и попробуйте снова.");
+      setMessage("Ошибка при повторной отправке кода подтверждения. Email который вы вели не существует.");
+      setIsResendDisabled(false); // Разблокируем кнопку при ошибке
     }
   };
+  
+
+  const startTimer = () => {
+    setTimeLeft(60); // Устанавливаем время задержки в секундах (можете изменить по необходимости)
+
+    const interval = setInterval(() => {
+      setTimeLeft((prevTime) => prevTime - 1);
+    }, 1000);
+
+    // Устанавливаем таймер на разблокировку кнопки после завершения времени задержки
+    setTimeout(() => {
+      clearInterval(interval);
+      setIsResendDisabled(false);
+      setTimeLeft(0);
+    }, 60000); // 60 секунд
+  };
+
+  useEffect(() => {
+    return () => {
+      // Очищаем таймер, чтобы избежать утечек при размонтировании компонента
+      clearInterval();
+    };
+  }, []);
 
   return (
     <div className="coderegister">
@@ -87,9 +116,9 @@ const ConfirmationForm = () => {
         <button type="submit" className="btn-secondary">
         שלח קוד
         </button>
-        <button className="btn-secondary"  onClick={handleResendCode}>
-        לא קיבלתי את הקוד
-         </button>
+        <button type="handleResendCode" className="btn-secondary" onClick={handleResendCode} disabled={isResendDisabled}>
+        לא קיבלתי את הקוד {timeLeft > 0 && `(${timeLeft} sec)`}
+        </button>
       </form>
      
       {message && <h1>{message}</h1>}

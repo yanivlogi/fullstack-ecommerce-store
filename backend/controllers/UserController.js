@@ -43,12 +43,20 @@ export const getUserProfile = async (req, res) => {
 
 export const userLogin = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    if (!(username && password)) {
-      res.status(400).send('Please provide both username and password');
+    const { account, password } = req.body; // Изменил "username" на "account"
+    
+    if (!(account && password)) {
+      res.status(400).send('Please provide both username/email and password');
       return;
     }
-    const user = await User.findOne({ username });
+
+    // Проверяем, является ли введенный аккаунт email'ом
+    const isEmail = account.includes('@');
+    
+    // Изменяем условие поиска в базе данных в зависимости от того, является ли введенный аккаунт email'ом или именем пользователя
+    const user = isEmail
+      ? await User.findOne({ email: account })
+      : await User.findOne({ username: account });
 
     if (user && (await bcrypt.compare(password, user.password)) && user.isActive) {
       const token = jwt.sign(
@@ -70,6 +78,7 @@ export const userLogin = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 //__________________________________________התנתקות____________________________________________
 

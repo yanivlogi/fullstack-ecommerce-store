@@ -19,7 +19,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(`${server_url}/users/userLogin`, {
-        username,
+        account:username,
         password,
       });
 
