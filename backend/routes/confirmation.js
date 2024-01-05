@@ -25,27 +25,31 @@ router.post('/send-confirmation-code', async (req, res) => {
 });
 
 router.post('/confirm-registration', async (req, res) => {
-    try {
-      const { email, code } = req.body;
-      if (!email || !code) {
-        return res.status(400).json({ message: 'Email and code are required' });
-      }
-  
-      // Проверяем код подтверждения
-      const isConfirmed = await confirmRegistration(email, code);
-  
-      if (isConfirmed) {
-        // Регистрация успешно подтверждена
-        res.status(200).json({ message: 'Registration confirmed successfully' });
-      } else {
-        // Код подтверждения неверный или истек
-        res.status(400).json({ message: 'Invalid or expired confirmation code' });
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error confirming registration' });
+  try {
+    const { email, code } = req.body;
+    
+    if (!email || !code) {
+      return res.status(400).json({ error: 'Email and code are required' });
     }
-  });
+
+    // Проверяем код подтверждения
+    const isConfirmed = await confirmRegistration(email, code);
+
+    if (isConfirmed) {
+      // Регистрация успешно подтверждена
+      res.status(200).json({ message: 'Registration confirmed successfully' });
+    } else {
+      // Код подтверждения неверный или истек
+      res.status(400).json({ error: 'Invalid or expired confirmation code' });
+    }
+  } catch (error) {
+    console.error('Error confirming registration:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
   router.post('/resend-confirmation-code', async (req, res) => {
     try {
       const { email } = req.body;
@@ -68,6 +72,7 @@ router.post('/confirm-registration', async (req, res) => {
       res.status(500).json({ message: 'Error resending confirmation code' });
     }
   });
+  
   
 
 export default router;
