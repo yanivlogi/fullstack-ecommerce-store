@@ -51,7 +51,8 @@ export const sendConfirmationCode = async (email) =>  {
             code: hashedCode,
             expirationTime: new Date(expirationTime),
           });
-          
+          console.log('Confirmation Code Timestamp:', confirmationCode.timestamp); // Вывод в консоль
+
           try {
             await confirmationCode.save();
             console.log('Confirmation code saved to the database');
@@ -73,6 +74,9 @@ export const resendConfirmationCode = async (email) => {
       throw new Error('User not found with the provided email');
     }
 
+    // Добавляем задержку перед повторной отправкой кода 
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     // Отправляем новый код подтверждения
     const confirmationCode = await sendConfirmationCode(email);
     console.log('Resending confirmation code to:', email);
@@ -82,5 +86,3 @@ export const resendConfirmationCode = async (email) => {
     throw error;
   }
 };
-
-  

@@ -2,10 +2,6 @@ import Post from "../models/PostModel.js";
 import User from "../models/UserModel.js";
 import jwt from 'jsonwebtoken';
 import 'dotenv/config'
-import fs from'fs'
-import path from 'path'
-
-
 const jwt_key = process.env.JWT_KEY;
 
 

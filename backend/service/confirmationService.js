@@ -30,12 +30,18 @@ export const confirmRegistration = async (email, code) => {
       storedCodeData.used = true; // Отмечаем код как использованный
       await storedCodeData.save(); // Сохраняем изменения в базе данных
 
-      // Удаляем код из базы данных через 2 часа после использования
-    // Удаляем код из базы данных через 2 минуты после использования
+     // Удаляем код из базы данных через 2 минуты после использования
 const deletionTime = storedCodeData.timestamp.getTime() + 2 * 60 * 1000; // 2 минуты в миллисекундах
-if (currentTime < deletionTime) {
+console.log('Current Time:', currentTime);
+console.log('Deletion Time:', deletionTime);
+
+if (currentTime > deletionTime) {
   console.log('Deleting code from the database:', storedCodeData._id);
-  await ConfirmationCode.deleteOne({ _id: storedCodeData._id });
+  const deletionResult = await ConfirmationCode.deleteMany({ _id: storedCodeData._id });
+  console.log('Deletion Result:', deletionResult);
+  
+} else {
+  console.log('Code deletion time not reached for email:', email);
 }
 
 
