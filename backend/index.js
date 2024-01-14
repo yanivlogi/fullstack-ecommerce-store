@@ -9,7 +9,7 @@ import MessagesRoute from "./routes/MessagesRoute.js";
 import cookieParser from 'cookie-parser';
 import bodyParser from "body-parser"; 
 import sendMailRouter from "./routes/SendMailRoute.js"; 
-import confirmationRouter from './routes/confirmation.js';
+import confirmationRouter from './routes/ConfirmationRouter.js';
 import AdminRoute from './routes/AdminRoute.js';
 
 

@@ -1,18 +1,10 @@
 import User from "../models/UserModel.js";
 import Message from "../models/MessageModel.js";
-import cookieParser from "cookie-parser";
 import jwt from 'jsonwebtoken';
 import 'dotenv/config'
 import bcrypt from 'bcryptjs'
 const jwt_key = process.env.JWT_KEY;
 import { sendConfirmationCode } from '../service/emailService.js'; 
-
-
-
-
-
-
-
 
 //__________________________________________הצגת משתמש_________________________________
 
