@@ -263,8 +263,21 @@ export const getPostById = async (req, res) => {
     const postId = req.params.id; // Assuming the post ID is passed as a route parameter
 
     const post = await Post.findById(postId);
+    
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
     const user = await User.findById(post.author);
-    const { username, image } = user; // Extract username and image from the user object
+
+    let username = 'משתמש לא קיים';
+    let image = '/maleDefaultImage.jpg'; // You can set a default image URL or any other value
+
+    if (user) {
+      // If the user is found, extract username and image from the user object
+      username = user.username;
+      image = user.image;
+    }
 
     const postWithUser = {
       ...post.toObject(),
@@ -280,6 +293,7 @@ export const getPostById = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
 
 
 

@@ -8,11 +8,11 @@ import developerImage from '../uploads/developerImage.png';
 const AboutUs = () => {
   return (
     <Container>
-      <h1 style={{direction:'rtl' ,padding:'20px',textAlign:'center',color:'rgb(225, 13, 13)',fontWeight:"bold"}}>קצת עלינו</h1>
-      <p style={{ textShadow: '1px 1px 2px pink',fontSize:'18px',textAlign:'center' }}>
+      <h2 style={{padding:'20px'}}>קצת עלינו</h2>
+      <p style={{ textShadow: '1px 1px 2px rgb(0, 167, 209)',fontSize:'18px',textAlign:'center' , color:'#0d6efd' }}>
       במשלוח חיות מחמד, אנו נלהבים לחבר בין בעלי חיים לבתים אוהבים. אנו יודעים שמציאת חיית המחמד המושלמת יכולה להיות אתגר, וזו הסיבה שהפכנו את המשימה שלנו לפשט את התהליך. הפלטפורמה שלנו מאפשרת לך לגלוש חיות מחמד לאימוץ מן הנוחות של הבית שלך, ואנחנו מציעים שירותי משלוח מהיר ואמין כדי לקבל את החבר החדש שלך פרוותי לך מהר ככל האפשר. </p>
-      <h2>הצוות שלנו</h2>
       <Row>
+      <h2 style={{direction:'rtl' ,textAlign:'center',fontWeight:"bold" , textShadow: '0px 0px 6px rgb(0, 167, 209)' , color:'white'}}>הצוות שלנו</h2>
         <Col md={6}>
           <Card>
             <Card.Img variant="top" src={developerImage} />

@@ -104,8 +104,8 @@ const Login = () => {
           <button type="submit" className="login-button">
           כניסה
           </button>
-          <button type="submit" className="login-button">
-          <Nav.Link href="/register">הרשמה</Nav.Link>
+          <button type="submit" className="btn">
+          <Nav.Link href="/register">או לחצ/י כאן להרשם</Nav.Link>
           </button>
         </form>
 
