@@ -10,7 +10,7 @@ const Home = () => {
   return (
     
     <div className="container mt-5">
-      <div className="israel"> <h1 class="text-flicker">ביחד ננצח </h1></div>
+      <div className="israel"> <h1 className="text-flicker">ביחד ננצח </h1></div>
       <div className="row" style={{direction:'rtl', backgroundColor:"white", padding:'20px', border:"thick double rgb(50, 161, 206)"}}>
         <div className="col-md-6">
           <div>

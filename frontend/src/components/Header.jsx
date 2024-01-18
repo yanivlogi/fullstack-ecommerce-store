@@ -14,7 +14,7 @@ const Header = () => {
 
 
   useEffect(() => {
-    console.log(process.env)
+    
     changeHeader();
     fetchUnreadMessageCount();
   }, []);

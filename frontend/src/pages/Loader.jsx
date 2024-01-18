@@ -1,6 +1,6 @@
-// В файле Loader.jsx
+
 import React from 'react';
-import LoaderComponent from '../components/loading/Loading'; // Изменили имя компонента
+import LoaderComponent from '../components/loading/Loading'; 
 
 const Loader = () => {
   return (

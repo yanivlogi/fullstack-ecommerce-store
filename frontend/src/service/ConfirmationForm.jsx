@@ -62,23 +62,21 @@ const ConfirmationForm = () => {
   
 
   const startTimer = () => {
-    setTimeLeft(60); // Устанавливаем время задержки в секундах (можете изменить по необходимости)
-
+    setTimeLeft(60); 
     const interval = setInterval(() => {
       setTimeLeft((prevTime) => prevTime - 1);
     }, 1000);
 
-    // Устанавливаем таймер на разблокировку кнопки после завершения времени задержки
+    
     setTimeout(() => {
       clearInterval(interval);
       setIsResendDisabled(false);
       setTimeLeft(0);
-    }, 60000); // 60 секунд
+    }, 60000); 
   };
 
   useEffect(() => {
     return () => {
-      // Очищаем таймер, чтобы избежать утечек при размонтировании компонента
       clearInterval();
     };
   }, []);

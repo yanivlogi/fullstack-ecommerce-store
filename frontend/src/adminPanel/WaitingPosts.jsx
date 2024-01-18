@@ -123,7 +123,7 @@ const WaitingPosts = () => {
         if (post._id === postId) {
           return { ...post, isOptionsVisible: !post.isOptionsVisible };
         }
-        return { ...post, isOptionsVisible: false }; // Close options menu for other posts
+        return { ...post, isOptionsVisible: false }; 
       });
     });
   };
