@@ -10,7 +10,7 @@ const UserRegister = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [image, setImage] = useState(null);
-  const [gender, setGender] = useState("male");
+  const [gender, setGender] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
@@ -77,28 +77,7 @@ const UserRegister = () => {
           <form onSubmit={registerUser}>
              {error && <div className="error-message">{error}</div>}
           {validationMsg && <div className="error-message">{validationMsg}</div>}
-            <div className="form-group">
-              
-              <div className="input-group mb-3" id="image-form">
-                <div className="custom-file">
-                  <input
-                    type="file"
-                    className="custom-file-input-register"
-                    id="image"
-                    onChange={handleImageChange}
-                  />
-                  <label className="custom-file-label" htmlFor="image">
-                    Choose file
-                  </label>
-                </div>
-              </div>
-              {image && (
-                <div className="mt-3">
-                  <p>Preview:</p>
-                  <img src={URL.createObjectURL(image)} alt="Preview" width="200" />
-                </div>
-              )}
-            </div>
+        
             <div className="form-group">
               <label htmlFor="name">Name</label>
               <input
@@ -175,12 +154,38 @@ const UserRegister = () => {
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
               >
-                <option value="male">Other / Prefer not to say</option>
+                <option value="Prefer not to say">Prefer not to say</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
+                <option value="Other">Other</option>
               </select>
             </div>
-      
+            <br></br>
+          
+            <div className="form-group">
+              
+              <div className="input-group mb-3" id="image-form">
+                <div className="custom-file">
+                  <input
+                    type="file"
+                    className="custom-file-input-register"
+                    id="image"
+                    onChange={handleImageChange}
+                  />
+                  <label className="custom-file-label" htmlFor="image">
+                    Choose file
+                  </label>
+                </div>
+              </div>
+              {image && (
+                <div className="mt-3">
+                  <p>Preview:</p>
+                  <img src={URL.createObjectURL(image)} alt="Preview" width="200" />
+                </div>
+              )}
+            </div>
+        
+    
             <div className="form-group">
               <button type="submit" className="btn btn-success">
                 Register
