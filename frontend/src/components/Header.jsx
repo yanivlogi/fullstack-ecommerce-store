@@ -96,7 +96,7 @@ const Header = () => {
                   <Nav.Link href="/WaitingPosts">אישור פוסטים</Nav.Link>
                 )}
                   
-                  <Nav.Link onClick={handleLogout}>התנתק/י</Nav.Link>
+                  <Nav.Link onClick={handleLogout} style={{backgroundColor:'red'}}>התנתק/י</Nav.Link>
                   <Nav.Link href="/Profile">הפרופיל שלי</Nav.Link>
                   <Nav.Link href="/MyPosts">הפוסטים שלי</Nav.Link>
                   <Nav.Link href="/AllMessages">
