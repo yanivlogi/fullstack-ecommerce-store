@@ -27,11 +27,11 @@ export const confirmRegistration = async (email, code) => {
 
     if (isCodeValid) {
       console.log('Code is valid for email:', email);
-      storedCodeData.used = true; // Отмечаем код как использованный
-      await storedCodeData.save(); // Сохраняем изменения в базе данных
+      storedCodeData.used = true;
+      await storedCodeData.save();
 
-     // Удаляем код из базы данных через 2 минуты после использования
-const deletionTime = storedCodeData.timestamp.getTime() + 2 * 60 * 1000; // 2 минуты в миллисекундах
+      const deletionTime = storedCodeData.usedTime ? storedCodeData.usedTime.getTime() + 2 * 60 * 1000 : 0;
+
 console.log('Current Time:', currentTime);
 console.log('Deletion Time:', deletionTime);
 
@@ -39,7 +39,6 @@ if (currentTime > deletionTime) {
   console.log('Deleting code from the database:', storedCodeData._id);
   const deletionResult = await ConfirmationCode.deleteMany({ _id: storedCodeData._id });
   console.log('Deletion Result:', deletionResult);
-  
 } else {
   console.log('Code deletion time not reached for email:', email);
 }
@@ -67,4 +66,3 @@ if (currentTime > deletionTime) {
     return false;
   }
 };
-

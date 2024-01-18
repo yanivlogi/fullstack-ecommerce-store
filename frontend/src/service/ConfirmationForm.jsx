@@ -44,43 +44,19 @@ const ConfirmationForm = () => {
   
 
   const handleResendCode = async () => {
-<<<<<<< HEAD
     if (!email) {
       setMessage("אנא הזן את האימייל שלך כדי לשלוח את הקוד.");
       return;
     }
     console.log("Email for Resend:", email); 
-=======
-    if (!email || isResendDisabled) {
-      setMessage("Пожалуйста, введите свой email для отправки кода.");
-      return;
-    }
-  
-    setIsResendDisabled(true); // Заблокируем кнопку
-  
->>>>>>> 61c1077a5960259fbfb1da9a4cb22941753d343d
     try {
       const response = await axios.post(`${server_url}/resend-confirmation-code`, {
         email,
       });
-<<<<<<< HEAD
 
       setMessage("!קוד האישור נשלח בהצלחה");
     } catch (error) {
       setMessage("מייל לא קיים במערכת");
-=======
-  
-      setMessage(response.data.message); // Отображаем сообщение из ответа сервера
-  
-      if (response.data.confirmationCode) {
-        startTimer(); // Запускаем таймер после успешной отправки
-      } else {
-        setIsResendDisabled(false); // Разблокируем кнопку при ошибке
-      }
-    } catch (error) {
-      setMessage("Ошибка при повторной отправке кода подтверждения. Email который вы вели не существует.");
-      setIsResendDisabled(false); // Разблокируем кнопку при ошибке
->>>>>>> 61c1077a5960259fbfb1da9a4cb22941753d343d
     }
   };
   
