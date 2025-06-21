@@ -377,7 +377,8 @@ export const updatePost = async (req, res) => {
 
     const postById = await Post.findById(req.params.id);
 
-    if (userId != postById.author || !user.isAdmin) {
+    // allow authors or admins to update the post
+    if (userId != postById.author && !user.isAdmin) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
    
