@@ -1,125 +1,137 @@
-import { useState, useEffect } from 'react';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import axios from 'axios';
+
+import { useState, useEffect, useCallback } from "react";
+import { Link, NavLink } from "react-router-dom";
+import axios from "axios";
 import logo from "../uploads/logo.png";
+import "../css/Header.css";
 
-const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+const pagesMenu = [
+  { label: "אודות", path: "/aboutus" },
+  { label: "שאלות נפוצות", path: "/faq" },
+  { label: "צור קשר", path: "/contactus" },
+];
+const categoriesMenu = [
+  { label: "ירקות", path: "/cat/vegetables" },
+  { label: "פירות", path: "/cat/fruits" },
+  { label: "אורגני", path: "/cat/organic" },
+];
+
+export default function Header() {
+  const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useState(null);
-  const [image, setImage] = useState(null);
-  const [unreadMessageCount, setUnreadMessageCount] = useState(0);
-  const [server_url] = useState(process.env.REACT_APP_SERVER_URL);
+  const [count, setCount] = useState(0);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const server = process.env.REACT_APP_SERVER_URL;
 
+  const getHeaderInfo = useCallback(async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const { data } = await axios.get(`${server}/Header`, {
+        headers: { Authorization: token },
+      });
+      setIsLogged(true);
+      setUser(data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [server]);
+
+  const getUnread = useCallback(async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const { data } = await axios.get(`${server}/unreadMessageCount`, {
+        headers: { Authorization: token },
+      });
+      setCount(data.count);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [server]);
 
   useEffect(() => {
-    
-    changeHeader();
-    fetchUnreadMessageCount();
-  }, []);
+    getHeaderInfo();
+    getUnread();
+  }, [getHeaderInfo, getUnread]);
 
-  const changeHeader = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) return setIsLoggedIn(false); // add check for token existence
-      const response = await axios.get(`${server_url}/Header`, {
-        headers: { Authorization: token },
-      });
-      console.log(response.data);
-      setIsLoggedIn(true);
-      setUser(response.data.data);
-      setImage(response.data.data.image);
-      // response.data.data contains the user name
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  
-  const fetchUnreadMessageCount = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) return;
-
-      const response = await axios.get(`${server_url}/unreadMessageCount`, {
-        headers: { Authorization: token },
-      });
-      setUnreadMessageCount(response.data.count);
-    } catch (error) {
-      console.error('Error fetching unread message count:', error);
-    }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('name');
-    setIsLoggedIn(false);
-    setUser(null);
-    window.location.reload(true);
+  const logout = () => {
+    localStorage.clear();
+    window.location.reload();
   };
 
   return (
-    <header>
-    <Navbar bg="primary" variant="dark" expand="lg" fixed="top">
-      <Container>
-        <Navbar.Brand className="d-flex align-items-center justify-content-center">
-          <a href="/" className="d-flex align-items-center" style={{ textDecoration: 'none' }}>
-            <img 
-              src={logo}
-              alt="Logo"
-              className="mr-2 rounded-circle"
-              style={{ width: '45px', marginLeft: 'auto', marginRight: 'auto',animation: 'slidein 3s linear 1s infinite alternate' }}
-            />
-            <span style={{ fontSize: '20px', fontWeight: 'bold' , color:'white'}}>PetHouse</span>
-          </a>
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbar-nav" />
-        <Navbar.Collapse id="navbar-nav">
-          <Nav className="me-auto mb-2 mb-lg-0">
-              <Nav.Link href="/AboutUs">עלינו</Nav.Link>
-              <Nav.Link href="/ContactUs">צור קשר</Nav.Link>
-              <Nav.Link href="/AdoptedPosts">חיות שאומצו</Nav.Link>
-              <Nav.Link href="/AllPosts">כל הפוסטים</Nav.Link>
-            </Nav>
-            <Nav className="ms-auto mb-2 mb-lg-0">
-              {!isLoggedIn ? (
-                <>
-             
-                  <Nav.Link href="/confirm-registration">בדיקה</Nav.Link>
-                  <Nav.Link href="/register">הרשמה</Nav.Link>
-                  <Nav.Link href="/userLogin">התחבר/י</Nav.Link>
-                </>
-              ) : (
-                <>
-                {user.isAdmin &&(
-                  <Nav.Link href="/WaitingPosts">אישור פוסטים</Nav.Link>
-                )}
-                  
-                  <Nav.Link onClick={handleLogout} style={{backgroundColor:'red'}}>התנתק/י</Nav.Link>
-                  <Nav.Link href="/Profile">הפרופיל שלי</Nav.Link>
-                  <Nav.Link href="/MyPosts">הפוסטים שלי</Nav.Link>
-                  <Nav.Link href="/AllMessages">
-                    {unreadMessageCount > 0 && (
-                      <span className="badge bg-danger">{unreadMessageCount}</span>
-                    )}
-                    <span className="large ml">הודעות</span>
-                  </Nav.Link>
-                  <Nav.Link disabled>ברוך הבא ,{user.name}</Nav.Link>
-                  <img
-                    src={`${server_url}/${image}`}
-                    alt="Logo"
-                    className="mr-2 rounded-circle"
-                    style={{ width: "45px", borderStyle: 'double', borderColor: 'white' }}
-                  />
-                </>
-              )}
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    </header>
-  );
-};
+    <>
+      <div className="topbar">
+        <div className="container flex-between">
+          <span>ברוך הבא לחנות כפרי!</span>
+          <div className="top-links">
 
-export default Header;
+            {isLogged ? (
+              <NavLink to="/profile">👤 {user?.name}</NavLink>
+            ) : (
+              <NavLink to="/userlogin">🔑 התחברות</NavLink>
+            )}
+            <NavLink to="#">🌐 עברית</NavLink>
+            <NavLink to="#">💱 ₪ ILS</NavLink>
+          </div>
+        </div>
+      </div>
+
+      <header className="midbar">
+        <div className="container midbar-grid">
+          <div className="nav-left">
+            <nav className="nav-desktop">
+              {pagesMenu.map((p) => (
+                <NavLink key={p.path} to={p.path}>{p.label}</NavLink>
+              ))}
+              {categoriesMenu.map((c) => (
+                <NavLink key={c.path} to={c.path}>{c.label}</NavLink>
+              ))}
+              {isLogged && (
+                <button onClick={logout} className="logout-btn">התנתק/י</button>
+              )}
+            </nav>
+            <div
+              className={`hamburger ${mobileOpen ? "open" : "close"}`}
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="תפריט"
+            >
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+
+          </div>
+
+          <Link className="logo" to="/">
+            <img src={logo} alt="logo" />
+          </Link>
+
+          <div className="icons">
+            <NavLink to="/profile">👤</NavLink>
+            <NavLink to="/wishlist">❤️</NavLink>
+            <NavLink to="/compare">🔄</NavLink>
+            <NavLink to="/cart">🛒<small>{count}</small></NavLink>
+          </div>
+        </div>
+                <div className="container">
+
+        <nav className={`navbar ${mobileOpen ? "open" : "close"}`}>
+          <ul className="nav-list">
+            {pagesMenu.map((p) => (
+              <li key={p.path}><NavLink to={p.path}>{p.label}</NavLink></li>
+            ))}
+            {categoriesMenu.map((c) => (
+              <li key={c.path}><NavLink to={c.path}>{c.label}</NavLink></li>
+            ))}
+            {isLogged && (
+              <li><button onClick={logout} className="logout-btn">התנתק/י</button></li>
+            )}
+          </ul>
+        </nav>
+        </div>
+      </header>
+    </>
+  );
+}

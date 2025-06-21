@@ -1,0 +1,19 @@
+.btn-bite {
+  background-color: #e7ccaa; /* גוון חום כפרי */
+  color: #523922;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+  font-family: 'Assistant', sans-serif; /* גופן קריא בעברית */
+}
+
+.btn-bite:hover {
+  background-color: #523922;
+  color: #e7ccaa;
+  
+}

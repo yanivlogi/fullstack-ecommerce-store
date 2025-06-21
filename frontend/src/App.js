@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import Header from './components/Header';
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
 import NoPageFound from "./pages/NoPageFound";
@@ -38,10 +39,13 @@ import EditMyProfile from "./User/EditMyProfile";
 import WaitingPosts from "./adminPanel/WaitingPosts";
 
 
+const user = localStorage.getItem("token");
 
 export default function App() {
   return (
     <BrowserRouter>
+        <Header user={user} />
+    
       <div style={{ minHeight: "calc(100vh - 150px)" }}>
         <Routes>
           <Route index element={<Home />} />

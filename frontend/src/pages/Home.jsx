@@ -2,30 +2,27 @@ import React from "react";
 import { Link } from "react-router-dom";
 import ChatBox from "../components/ChatBox"; // Import the ChatBox component
 import SomePosts from "../components/SomePosts"; // Import the ChatBox component
-import homeImage from "../uploads/homeImage.png";
-import "../css/Israel.css";
+import ButtonBite from '../components/buttons/buttonEdit/ButtonBite';
+
+import homeImage from "../uploads/logo.png";
 
 const Home = () => {
   
   return (
     
     <div className="container mt-5">
-      <div className="israel"> <h1 className="text-flicker">ביחד ננצח </h1></div>
+      
       <div className="row" style={{direction:'rtl', backgroundColor:"white", padding:'20px', border:"thick double rgb(50, 161, 206)"}}>
         <div className="col-md-6">
           <div>
-            <h1 className="display-4"> ברוכים הבאים ל - PetHouse</h1>
+            <h1 className="display-4"> ביס מהטבע </h1>
             <p className="lead" style={{ direction: "rtl" }}>
-              אנחנו קהילה של אוהבי בעלי חיים המוקדשים לעזור לבעלי חיים למצוא את בתיהם לנצח.
-              עיין בבעלי החיים הזמינים שלנו או פרסם אחד חדש כדי למצוא להם משפחה אוהבת.
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+               Voluptatum ex excepturi odit facilis deleniti impedit perspiciatis nostrum cupiditate laborum.
+                Alias voluptate quia architecto, mollitia quasi dolor dolorem rerum. Doloribus, nesciunt.
             </p>
             <div className="justify-content-center" style={{padding:'30px', margin:"10px"}}>
-              <Link to="/AllPosts" className="btn btn-primary" style={{padding:'10px', margin:"5px"}} >
-                הצג את חיות המחמד
-              </Link>
-              <Link to="/addPost" className="btn btn-primary" style={{padding:'10px', margin:"5px"}} >
-                פרסם חיית מחמד
-              </Link>
+                <ButtonBite to="/AllPosts">לכל הפוסטים</ButtonBite>
             </div>
           </div>
         </div>
@@ -45,12 +42,15 @@ const Home = () => {
         </div>
         <div className="col-md-6">
           <div className="chatbox-container">
-            <div className="chatbox-wrapper">
               <ChatBox />
+            <div className="chatbox-wrapper">
+             
             </div>
           </div>
         </div>
       </div>
+      <br />
+       <br />
     </div>
   );
 };

@@ -12,7 +12,6 @@ const user = localStorage.getItem("token");
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Header user={user} />
     <App />
     <Footer />
   </React.StrictMode>

@@ -1,372 +1,332 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import { cities } from "../js/cities.js";
-import { dogsList } from "../js/dogsList.js";
-import { catsList } from "../js/catsList.js";
 import { petsList } from "../js/petsList.js";
-import { birdsList } from "../js/birdsList.js";
-import { reptilesList } from "../js/reptilesList.js";
-import { rodentsList } from "../js/rodentsList.js";
-import "../css/imageCss.css";
 import "../css/AddPost.css";
+// בראש הקובץ
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+
 
 const AddPost = () => {
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
-  const [gender, setGender] = useState("זכר");
-  const [location, setLocation] = useState("");
-  const [type, setType] = useState("");
-  const [age, setAge] = useState("");
-  const [description, setDescription] = useState("");
-  const [isImmune, setIsImmune] = useState("");
-  const [isEducated, setIsEducated] = useState("");
-  const [isCastrated, setIsCastrated] = useState("");
-  const [name, setName] = useState("");
-  const [images, setImages] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [birds, setBirds] = useState([]);
-  const [typeOptions, setTypeOptions] = useState([]);
-  const [typeLabel, setTypeLabel] = useState("בחר קודם קטגוריה כדי לבחור סוג");
-  const [isDragging, setIsDragging] = useState(false);
-  const [server_url] = useState(process.env.REACT_APP_SERVER_URL);
-
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, []);
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState("");
+  const [type, setType] = useState("");
+  const [typeOptions, setTypeOptions] = useState([]);
+  const [price, setPrice] = useState("");
+  const [priceSale, setPriceSale] = useState("");
+  const [priceCost, setPriceCost] = useState("");
+  const [barcode, setBarcode] = useState("");
+  const [sku, setSku] = useState("");
+  const [storeLocation, setStoreLocation] = useState("");
+  const [stock, setStock] = useState("");
+  const [description, setDescription] = useState("");
+  const [images, setImages] = useState([]);
+  const [server_url] = useState(process.env.REACT_APP_SERVER_URL);
+  const [validationError, setValidationError] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [weight, setWeight] = useState("");
+  const [length, setLength] = useState("");
+  const [width, setWidth] = useState("");
+  const [height, setHeight] = useState("");
+  const [sellingType, setSellingType] = useState("in-store");
 
-  const AddPost = async (e) => {
-    e.preventDefault();
+const sensors = useSensors(useSensor(PointerSensor));
 
-    const userId = localStorage.getItem("token");
+const SortableImage = ({ id, index, img, onRemove }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id });
 
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("category", category);
-    formData.append("gender", gender);
-    formData.append("location", location);
-    formData.append("type", type);
-    formData.append("age", age);
-    formData.append("description", description);
-    formData.append("name", name);
-    formData.append("userId", userId);
-    formData.append("isImmune", isImmune);
-    formData.append("isEducated", isEducated);
-    formData.append("isCastrated", isCastrated);
-
-    // Append each image file separately
-    images.forEach((image) => {
-      formData.append("image[]", image);
-    });
-
-    try {
-      await axios.post(`${server_url}/posts`, formData);
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const removeImage = (index) => {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
-  };
-
-  const handleImageChange = (e) => {
-    const selectedImages = Array.from(e.target.files);
-    setImages((prevImages) => [...prevImages, ...selectedImages]);
-  };
-
-  const handleUploadClick = () => {
-    document.getElementById("imageInput").click();
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const droppedImages = Array.from(e.dataTransfer.files);
-    setImages((prevImages) => [...prevImages, ...droppedImages]);
-    setIsDragging(false);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = () => {
-    setIsDragging(false);
-  };
-
-  const handleCategoryChange = (selectedCategory) => {
-    setCategory(selectedCategory);
-
-    if (selectedCategory === "כלבים") {
-      setTypeOptions(dogsList);
-      setTypeLabel("בחר סוג כלב");
-    } else if (selectedCategory === "חתולים") {
-      setTypeOptions(catsList);
-      setTypeLabel("בחר סוג חתול");
-    } else if (selectedCategory === "תוכים ובעלי כנף") {
-      setTypeOptions(birdsList);
-      setTypeLabel("בחר סוג ציפורים");
-    } else if (selectedCategory === "מכרסמים") {
-      setTypeOptions(rodentsList);
-      setTypeLabel("בחר סוג מכרסמים");
-    } else if (selectedCategory === "זוחלים") {
-      setTypeOptions(reptilesList);
-      setTypeLabel("בחר סוג זוחלים");
-    } else {
-      setTypeOptions([]);
-      setTypeLabel("בחר סוג אחר");
-    }
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    touchAction: "none",
+    position: "relative",
   };
 
   return (
-    <div className="container my-5">
-      {isLoggedIn ? (
-        <div className="row" id="add-post-row">
-          <div className="col-md-6 mx-auto">
-            <div className="card">
-              <div className="card-body">
-                <h1 className="card-title text-center mb-4" >הוספת בעל חיים</h1>
-                <form onSubmit={AddPost}>
-                  <div className="form-group" >
-                    <label htmlFor="name">שם בעל החייים</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="הזן שם"
-                      required
-                    />
-                  </div>
+    <div ref={setNodeRef} style={style} className="product-image-tile" {...attributes}>
+      {/* אזור שניתן לגרירה בלבד */}
+      <div {...listeners} style={{ width: "100%", height: "100%" }}>
+        <img src={URL.createObjectURL(img)} alt={`image-${index}`} />
+{index === 0 && <div className="main-image-badge">ראשית</div>}
+      </div>
 
-                  <div className="form-group">
-                    <label htmlFor="category">קטגוריה</label>
-                    <select
-                      className="form-control"
-                      id="category"
-                      value={category}
-                      onChange={(e) => handleCategoryChange(e.target.value)}
-                      required
-                    >
-                      <option value="">בחר קטגורית חיית מחמד</option>
-                      {petsList.map((type) => (
-                        <option key={type} value={type}>
-                          {type}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+      {/* כפתור מחיקה שלא גורר */}
+      <div className="tile-actions">
+    <button type="button" className="remove-button" onClick={() => onRemove(index)}>
+    🗑
+  </button>
 
-                  <div className="form-group">
-                    <label htmlFor="type">{typeLabel}</label>
-
-                    <select
-                      className="form-control"
-                      id="type"
-                      value={type}
-                      onChange={(e) => setType(e.target.value)}
-                      required
-                    >
-                      <option value="">Select type</option>
-                      {typeOptions.map((type) => (
-                        <option key={type} value={type}>
-                          {type}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="gender">מין</label>
-                    <select
-                      className="form-control"
-                      id="gender"
-                      value={gender}
-                      onChange={(e) => setGender(e.target.value)}
-                      required
-                    >
-                      <option value="זכר">זכר</option>
-                      <option value="נקבה">נקבה</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="isImmune"> ?האם אני מחוסן/ת</label>
-                    <select
-                      className="form-control"
-                      id="isImmune"
-                      value={isImmune}
-                      onChange={(e) => setIsImmune(e.target.value)}
-                      required
-                    >
-                      <option value="false">לא</option>
-                      <option value="true">כן</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="isEducated">?מחונך לצרכים</label>
-                    <select
-                      className="form-control"
-                      id="isEducated"
-                      value={isEducated}
-                      onChange={(e) => setIsEducated(e.target.value)}
-                      required
-                    >
-                      <option value="false">לא</option>
-                      <option value="true">כן</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="isCastrated">? מסורס / מעוקרת </label>
-                    <select
-                      className="form-control"
-                      id="isCastrated"
-                      value={isCastrated}
-                      onChange={(e) => setIsCastrated(e.target.value)}
-                      required
-                    >
-                      <option value="false">לא</option>
-                      <option value="true">כן</option>
+      </div>
+    </div>
+  );
+};
 
 
-                    </select>
-                  </div>
 
-                  <div className="form-group">
-                    <label htmlFor="location">איזור איסוף</label>
-                    <select
-                      className="form-control"
-                      id="location"
-                      value={location}
-                      onChange={(e) => setLocation(e.target.value)}
-                      required
-                    >
-                      <option value="">בחר מיקום</option>
-                      {cities.map((city) => (
-                        <option key={city} value={city}>
-                          {city}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem("token"));
+  }, []);
 
-                  <div className="form-group">
-                    <label htmlFor="age">גיל (בשנים)</label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="age"
-                      value={age}
-                      onChange={(e) => setAge(Math.max(parseFloat(e.target.value), 0.1))}
-                      placeholder="Enter age"
-                      step="0.1"
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="description">קצת על בעל החיים</label>
-                    <textarea
-                      className="form-control"
-                      id="description"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      placeholder="כתוב קצת על בעל החיים"
-                      required
-                    />
-                  </div>
+  const handleCategoryChange = (value) => {
+    setCategory(value);
+    setTypeOptions(["סוג 1", "סוג 2", "סוג 3"]);
+  };
 
-                  <div className="form-group">
-                    <label htmlFor="image">Image</label>
-                    <small className="text-muted">
-                      (You can select multiple images)
-                    </small>
-                    <div
-                      className={`input-group mb-3 ${isDragging ? "dragging" : ""
-                        }`}
-                      onDrop={handleDrop}
-                      onDragOver={handleDragOver}
-                      onDragLeave={handleDragLeave}
-                    >
-                      <div className="custom-file">
-                        <input
-                          type="file"
-                          className="custom-file-input"
-                          id="imageInput"
-                          onChange={handleImageChange}
-                          multiple
-                        />
-                        <label
-                          className="custom-file-label"
-                          htmlFor="image"
-                          onClick={handleUploadClick}
-                        >
-                          {isDragging
-                            ? "Drop image here 🔽"
-                            : images.length === 0
-                              ? "Choose file 🖼"
-                              : "Upload more files ➕"}
-                        </label>
-                      </div>
-                    </div>
-                    {images.length > 0 && (
-                      <div className="image-preview">
-                        {images.map((image, index) => (
-                          <div
-                            key={index}
-                            className="image-item position-relative"
-                          >
-                            <img
-                              src={URL.createObjectURL(image)}
-                              alt={`Image ${index + 1}`}
-                              className="preview-image img-thumbnail"
-                              style={{ width: "200px" }}
-                            />
-                            <button
-                              className="remove-button"
-                              onClick={() => removeImage(index)}
-                            >
-                              <span
-                                style={{
-                                  fontSize: "18px",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                ✖
-                              </span>
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+  const handleImageChange = (e) => {
+    const selected = Array.from(e.target.files);
+    setImages((prev) => [...prev, ...selected]);
+  };
 
-                  <button
-                    type="submit"
-                    className="btn btn-primary mt-4"
-                  >
-                    הוסף פוסט
-                  </button>
-                </form>
+const removeImage = (index) => {
+  const tile = document.getElementById(`tile-${index}`);
+  if (tile) {
+    tile.classList.add('fade-out');
+    setTimeout(() => {
+      setImages((prev) => prev.filter((_, i) => i !== index));
+    }, 300);
+  }
+};
+
+
+  const submitProduct = async (e) => {
+    e.preventDefault();
+    if (priceSale && parseFloat(priceSale) > parseFloat(price)) {
+      return setValidationError("מחיר מבצע לא יכול להיות גבוה מהמחיר הרגיל.");
+    }
+
+    setValidationError("");
+    const formData = new FormData();
+    [
+      ["name", name],
+      ["category", category],
+      ["type", type],
+      ["price", price],
+      ["priceSale", priceSale],
+      ["priceCost", priceCost],
+      ["barcode", barcode],
+      ["sku", sku],
+      ["storeLocation", storeLocation],
+      ["stock", stock],
+      ["description", description],
+      ["weight", weight],
+      ["length", length],
+      ["width", width],
+      ["height", height],
+      ["sellingType", sellingType],
+      ["userId", localStorage.getItem("token")],
+    ].forEach(([key, val]) => formData.append(key, val));
+
+    images.forEach((img) => formData.append("image[]", img));
+
+    try {
+      await axios.post(`${server_url}/products`, formData);
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  if (!isLoggedIn) {
+    return (
+      <div className="container mt-5 text-center">
+        <div className="alert alert-danger">
+          עליך להתחבר כדי להוסיף מוצר.{" "}
+          <Link to="/userLogin" className="btn btn-primary ms-2">התחבר</Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container add-product-wrapper my-5" style={{ direction: "rtl" }}>
+      <form onSubmit={submitProduct}>
+        <h2 className="shop-title">הוספת מוצר חדש</h2>
+        {validationError && <div className="alert alert-danger">{validationError}</div>}
+
+        <div className="row g-4">
+          <div className="col-md-8">
+            <div className="form-card">
+              <h4>📝 תיאור מוצר</h4>
+              <label>שם מוצר</label>
+              <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} required />
+              <label className="mt-3">תיאור</label>
+              <textarea className="form-control" rows={5} value={description} onChange={(e) => setDescription(e.target.value)} required />
+            </div>
+
+            <div className="form-card">
+              <h4>📂 קטגוריה וסוג</h4>
+              <div className="row">
+                <div className="col-md-6">
+                  <label>קטגוריה</label>
+                  <select className="form-select" value={category} onChange={(e) => handleCategoryChange(e.target.value)} required>
+                    <option value="">בחר קטגוריה</option>
+                    {petsList.map((c) => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </div>
+                <div className="col-md-6">
+                  <label>סוג</label>
+                  <select className="form-select" value={type} onChange={(e) => setType(e.target.value)} required>
+                    <option value="">בחר סוג</option>
+                    {typeOptions.map((t) => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div className="form-card">
+              <h4>📌 מזהים ומלאי</h4>
+              <div className="row g-3">
+                <div className="col-md-6">
+                  <label>ברקוד</label>
+                  <input type="text" className="form-control" value={barcode} onChange={(e) => setBarcode(e.target.value)} />
+                </div>
+                <div className="col-md-6">
+                  <label>SKU (מזהה מוצר)</label>
+                  <input type="text" className="form-control" value={sku} onChange={(e) => setSku(e.target.value)} />
+                </div>
+                <div className="col-md-6">
+                  <label>מיקום בחנות</label>
+                  <input type="text" className="form-control" value={storeLocation} onChange={(e) => setStoreLocation(e.target.value)} />
+                </div>
+                <div className="col-md-6">
+                  <label>כמות במלאי</label>
+                  <input type="number" className="form-control" value={stock} onChange={(e) => setStock(e.target.value)} required />
+                </div>
+              </div>
+            </div>
+
+            <div className="form-card">
+              <h4>💰 מחירים</h4>
+              <label>מחיר רגיל (₪)</label>
+              <input type="number" className="form-control" value={price} onChange={(e) => setPrice(e.target.value)} required />
+              <label className="mt-3">מחיר מבצע (₪)</label>
+              <input type="number" className="form-control" value={priceSale} onChange={(e) => setPriceSale(e.target.value)} />
+              <label className="mt-3">מחיר עלות (₪)</label>
+              <input type="number" className="form-control" value={priceCost} onChange={(e) => setPriceCost(e.target.value)} />
+            </div>
+          </div>
+
+          <div className="col-md-4">
+<div className="form-card">
+  <h4>🖼️ תמונות מוצר</h4>
+  <p className="text-muted small">גרור תמונה ראשונה כדי להפוך אותה לתמונה הראשית.</p>
+
+  <DndContext
+    sensors={sensors}
+    collisionDetection={closestCenter}
+    onDragEnd={({ active, over }) => {
+      if (active.id !== over?.id) {
+        const oldIndex = images.findIndex((_, i) => `img-${i}` === active.id);
+        const newIndex = images.findIndex((_, i) => `img-${i}` === over?.id);
+        setImages(arrayMove(images, oldIndex, newIndex));
+      }
+    }}
+  >
+    <SortableContext
+      items={images.map((_, i) => `img-${i}`)}
+      strategy={verticalListSortingStrategy}
+    >
+      <div className="product-images-section">
+        {/* ריבוע העלאה תמיד ראשון */}
+        <label className="image-upload-tile">
+          <input type="file" multiple hidden onChange={handleImageChange} />
+          <div className="upload-box">
+            <span className="upload-icon">📤</span>
+            <span className="upload-text">Click to upload<br />or drag and drop</span>
+          </div>
+        </label>
+
+        {/* כל שאר התמונות */}
+        {images.map((img, i) => (
+          <SortableImage
+            key={`img-${i}`}
+            id={`img-${i}`}
+            index={i}
+            img={img}
+            onRemove={(index) =>
+              setImages((prev) => prev.filter((_, idx) => idx !== index))
+            }
+          />
+        ))}
+      </div>
+    </SortableContext>
+  </DndContext>
+</div>
+
+
+            <div className="form-card">
+              <h4>🚚 משלוח וגודל חבילה</h4>
+              <label>משקל המוצר (ק״ג)</label>
+              <input type="number" className="form-control" value={weight} onChange={(e) => setWeight(e.target.value)} />
+              <label className="mt-3">מידות החבילה (ס״מ)</label>
+              <div className="row g-2">
+                <div className="col-md-4">
+                  <label>אורך</label>
+                  <input type="number" className="form-control" value={length} onChange={(e) => setLength(e.target.value)} />
+                </div>
+                <div className="col-md-4">
+                  <label>רוחב</label>
+                  <input type="number" className="form-control" value={width} onChange={(e) => setWidth(e.target.value)} />
+                </div>
+                <div className="col-md-4">
+                  <label>גובה</label>
+                  <input type="number" className="form-control" value={height} onChange={(e) => setHeight(e.target.value)} />
+                </div>
+              </div>
+            </div>
+
+            <div className="form-card">
+              <h4>🛒 אופן המכירה</h4>
+              {["in-store", "online", "both"].map((val) => (
+                <div className="form-check" key={val}>
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="sellingType"
+                    value={val}
+                    checked={sellingType === val}
+                    onChange={(e) => setSellingType(e.target.value)}
+                  />
+                  <label className="form-check-label">
+                    {val === "in-store" ? "מכירה בחנות בלבד" :
+                      val === "online" ? "מכירה אונליין בלבד" :
+                        "מכירה בחנות וגם אונליין"}
+                  </label>
+                </div>
+              ))}
+            </div>
+
+            <div className="form-card form-card-buttons">
+              <div className="button-group">
+                <button type="button" className="btn-discard">בטל</button>
+                <button type="button" className="btn-schedule">תזמן</button>
+                <button type="submit" className="btn-primary-add">הוסף מוצר</button>
               </div>
             </div>
           </div>
         </div>
-      ) : (
-        <div className="alert alert-danger">
-          You need to be logged in to add a post.{" "}
-          <Link to="/userLogin" className="btn btn-primary">
-            Login
-          </Link>
-        </div>
-      )}
+      </form>
     </div>
   );
 };

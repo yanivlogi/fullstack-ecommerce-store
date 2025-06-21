@@ -1,0 +1,163 @@
+
+/* בסיס + צבעים + טופבר נשאר כמו בקוד המקורי שלך */
+
+/* רספונסיביות למסך גדול */
+
+
+.flex-between{
+  display: flex;
+  align-items: center;
+  direction: rtl;
+    justify-content: space-between;
+
+
+
+}
+
+.nav-list{
+    display:none;
+  }
+
+.midbar-grid {
+  direction: rtl;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  
+  background: #291203b8;
+}
+
+.nav-left {
+  display: flex;
+  gap: 16px;
+}
+
+.nav-desktop {
+  display: flex;
+  gap: 16px;
+}
+
+.nav-desktop a, .logout-btn {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+}
+
+.logo img {
+  height: 58px;
+  border-radius: 50%;
+  background: white;
+  padding: 4px;
+  box-shadow: 0px 1px 8px rgb(0, 0, 0);
+}
+
+.icons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.icons a{
+  text-decoration: none;
+}
+/* מובייל */
+@media (max-width: 1200px) {
+
+
+  .nav-desktop {
+    display: none;
+  }
+.hamburger {
+  width: 24px;
+  height: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.hamburger div {
+  height: 3px;
+  background-color: white;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* מצב פתוח: X */
+.hamburger.open div:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburger.open div:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.open div:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+  .navbar {
+    display: none;
+    background: var(--c-nav);
+    z-index: 10;
+  }
+
+  .navbar.close {
+    display: none;
+  }
+ 
+.navbar.open {
+  display: block;
+  background: #291203b8;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgb(0, 0, 0);
+  z-index: 15;
+  width: 100%;
+}
+
+
+
+  .nav-list {
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
+  }
+
+  .nav-list li {
+    background: var(--c-mid);
+    border: 2px solid white;
+      box-shadow: 5px 5px 10px rgb(0, 0, 0);
+
+    background-color: rgba(48, 29, 10, 0.789);
+    border-radius: 6px;
+    text-align: center;
+  }
+
+  .nav-list a, .nav-list button {
+    text-decoration: none;
+    display: inline-block;
+    padding: 12px;
+    font-size: 16px;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .midbar-grid {
+    grid-template-columns: 1fr auto 1fr;
+  }
+}
