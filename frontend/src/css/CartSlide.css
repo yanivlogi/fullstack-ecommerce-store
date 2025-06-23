@@ -1,18 +1,23 @@
+/* כללית */
 .cart-slide {
   position: fixed;
   top: 0;
   right: 0;
-  bottom: 0;
+  height: 100%;
   width: 0;
   overflow: hidden;
-  transition: width 0.3s ease;
   z-index: 2000;
+  direction: rtl;
+  transition: width 0.3s ease;
+  font-family: "Heebo", sans-serif;
 }
 
+/* כאשר העגלה פתוחה */
 .cart-slide.open {
-  width: 300px;
+  width: 400px;
 }
 
+/* רקע כהה מאחורי העגלה */
 .cart-slide-overlay {
   position: fixed;
   top: 0;
@@ -24,43 +29,157 @@
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
-
 .cart-slide.open .cart-slide-overlay {
   opacity: 1;
   pointer-events: auto;
 }
 
+/* תוכן העגלה */
 .cart-slide-content {
-  background: #fff;
+  position: absolute;
+  top: 0;
+  right: 0;
   height: 100%;
+  width: 400px;
+  background: #fff;
   padding: 20px;
-  box-shadow: -2px 0 6px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
   transform: translateX(100%);
   transition: transform 0.3s ease;
+  box-shadow: -4px 0 6px rgba(0, 0, 0, 0.2);
 }
-
 .cart-slide.open .cart-slide-content {
   transform: translateX(0);
 }
 
+/* כפתור סגירה */
 .close-btn {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
   position: absolute;
   top: 10px;
   left: 10px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
-.cart-slide-content ul {
-  list-style: none;
-  padding: 0;
+/* כותרת העגלה */
+.cart-title {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
 }
 
-.cart-slide-content li {
+/* פס התקדמות */
+.shipping-progress-text {
+  text-align: center;
+  font-size: 14px;
+  color: #0073aa;
+  margin-bottom: 6px;
+}
+.shipping-progress-bar {
+  height: 6px;
+  background: #eee;
+  margin: 0 auto 15px;
+  width: 80%;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: black;
+  transition: width 0.3s ease;
+}
+
+/* פריטי עגלה */
+.cart-items {
+  margin-bottom: 15px;
+}
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+.cart-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+.item-details {
+  flex: 1;
+  font-size: 14px;
+}
+.quantity-control {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 5px;
+}
+.quantity-control button {
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: 1px solid #999;
+  cursor: pointer;
+}
+.item-total {
+  font-weight: bold;
+}
+
+/* קוד קופון */
+.promo-code {
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* סיכום מחיר */
+.summary {
+  border-top: 1px dashed #ccc;
+  padding-top: 10px;
+  margin-bottom: 10px;
+}
+.summary div {
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+.summary .total {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* כפתורים */
+.cart-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.cart-actions button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: black;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* PayPal */
+.paypal-btn {
+  background: #ffc439;
+  color: #003087;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
 }

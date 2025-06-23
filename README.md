@@ -61,7 +61,7 @@ npm run start
 
 **Yaniv Logi**  
 Full Stack Developer & UI/UX Enthusiast  
-[📧](mailto:your@email.com) | [LinkedIn](https://linkedin.com/in/yanivlogi)
+[📧](mailto:yanivlogi1@gmail.com) | [LinkedIn](https://linkedin.com/in/yaniv-logi)
 
 ---
 
