@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { Card, Button, Col, Row, Form, Container, Tooltip, OverlayTrigger } from "react-bootstrap";
-import "../css/PostList.css";
+import "../css/AllProducts.css";
 
 
 

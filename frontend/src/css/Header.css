@@ -1,30 +1,50 @@
-
-/* בסיס + צבעים + טופבר נשאר כמו בקוד המקורי שלך */
-
-/* רספונסיביות למסך גדול */
-
-
-.flex-between{
-  display: flex;
-  align-items: center;
+/* בסיס כללי */
+.topbar {
   direction: rtl;
-    justify-content: space-between;
-
-
-
+  background-color: #ffffff;
+  font-size: 13px;
+  color: #3b210d;
+  padding: 4px 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-
-.nav-list{
-    display:none;
+ .navbar.close {
+    display: none;
   }
 
-.midbar-grid {
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   direction: rtl;
+}
+
+/* חלק מרכזי של ההדר */
+.midbar {
+  background-color: #ffffff;
+  position: fixed;
+  top: 25px; /* כי ה־topbar הוא 30px */
+  width: 100%;
+  z-index: 1001;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  padding: 2px 0;
+}
+
+.midbar-grid {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  
-  background: #291203b8;
+  direction: rtl;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 12px;
 }
 
 .nav-left {
@@ -37,8 +57,9 @@
   gap: 16px;
 }
 
-.nav-desktop a, .logout-btn {
-  color: #fff;
+.nav-desktop a,
+.logout-btn {
+  color: #3b210d;
   text-decoration: none;
   font-weight: 500;
   font-size: 15px;
@@ -66,46 +87,55 @@
   gap: 12px;
 }
 
-.icons a{
+.icons a {
   text-decoration: none;
 }
+
 .cart-icon {
   cursor: pointer;
 }
-/* מובייל */
+
+.cart-icon small {
+  font-size: 12px;
+  vertical-align: super;
+}
+
+/* ------------------------------- */
+/* רספונסיביות למסכים קטנים       */
+/* ------------------------------- */
 @media (max-width: 1200px) {
-
-
   .nav-desktop {
     display: none;
   }
-.hamburger {
-  width: 24px;
-  height: 18px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  cursor: pointer;
-  z-index: 20;
-}
 
-.hamburger div {
-  height: 3px;
-  background-color: white;
-  border-radius: 2px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
+  .hamburger {
+    width: 24px;
+    height: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    z-index: 20;
+  }
 
-/* מצב פתוח: X */
-.hamburger.open div:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-.hamburger.open div:nth-child(2) {
-  opacity: 0;
-}
-.hamburger.open div:nth-child(3) {
-  transform: rotate(-45deg) translate(5px, -5px);
-}
+  .hamburger div {
+    height: 3px;
+    background-color: rgb(0, 0, 0);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .hamburger.open div:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .hamburger.open div:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger.open div:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
 
   .navbar {
     display: none;
@@ -116,18 +146,16 @@
   .navbar.close {
     display: none;
   }
- 
-.navbar.open {
-  display: block;
-  background: #291203b8;
-  padding: 12px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgb(0, 0, 0);
-  z-index: 15;
-  width: 100%;
-}
 
-
+  .navbar.open {
+    display: block;
+    background: #291203b8;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgb(0, 0, 0);
+    z-index: 15;
+    width: 100%;
+  }
 
   .nav-list {
     list-style: none;
@@ -136,20 +164,18 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    
   }
 
   .nav-list li {
-    background: var(--c-mid);
-    border: 2px solid white;
-      box-shadow: 5px 5px 10px rgb(0, 0, 0);
-
     background-color: rgba(48, 29, 10, 0.789);
     border-radius: 6px;
     text-align: center;
+    border: 2px solid white;
+    box-shadow: 5px 5px 10px rgb(0, 0, 0);
   }
 
-  .nav-list a, .nav-list button {
+  .nav-list a,
+  .nav-list button {
     text-decoration: none;
     display: inline-block;
     padding: 12px;
@@ -163,4 +189,9 @@
   .midbar-grid {
     grid-template-columns: 1fr auto 1fr;
   }
+}
+
+/* מוסיף מקום בתוכן מתחת להדר */
+body {
+  padding-top: 110px; /* topbar + midbar משולבים */
 }

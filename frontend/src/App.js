@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
 import NoPageFound from "./pages/NoPageFound";
+import FilterSidebar from "./components/FilterSidebar";
 
 
 //posts
@@ -74,6 +75,7 @@ export default function App() {
           <Route path="posts/:id" element={<Post />} />
           <Route path="MyPosts" element={<MyPosts />} />
           <Route path="AllPosts" element={<AllPosts />} />
+          <Route path="FilterSidebar" element={<FilterSidebar />} />
           <Route path="someposts" element={<SomePosts />} />
           <Route path="addPost" element={<AddPost />} />
           <Route path="edit/:id" element={<EditPost />} />

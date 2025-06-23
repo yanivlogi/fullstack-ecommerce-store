@@ -1,0 +1,114 @@
+.products-page {
+  display: flex;
+  direction: rtl;
+  gap: 20px;
+  padding: 20px;
+  margin-top: 50px;
+  position: relative;
+  flex-wrap: nowrap;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 20px;
+  flex: 1;
+}
+
+.product-card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+.sale-tag {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  background: #f50057;
+  color: #fff;
+  padding: 4px 8px;
+  font-size: 13px;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.product-image img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.price-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.price-original {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 14px;
+}
+
+.price-discounted {
+  color: #ffc107;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: auto;
+}
+
+.quantity-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.quantity-box button {
+  padding: 4px 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.add-btn {
+  background-color: #f50057;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.expiry {
+  font-size: 13px;
+  color: #666;
+  margin-top: 6px;
+}
+
+@media (max-width: 768px) {
+  .products-page {
+    flex-wrap: wrap;
+    padding: 0;
+  }
+
+  .product-grid {
+    padding: 16px;
+    width: 100%;
+  }
+}

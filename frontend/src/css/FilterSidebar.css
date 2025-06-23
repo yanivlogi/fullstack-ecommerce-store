@@ -1,0 +1,60 @@
+/* קונטיינר כללי */
+.filter-slide-container {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+/* גרסה למובייל (סגור כברירת מחדל) */
+.filter-slide-container.mobile {
+  position: fixed;
+  top: 80px;
+  right: 0;
+  height: calc(100vh - 80px);
+  z-index: 1000;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+    overflow: visible;
+}
+
+/* פתיחה */
+.filter-slide-container.mobile.open {
+  transform: translateX(0);
+}
+
+/* Sidebar עצמו */
+.filter-sidebar {
+  direction: rtl;
+  width: 260px;
+  padding: 16px;
+  background-color: #fff;
+  border-left: 1px solid #ccc;
+  transition: transform 0.3s ease;
+}
+
+/* כפתור גרירה */
+.drag-button {
+  position: absolute;
+  right: 98%;
+  top: 6%;
+  transform: translateY(-50%);
+  background-color: #ffffff;
+  color: rgb(0, 38, 255);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: grab;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: -24px; /* כדי לבלוט החוצה */
+  z-index: 1500;
+}
+
+/* הסתרה במסכים גדולים */
+@media (min-width: 769px) {
+  .drag-button {
+    display: none;
+  }
+}
