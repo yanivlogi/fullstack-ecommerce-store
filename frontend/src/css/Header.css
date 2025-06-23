@@ -69,6 +69,9 @@
 .icons a{
   text-decoration: none;
 }
+.cart-icon {
+  cursor: pointer;
+}
 /* מובייל */
 @media (max-width: 1200px) {
 

@@ -4,6 +4,7 @@ import { Link, NavLink } from "react-router-dom";
 import axios from "axios";
 import logo from "../uploads/logo.png";
 import "../css/Header.css";
+import CartSlide from "./CartSlide";
 
 const pagesMenu = [
   { label: "אודות", path: "/aboutus" },
@@ -21,6 +22,11 @@ export default function Header() {
   const [user, setUser] = useState(null);
   const [count, setCount] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartItems] = useState([
+    { name: "מוצר לדוגמה", price: 20 },
+    { name: "מוצר נוסף", price: 35 },
+  ]);
   const server = process.env.REACT_APP_SERVER_URL;
 
   const getHeaderInfo = useCallback(async () => {
@@ -112,12 +118,14 @@ export default function Header() {
             <NavLink to="/profile">👤</NavLink>
             <NavLink to="/wishlist">❤️</NavLink>
             <NavLink to="/compare">🔄</NavLink>
-            <NavLink to="/cart">🛒<small>{count}</small></NavLink>
+            <span className="cart-icon" onClick={() => setCartOpen(true)}>
+              🛒<small>{count}</small>
+            </span>
           </div>
         </div>
                 <div className="container">
 
-        <nav className={`navbar ${mobileOpen ? "open" : "close"}`}>
+        <nav className={`navbar ${mobileOpen ? "open" : "close"}`}> 
           <ul className="nav-list">
             {pagesMenu.map((p) => (
               <li key={p.path}><NavLink to={p.path}>{p.label}</NavLink></li>
@@ -132,6 +140,11 @@ export default function Header() {
         </nav>
         </div>
       </header>
+      <CartSlide
+        isOpen={cartOpen}
+        onClose={() => setCartOpen(false)}
+        items={cartItems}
+      />
     </>
   );
 }
