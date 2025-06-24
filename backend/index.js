@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import UserRoute from "./routes/UserRoute.js";
-import PostRoute from "./routes/PostRoute.js";
+import ProductRoute from "./routes/ProductRoute.js";
 import ChatBoxRoute from "./routes/ChatBoxRoute.js";
 import CommentRoute from "./routes/CommentRoute.js";
 import MessagesRoute from "./routes/MessagesRoute.js";
@@ -44,7 +44,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(UserRoute);
-app.use(PostRoute);
+app.use(ProductRoute);
 app.use(ChatBoxRoute);
 app.use(CommentRoute);
 app.use(MessagesRoute);
