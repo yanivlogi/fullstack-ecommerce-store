@@ -107,7 +107,14 @@ const AllPosts = () => {
   };
 
   const formatDate = (dateStr) => new Date(dateStr).toLocaleDateString("he-IL");
-  const getImageUrl = (imagePath) => imagePath ? `${server_url}/${imagePath?.split(",")[0]?.replace(/\\\\/g, "/").split("/").pop()}` : "";
+
+
+const getImageUrl = (imagePath) => {
+  if (!imagePath) return "";
+  const firstPath = imagePath.split(",")[0]?.trim();
+  const cleanPath = firstPath.replace(/^uploads[\\/]/, "/");
+  return `${server_url}/${cleanPath}`;
+};
   const addToCart = (id) => setQuantities((prev) => ({ ...prev, [id]: (prev[id] || 1) + 1 }));
   const decreaseQuantity = (id) => setQuantities((prev) => ({ ...prev, [id]: Math.max(1, (prev[id] || 1) - 1) }));
 

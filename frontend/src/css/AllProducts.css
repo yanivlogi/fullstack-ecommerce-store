@@ -112,3 +112,9 @@
     width: 100%;
   }
 }
+@media (min-width: 769px) {
+  .products-page {
+    margin-right: 260px; /* זהה לרוחב הסיידבר */
+    padding: 16px;
+  }
+}
