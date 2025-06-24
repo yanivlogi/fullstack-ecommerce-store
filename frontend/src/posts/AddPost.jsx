@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import { petsList } from "../js/petsList.js";
+import { vegetableCategories } from "../js/vegetableCategories.js";
+import { leafyList } from "../js/leafyList.js";
+import { rootList } from "../js/rootList.js";
+import { fruitList } from "../js/fruitList.js";
 import "../css/AddPost.css";
 // בראש הקובץ
 import {
@@ -90,7 +93,19 @@ const SortableImage = ({ id, index, img, onRemove }) => {
 
   const handleCategoryChange = (value) => {
     setCategory(value);
-    setTypeOptions(["סוג 1", "סוג 2", "סוג 3"]);
+    switch (value) {
+      case "ירקות עליים":
+        setTypeOptions(leafyList);
+        break;
+      case "ירקות שורש":
+        setTypeOptions(rootList);
+        break;
+      case "ירקות פירות":
+        setTypeOptions(fruitList);
+        break;
+      default:
+        setTypeOptions([]);
+    }
   };
 
   const handleImageChange = (e) => {
@@ -181,7 +196,9 @@ const removeImage = (index) => {
                   <label>קטגוריה</label>
                   <select className="form-select" value={category} onChange={(e) => handleCategoryChange(e.target.value)} required>
                     <option value="">בחר קטגוריה</option>
-                    {petsList.map((c) => <option key={c} value={c}>{c}</option>)}
+                    {vegetableCategories.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
                   </select>
                 </div>
                 <div className="col-md-6">

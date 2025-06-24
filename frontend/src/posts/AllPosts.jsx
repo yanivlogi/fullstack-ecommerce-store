@@ -3,13 +3,10 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import FilterSidebar from "../components/FilterSidebar";
-import { cities } from "../js/cities.js";
-import { dogsList } from "../js/dogsList.js";
-import { catsList } from "../js/catsList.js";
-import { petsList } from "../js/petsList.js";
-import { birdsList } from "../js/birdsList.js";
-import { reptilesList } from "../js/reptilesList.js";
-import { rodentsList } from "../js/rodentsList.js";
+import { vegetableCategories } from "../js/vegetableCategories.js";
+import { leafyList } from "../js/leafyList.js";
+import { rootList } from "../js/rootList.js";
+import { fruitList } from "../js/fruitList.js";
 import "../css/AllProducts.css";
 
 const AllPosts = () => {
@@ -19,14 +16,9 @@ const AllPosts = () => {
   const [category, setCategory] = useState("");
   const [type, setType] = useState("");
   const [typeOptions, setTypeOptions] = useState([]);
-  const [selectedGender, setSelectedGender] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [isEducated, setIsEducated] = useState("");
-  const [isCastrated, setIsCastrated] = useState("");
-  const [isImmune, setIsImmune] = useState("");
-  const [minAge, setMinAge] = useState(0);
-  const [maxAge, setMaxAge] = useState(99);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(0);
   const [quantities, setQuantities] = useState({});
   const [sidebarPosition, setSidebarPosition] = useState("closed");
   const [isOpen, setIsOpen] = useState(false);
@@ -40,18 +32,13 @@ const AllPosts = () => {
 
   const getPosts = async () => {
     try {
-      const res = await axios.get(`${server_url}/posts`, {
+      const res = await axios.get(`${server_url}/products`, {
         params: {
           search: searchQuery,
           category,
           type,
-          gender: selectedGender,
-          location: selectedLocation,
-          isImmune,
-          isEducated,
-          isCastrated,
-          minAge,
-          maxAge,
+          minPrice,
+          maxPrice,
         },
       });
       setPosts(res.data);
@@ -80,29 +67,28 @@ const AllPosts = () => {
     let result = [...posts];
     if (category) result = result.filter((p) => p.category === category);
     if (type) result = result.filter((p) => p.type === type);
-    if (selectedGender) result = result.filter((p) => p.gender === selectedGender);
-    if (selectedLocation) result = result.filter((p) => p.location === selectedLocation);
-    if (isEducated) result = result.filter((p) => p.isEducated?.toString() === isEducated);
-    if (isCastrated) result = result.filter((p) => p.isCastrated?.toString() === isCastrated);
-    if (isImmune) result = result.filter((p) => p.isImmune?.toString() === isImmune);
     if (searchQuery) result = result.filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
-    if (minAge) result = result.filter((p) => p.age >= parseInt(minAge));
-    if (maxAge) result = result.filter((p) => p.age <= parseInt(maxAge));
+    if (minPrice) result = result.filter((p) => p.price >= parseFloat(minPrice));
+    if (maxPrice) result = result.filter((p) => p.price <= parseFloat(maxPrice));
     setFilteredPosts(result);
   }, [
-    posts, category, type, selectedGender, selectedLocation,
-    isEducated, isCastrated, isImmune, searchQuery, minAge, maxAge
+    posts, category, type, searchQuery, minPrice, maxPrice
   ]);
 
   const handleCategoryChange = (selectedCategory) => {
     setCategory(selectedCategory);
     switch (selectedCategory) {
-      case "כלבים": setTypeOptions(dogsList); break;
-      case "חתולים": setTypeOptions(catsList); break;
-      case "תוכים ובעלי כנף": setTypeOptions(birdsList); break;
-      case "מכרסמים": setTypeOptions(rodentsList); break;
-      case "זוחלים": setTypeOptions(reptilesList); break;
-      default: setTypeOptions([]);
+      case "ירקות עליים":
+        setTypeOptions(leafyList);
+        break;
+      case "ירקות שורש":
+        setTypeOptions(rootList);
+        break;
+      case "ירקות פירות":
+        setTypeOptions(fruitList);
+        break;
+      default:
+        setTypeOptions([]);
     }
   };
 
@@ -126,34 +112,23 @@ const getImageUrl = (imagePath) => {
   setSidebarOpen={setSidebarOpen}
   category={category}
   type={type}
-  selectedGender={selectedGender}
-  selectedLocation={selectedLocation}
   searchQuery={searchQuery}
-  isEducated={isEducated}
-  isCastrated={isCastrated}
-  isImmune={isImmune}
-  minAge={minAge}
-  maxAge={maxAge}
-  petsList={petsList}
+  minPrice={minPrice}
+  maxPrice={maxPrice}
+  categories={vegetableCategories}
   typeOptions={typeOptions}
-  cities={cities}
   setCategory={handleCategoryChange}
   setType={setType}
-  setSelectedGender={setSelectedGender}
-  setSelectedLocation={setSelectedLocation}
   setSearchQuery={setSearchQuery}
-  setIsEducated={setIsEducated}
-  setIsCastrated={setIsCastrated}
-  setIsImmune={setIsImmune}
-  setMinAge={setMinAge}
-  setMaxAge={setMaxAge}
+  setMinPrice={setMinPrice}
+  setMaxPrice={setMaxPrice}
   handleSearch={getPosts}
 />
 
 
 
       <section className="product-grid">
-        {filteredPosts.filter((post) => !post.isAdopted).map((post) => (
+        {filteredPosts.map((post) => (
           <div className="product-card" key={post._id}>
             <div className="sale-tag">מבצע!</div>
             <div className="product-image">
@@ -162,10 +137,11 @@ const getImageUrl = (imagePath) => {
             <h3>{post.name}</h3>
             <p className="desc">{post.description?.slice(0, 50)}...</p>
             <div className="price-row">
-              <span className="price-discounted">₪10</span>
-              <span className="price-original">₪19.9</span>
+              {post.priceSale && (
+                <span className="price-discounted">₪{post.priceSale}</span>
+              )}
+              <span className="price-original">₪{post.price}</span>
             </div>
-            <div className="expiry">עד: {formatDate(post.expiryDate)}</div>
             <div className="actions">
               <button className="add-btn" onClick={() => addToCart(post._id)}>הוסף</button>
               <div className="quantity-box">

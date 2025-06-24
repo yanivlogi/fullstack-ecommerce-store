@@ -1,4 +1,4 @@
-import Post from "../models/PostModel.js";
+import Product from "../models/ProductModel.js";
 import User from "../models/UserModel.js";
 import jwt from 'jsonwebtoken';
 import 'dotenv/config'
@@ -14,7 +14,7 @@ export const getWaitingPosts = async (req, res) => {
 
     query.isConfirmed = false;
 
-    let posts = await Post.find(query);
+    let posts = await Product.find(query);
 
     res.json(posts);
   } catch (error) {
@@ -28,7 +28,7 @@ export const getWaitingPosts = async (req, res) => {
 
 export const postConfirmation = async (req, res) => {
     try {
-        const postId = req.params.id; // Assuming the post ID is passed as a route parameter
+        const productId = req.params.id; // Assuming the product ID is passed as a route parameter
         const token = req.headers.authorization; // Retrieve the entire Authorization header
         const decoded = jwt.verify(token, jwt_key);
 
@@ -38,18 +38,16 @@ export const postConfirmation = async (req, res) => {
             return res.status(403).json({ message: 'Access Denied' });
         }
 
-        // Find the post by ID
-        const post = await Post.findById(postId);
-        if (!post) {
-          return res.status(404).json({ message: 'Post not found' });
+        // Find the product by ID
+        const product = await Product.findById(productId);
+        if (!product) {
+          return res.status(404).json({ message: 'Product not found' });
         }
-    
-        // Update the isAdopted field to true
-        post.isConfirmed = true;
-        await post.save();
-    
-        // Return the updated post
-        res.json(post);
+
+        product.isConfirmed = true;
+        await product.save();
+
+        res.json(product);
       } catch (error) {
         res.status(500).json({ message: error.message });
       }
@@ -58,7 +56,7 @@ export const postConfirmation = async (req, res) => {
 
   export const rejectPost = async (req, res) => {
     try {
-      const postId = req.params.id;
+      const productId = req.params.id;
       const token = req.headers.authorization;
       const decoded = jwt.verify(token, jwt_key);
   
@@ -67,20 +65,19 @@ export const postConfirmation = async (req, res) => {
         return res.status(403).json({ message: 'Access Denied' });
       }
   
-      // Find the post by ID
-      const post = await Post.findById(postId);
-      if (!post) {
-        return res.status(404).json({ message: 'Post not found' });
+      // Find the product by ID
+      const product = await Product.findById(productId);
+      if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
       }
   
       // Optional: You might want to add a reason for rejection from query parameters
       const rejectionReason = req.query.rejectionReason;
   
-      // Delete the post
-      await post.remove();
-  
-      // Return a success message or any other relevant information
-      res.json({ message: `Post rejected and deleted successfully. Reason: ${rejectionReason || 'No reason provided'}` });
+      // Delete the product
+      await product.remove();
+
+      res.json({ message: `Product rejected and deleted successfully. Reason: ${rejectionReason || 'No reason provided'}` });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

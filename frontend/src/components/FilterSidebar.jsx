@@ -8,29 +8,17 @@ const FilterSidebar = ({
   setSidebarOpen,
   category,
   type,
-  selectedGender,
-  selectedLocation,
   searchQuery,
-  isEducated,
-  isCastrated,
-  isImmune,
-  minAge,
-  maxAge,
-  petsList,
+  minPrice,
+  maxPrice,
+  categories,
   typeOptions,
-  cities,
   setCategory,
   setType,
-  setSelectedGender,
-  setSelectedLocation,
   setSearchQuery,
-  setIsEducated,
-  setIsCastrated,
-  setIsImmune,
-  setMinAge,
-  setMaxAge,
-  handleSearch,
-  resetFilters
+  setMinPrice,
+  setMaxPrice,
+  handleSearch
 }) => {
   const containerRef = useRef(null);
   const startX = useRef(null);
@@ -110,7 +98,7 @@ const FilterSidebar = ({
           <label>קטגוריה:</label>
           <select value={category} onChange={(e) => setCategory(e.target.value)}>
             <option value="">הכל</option>
-            {petsList.map((c) => (
+            {categories.map((c) => (
               <option key={c} value={c}>{c}</option>
             ))}
           </select>
@@ -123,51 +111,14 @@ const FilterSidebar = ({
             ))}
           </select>
 
-          <label>מין:</label>
-          <select value={selectedGender} onChange={(e) => setSelectedGender(e.target.value)}>
-            <option value="">הכל</option>
-            <option value="זכר">זכר</option>
-            <option value="נקבה">נקבה</option>
-          </select>
-
-          <label>מיקום:</label>
-          <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)}>
-            <option value="">הכל</option>
-            {cities.map((city) => (
-              <option key={city} value={city}>{city}</option>
-            ))}
-          </select>
-
           <label>חיפוש לפי שם:</label>
           <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
 
-          <label>מחונך לצרכים:</label>
-          <select value={isEducated} onChange={(e) => setIsEducated(e.target.value)}>
-            <option value="">הכל</option>
-            <option value="true">כן</option>
-            <option value="false">לא</option>
-          </select>
-
-          <label>מסורס / מעוקרת:</label>
-          <select value={isCastrated} onChange={(e) => setIsCastrated(e.target.value)}>
-            <option value="">הכל</option>
-            <option value="true">כן</option>
-            <option value="false">לא</option>
-          </select>
-
-          <label>מחוסן/ת:</label>
-          <select value={isImmune} onChange={(e) => setIsImmune(e.target.value)}>
-            <option value="">הכל</option>
-            <option value="true">כן</option>
-            <option value="false">לא</option>
-          </select>
-
-          <label>גיל (מ-עד):</label>
-          <input type="number" value={minAge} onChange={(e) => setMinAge(e.target.value)} />
-          <input type="number" value={maxAge} onChange={(e) => setMaxAge(e.target.value)} />
+          <label>מחיר (מ-עד):</label>
+          <input type="number" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} />
+          <input type="number" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} />
 
           <button onClick={handleSearch}>חפש</button>
-          <button onClick={resetFilters}>איפוס סינון</button>
         </div>
       </div>
     </>

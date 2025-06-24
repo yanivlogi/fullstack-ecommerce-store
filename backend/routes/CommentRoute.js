@@ -10,7 +10,7 @@ import
 
 const router = express.Router();
 router.post('/comment/:id' , addComment)
-router.get(`/posts/:id/comments` , getComments)
+router.get(`/products/:id/comments` , getComments)
 router.delete(`/comment/:id` ,deleteComment )
 router.put(`/comment/:id` ,updateComment )
 

@@ -8,7 +8,7 @@ const jwt_key = process.env.JWT_KEY;
 export const addComment = async (req, res) => {
     try {
         const content = req.body.content
-        const postId = req.params.id;
+        const productId = req.params.id;
         const token = req.body.userId;
 
         const decoded = jwt.verify(token, jwt_key);
@@ -22,10 +22,10 @@ export const addComment = async (req, res) => {
             return res.status(400).json({ message: 'Empty comment' }) 
         }
         
-        const comment = new Comment({ 
+        const comment = new Comment({
             content : content,
             author : author,
-            post : postId
+            product : productId
         });
         
         await comment.save();
@@ -40,8 +40,8 @@ export const addComment = async (req, res) => {
 
 export const getComments = async (req, res) => {
     try {
-      const postId = req.params.id;
-      const comments = await Comment.find({ post: postId });
+      const productId = req.params.id;
+      const comments = await Comment.find({ product: productId });
       const populatedComments = await Promise.all(
         comments.map(async (comment) => {
           const user = await User.findById(comment.author);

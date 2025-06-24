@@ -15,9 +15,9 @@ const commentSchema = new mongoose.Schema({
       type: Date,
       default: Date.now
     },
-    post: {
+    product: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Post',
+      ref: 'Product',
       required: true
     }
   });
