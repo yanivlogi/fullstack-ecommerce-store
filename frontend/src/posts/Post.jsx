@@ -36,7 +36,7 @@ const Post = () => {
 
   const getPost = async () => {
     try {
-      const response = await axios.get(`${server_url}/posts/${id}`);
+      const response = await axios.get(`${server_url}/products/${id}`);
       const postData = response.data;
 
       // Splitting the image paths into an array and replacing backslashes with forward slashes
@@ -133,8 +133,8 @@ const Post = () => {
           Authorization: token,
         },
       };
-      await axios.delete(`${server_url}/posts/${id}`, config);
-      navigate('/posts')
+      await axios.delete(`${server_url}/products/${id}`, config);
+      navigate('/products')
     } catch (error) {
       console.log(error);
     }
@@ -164,7 +164,7 @@ const Post = () => {
   const getComments = async () => {
     try {
       const response = await axios.get(
-        `${server_url}/posts/${id}/comments`
+        `${server_url}/products/${id}/comments`
       );
       setComments(response.data);
     } catch (error) {
@@ -212,57 +212,45 @@ const Post = () => {
 
                         <tr>
                           <td>קטגוריה</td>
-                          <td>
-                            {post.category === 'כלבים' ? '🐶' :
-                              post.category === 'חתולים' ? '🐱' :
-                                post.category === 'תוכים ובעלי כנף' ? '🦜' :
-                                  post.category === 'זוחלים' ? '🐍' :
-                                    post.category === 'מכרסמים' ? '🐭' : ''}
-                          </td>
+                          <td>{post.category}</td>
                         </tr>
                         <tr>
                           <td>סוג</td>
                           <td>{post.type}</td>
                         </tr>
                         <tr>
-                          <td>מין</td>
-                          <td>{post.gender}</td>
+                          <td>מחיר</td>
+                          <td>₪{post.price}</td>
+                        </tr>
+                        {post.priceSale && (
+                          <tr>
+                            <td>מחיר מבצע</td>
+                            <td>₪{post.priceSale}</td>
+                          </tr>
+                        )}
+                        <tr>
+                          <td>מלאי</td>
+                          <td>{post.stock}</td>
                         </tr>
                         <tr>
-                          <td>מיקום 📍</td>
-                          <td>{post.location}</td>
+                          <td>מיקום בחנות</td>
+                          <td>{post.storeLocation}</td>
                         </tr>
                         <tr>
-                          <td>גיל (בשנים)</td>
-                          <td>{post.age}</td>
-                        </tr>
-                        <tr>
-                          <td>מחונך/ת לצרכים</td>
-                          <td>{post.isEducated ? '✅' : '❌'}</td>
-                        </tr>
-                        <tr>
-                          <td>מחוסן/ת</td>
-                          <td>{post.isImmune ? '✅' : '❌'}</td>
-                        </tr>
-                        <tr>
-                          <td>מסורס / מעוקרת</td>
-                          <td>{post.isCastrated ? '✅' : '❌'}</td>
-                        </tr>
-                        <tr>
-                          <td>קצת על בעל החיים</td>
+                          <td>תיאור</td>
                           <td style={{ maxWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "normal" }}>
                             {post.description}
                           </td>
                         </tr>
 
                         <tr>
-                          <td>מעלה הפוסט</td>
+                          <td>מעלה המוצר</td>
                           <td>
                             <a href={`/users/${post.author.id}`} className="post-field-value">
                               {post.author.username}
                               <img style={{ height: "50px", width: "50px", borderRadius: "50%", padding: '5px' }} src={`${server_url}/${post.author.image}`} alt="" />
                             </a>
-                            {decoded && decoded.id && post.author.id != decoded.id && !post.isAdopted && (
+                            {decoded && decoded.id && post.author.id != decoded.id && (
                     <div> 
                      
                       <Link style={{margin:'5px'}} to={`/sendmessage/${post.author.id}`} className="btn btn-warning mr-2">
@@ -303,7 +291,7 @@ const Post = () => {
                       </div>
                     </div>
                   </div>
-                  {decoded && decoded.id && post.author.id === decoded.id && !post.isAdopted && (
+                  {decoded && decoded.id && post.author.id === decoded.id && (
                     <div className="post-actions">
                       <Link to={`/edit/${id}`} className="btn btn-info mr-2">
                         Edit
