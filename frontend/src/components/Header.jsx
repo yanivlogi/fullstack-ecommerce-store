@@ -1,10 +1,10 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { Link, NavLink } from "react-router-dom";
 import axios from "axios";
 import logo from "../uploads/logo.png";
 import "../css/Header.css";
 import CartSlide from "./CartSlide";
+import { useCart } from "../context/CartContext"; // ✅ שימוש בקונטקסט
 
 const pagesMenu = [
   { label: "אודות", path: "/aboutus" },
@@ -23,10 +23,11 @@ export default function Header() {
   const [count, setCount] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
-  const [cartItems] = useState([
-    { name: "מוצר לדוגמה", price: 20 },
-    { name: "מוצר נוסף", price: 35 },
-  ]);
+  const [animateCart, setAnimateCart] = useState(false); // ✅ לאנימציה
+
+  const { items } = useCart(); // ✅ עגלה מהקונטקסט
+  const itemCount = items.reduce((sum, item) => sum + item.quantity, 0); // ✅ מונה אמיתי
+
   const server = process.env.REACT_APP_SERVER_URL;
 
   const getHeaderInfo = useCallback(async () => {
@@ -61,6 +62,14 @@ export default function Header() {
     getUnread();
   }, [getHeaderInfo, getUnread]);
 
+  // ✅ אפקט לאנימציית עגלה
+  useEffect(() => {
+    if (items.length === 0) return;
+    setAnimateCart(true);
+    const timer = setTimeout(() => setAnimateCart(false), 500);
+    return () => clearTimeout(timer);
+  }, [items]);
+
   const logout = () => {
     localStorage.clear();
     window.location.reload();
@@ -72,7 +81,6 @@ export default function Header() {
         <div className="container flex-between">
           <span>ברוך הבא לחנות כפרי!</span>
           <div className="top-links">
-
             {isLogged ? (
               <NavLink to="/profile">👤 {user?.name}</NavLink>
             ) : (
@@ -107,7 +115,6 @@ export default function Header() {
               <div></div>
               <div></div>
             </div>
-
           </div>
 
           <Link className="logo" to="/">
@@ -118,33 +125,33 @@ export default function Header() {
             <NavLink to="/profile">👤</NavLink>
             <NavLink to="/wishlist">❤️</NavLink>
             <NavLink to="/compare">🔄</NavLink>
-            <span className="cart-icon" onClick={() => setCartOpen(true)}>
-              🛒<small>{count}</small>
+            <span
+              className={`cart-icon ${animateCart ? "animate" : ""}`}
+              onClick={() => setCartOpen(true)}
+            >
+              🛒<small>{itemCount}</small>
             </span>
           </div>
         </div>
-                <div className="container">
 
-        <nav className={`navbar ${mobileOpen ? "open" : "close"}`}> 
-          <ul className="nav-list">
-            {pagesMenu.map((p) => (
-              <li key={p.path}><NavLink to={p.path}>{p.label}</NavLink></li>
-            ))}
-            {categoriesMenu.map((c) => (
-              <li key={c.path}><NavLink to={c.path}>{c.label}</NavLink></li>
-            ))}
-            {isLogged && (
-              <li><button onClick={logout} className="logout-btn">התנתק/י</button></li>
-            )}
-          </ul>
-        </nav>
+        <div className="container">
+          <nav className={`navbar ${mobileOpen ? "open" : "close"}`}>
+            <ul className="nav-list">
+              {pagesMenu.map((p) => (
+                <li key={p.path}><NavLink to={p.path}>{p.label}</NavLink></li>
+              ))}
+              {categoriesMenu.map((c) => (
+                <li key={c.path}><NavLink to={c.path}>{c.label}</NavLink></li>
+              ))}
+              {isLogged && (
+                <li><button onClick={logout} className="logout-btn">התנתק/י</button></li>
+              )}
+            </ul>
+          </nav>
         </div>
       </header>
-      <CartSlide
-        isOpen={cartOpen}
-        onClose={() => setCartOpen(false)}
-        items={cartItems}
-      />
+
+      <CartSlide isOpen={cartOpen} onClose={() => setCartOpen(false)} />
     </>
   );
 }

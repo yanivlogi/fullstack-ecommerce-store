@@ -7,9 +7,10 @@ import { vegetableCategories } from "../js/vegetableCategories.js";
 import { leafyList } from "../js/leafyList.js";
 import { rootList } from "../js/rootList.js";
 import { fruitList } from "../js/fruitList.js";
+import { useCart } from "../context/CartContext";
 import "../css/AllProducts.css";
 
-const AllProducts = () => {
+const AllProducts = ({ onOpenCart }) => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [decoded, setDecoded] = useState(null);
@@ -20,9 +21,11 @@ const AllProducts = () => {
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
   const [quantities, setQuantities] = useState({});
+  const [addedToCart, setAddedToCart] = useState({});
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
+  const { addToCart } = useCart();
   const server_url = process.env.REACT_APP_SERVER_URL;
   const navigate = useNavigate();
 
@@ -38,54 +41,49 @@ const AllProducts = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-const getProducts = async () => {
-  try {
-    const query = {};
-    if (searchQuery) query.search = searchQuery;
-    if (category) query.category = category;
-    if (type) query.type = type;
-    if (minPrice > 0) query.minPrice = minPrice;
-    if (maxPrice > 0) query.maxPrice = maxPrice;
+  const getProducts = async () => {
+    try {
+      const query = {};
+      if (searchQuery) query.search = searchQuery;
+      if (category) query.category = category;
+      if (type) query.type = type;
+      if (minPrice > 0) query.minPrice = minPrice;
+      if (maxPrice > 0) query.maxPrice = maxPrice;
 
-    const res = await axios.get(`${server_url}/products`, {
-      params: query,
-    });
+      const res = await axios.get(`${server_url}/products`, { params: query });
+      setProducts(res.data);
+      setFilteredProducts(res.data);
+    } catch (error) {
+      console.error("שגיאה בהבאת המוצרים:", error);
+    }
+  };
 
-    setProducts(res.data);
-    setFilteredProducts(res.data);
-  } catch (error) {
-    console.error("שגיאה בהבאת המוצרים:", error);
-  }
-};
+  useEffect(() => {
+    let result = [...products];
 
+    if (category) result = result.filter((p) => p.category === category);
+    if (type) result = result.filter((p) => p.type === type);
+    if (searchQuery)
+      result = result.filter((p) =>
+        p.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
 
-useEffect(() => {
-  let result = [...products];
+    if (minPrice) {
+      result = result.filter((p) => {
+        const effectivePrice = p.priceSale > 0 ? p.priceSale : p.price;
+        return effectivePrice >= parseFloat(minPrice);
+      });
+    }
 
-  if (category) result = result.filter((p) => p.category === category);
-  if (type) result = result.filter((p) => p.type === type);
-  if (searchQuery)
-    result = result.filter((p) =>
-      p.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    if (maxPrice) {
+      result = result.filter((p) => {
+        const effectivePrice = p.priceSale > 0 ? p.priceSale : p.price;
+        return effectivePrice <= parseFloat(maxPrice);
+      });
+    }
 
-  if (minPrice) {
-    result = result.filter((p) => {
-      const effectivePrice = p.priceSale > 0 ? p.priceSale : p.price;
-      return effectivePrice >= parseFloat(minPrice);
-    });
-  }
-
-  if (maxPrice) {
-    result = result.filter((p) => {
-      const effectivePrice = p.priceSale > 0 ? p.priceSale : p.price;
-      return effectivePrice <= parseFloat(maxPrice);
-    });
-  }
-
-  setFilteredProducts(result);
-}, [products, category, type, searchQuery, minPrice, maxPrice]);
-
+    setFilteredProducts(result);
+  }, [products, category, type, searchQuery, minPrice, maxPrice]);
 
   const handleCategoryChange = (selectedCategory) => {
     setCategory(selectedCategory);
@@ -111,14 +109,37 @@ useEffect(() => {
     return `${server_url}/${cleanPath}`;
   };
 
-  const addToCart = (id) =>
+  const increaseQuantity = (id) => {
     setQuantities((prev) => ({ ...prev, [id]: (prev[id] || 1) + 1 }));
+  };
 
-  const decreaseQuantity = (id) =>
+  const decreaseQuantity = (id) => {
     setQuantities((prev) => ({
       ...prev,
       [id]: Math.max(1, (prev[id] || 1) - 1),
     }));
+  };
+
+  const handleAddToCart = (product) => {
+    const quantity = quantities[product._id] || 1;
+    const price = product.priceSale > 0 ? product.priceSale : product.price;
+
+    addToCart({
+      _id: product._id,
+      name: product.name,
+      price,
+      quantity,
+      image: getImageUrl(product.images),
+    });
+
+    if (onOpenCart) onOpenCart(); // 🟢 פתיחת עגלה
+
+    // 🟡 אנימציה
+    setAddedToCart((prev) => ({ ...prev, [product._id]: true }));
+    setTimeout(() => {
+      setAddedToCart((prev) => ({ ...prev, [product._id]: false }));
+    }, 800);
+  };
 
   return (
     <div className="products-page">
@@ -144,31 +165,33 @@ useEffect(() => {
       <section className="product-grid">
         {filteredProducts.map((product) => (
           <div className="product-card" key={product._id}>
-            {product.priceSale && <div className="sale-tag">מבצע!</div>}
+            {product.priceSale > 0 && <div className="sale-tag">מבצע!</div>}
             <div className="product-image">
               <img src={getImageUrl(product.images)} alt={product.name} />
             </div>
             <h3>{product.name}</h3>
             <p className="desc">{product.description?.slice(0, 50)}...</p>
-       <div className="price-row">
-  {product.priceSale > 0 ? (
-    <>
-      <span className="price-discounted">₪{product.priceSale}</span>
-      <span className="price-original discounted">₪{product.price}</span>
-    </>
-  ) : (
-    <span className="price-original">₪{product.price}</span>
-  )}
-</div>
-
+            <div className="price-row">
+              {product.priceSale > 0 ? (
+                <>
+                  <span className="price-discounted">₪{product.priceSale}</span>
+                  <span className="price-original discounted">₪{product.price}</span>
+                </>
+              ) : (
+                <span className="price-original">₪{product.price}</span>
+              )}
+            </div>
             <div className="actions">
-              <button className="add-btn" onClick={() => addToCart(product._id)}>
-                הוסף
+              <button
+                className={`add-btn ${addedToCart[product._id] ? "added" : ""}`}
+                onClick={() => handleAddToCart(product)}
+              >
+                {addedToCart[product._id] ? "✔ נוסף!" : "הוסף"}
               </button>
               <div className="quantity-box">
                 <button onClick={() => decreaseQuantity(product._id)}>-</button>
                 <span>{quantities[product._id] || 1}</span>
-                <button onClick={() => addToCart(product._id)}>+</button>
+                <button onClick={() => increaseQuantity(product._id)}>+</button>
               </div>
             </div>
           </div>

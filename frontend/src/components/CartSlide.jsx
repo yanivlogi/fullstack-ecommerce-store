@@ -1,18 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../css/CartSlide.css';
+import { useCart } from '../context/CartContext';
 
-export default function CartSlide({ isOpen, onClose, items = [] }) {
-const subtotal = items.reduce(
-  (sum, item) => sum + item.price * (item.quantity || 1),
-  0
-);
+export default function CartSlide({ isOpen, onClose }) {
+  const { items = [], updateQuantity, removeFromCart } = useCart();
+
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.price * (item.quantity || 1),
+    0
+  );
   const shipping = 50;
   const total = subtotal + shipping;
   const freeShippingLimit = 70;
 
   return (
-<div className={`cart-slide ${isOpen ? 'open' : ''}`}>
+    <div className={`cart-slide ${isOpen ? 'open' : ''}`}>
       <div className="cart-slide-overlay" onClick={onClose}></div>
       <div className="cart-slide-content">
         <button className="close-btn" onClick={onClose}>×</button>
@@ -41,10 +44,13 @@ const subtotal = items.reduce(
                   {item.color && <div>צבע: {item.color}</div>}
                   <div>מחיר: {item.price}₪</div>
                   <div className="quantity-control">
-                    <button>-</button>
+                    <button onClick={() => updateQuantity(item._id, item.quantity - 1)}>-</button>
                     <span>{item.quantity}</span>
-                    <button>+</button>
+                    <button onClick={() => updateQuantity(item._id, item.quantity + 1)}>+</button>
                   </div>
+                  <button className="remove-btn" onClick={() => removeFromCart(item._id)}>
+                    הסר מוצר
+                  </button>
                 </div>
                 <span className="item-total">{item.price * item.quantity}₪</span>
               </div>

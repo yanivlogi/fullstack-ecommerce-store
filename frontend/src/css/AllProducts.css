@@ -127,3 +127,8 @@
     padding: 16px;
   }
 }
+
+.add-btn.added {
+  background-color: #4caf50 !important;
+  transition: 0.3s ease;
+}
