@@ -1,0 +1,37 @@
+.wishlist-container {
+  padding: 40px;
+  direction: rtl;
+  font-family: 'Heebo', sans-serif;
+}
+
+.wishlist-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.wishlist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wishlist-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.wishlist-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.item-info {
+  flex: 1;
+}
