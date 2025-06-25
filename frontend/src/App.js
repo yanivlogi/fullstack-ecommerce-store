@@ -7,14 +7,13 @@ import NoPageFound from "./pages/NoPageFound";
 import FilterSidebar from "./components/FilterSidebar";
 
 
-//posts
-import AllPosts from "./posts/AllPosts";
-import AddPost from "./posts/AddPost";
-import EditPost from "./posts/EditPost";
-import Post from "./posts/Post";
-import SomePosts from "./components/SomePosts";
-import MyPosts from "./posts/MyPosts";
-import AdoptedPosts from "./posts/AdoptedPosts";
+//products
+import Allproducts from "./Products/Allproducts";
+import AddProduct from "./Products/AddProduct";
+import EditProduct from "./Products/EditProduct";
+import Product from "./Products/Product";
+
+
 
 import Loader from  "./pages/Loader"
 
@@ -72,14 +71,11 @@ export default function App() {
           <Route path="WaitingPosts" element={<WaitingPosts />} />
 
 
-          <Route path="posts/:id" element={<Post />} />
-          <Route path="MyPosts" element={<MyPosts />} />
-          <Route path="AllPosts" element={<AllPosts />} />
+          <Route path="products/:id" element={<Product />} />
+          <Route path="Allproducts" element={<Allproducts />} />
           <Route path="FilterSidebar" element={<FilterSidebar />} />
-          <Route path="someposts" element={<SomePosts />} />
-          <Route path="addPost" element={<AddPost />} />
-          <Route path="edit/:id" element={<EditPost />} />
-          <Route path="AdoptedPosts" element={<AdoptedPosts />} />
+          <Route path="AddProduct" element={<AddProduct />} />
+          <Route path="edit/:id" element={<EditProduct />} />
 
           <Route path="*" element={<NoPageFound />} />
         </Routes>

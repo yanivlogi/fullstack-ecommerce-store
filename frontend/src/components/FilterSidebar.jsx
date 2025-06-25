@@ -67,6 +67,15 @@ const FilterSidebar = ({
     };
   }, [dragging, setSidebarOpen, isMobile]);
 
+  const handleReset = () => {
+    setCategory("");
+    setType("");
+    setSearchQuery("");
+    setMinPrice(0);
+    setMaxPrice(0);
+    handleSearch(); // להריץ את החיפוש מחדש עם ערכים מאופסים
+  };
+
   return (
     <>
       {isMobile && isSidebarOpen && (
@@ -119,6 +128,7 @@ const FilterSidebar = ({
           <input type="number" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} />
 
           <button onClick={handleSearch}>חפש</button>
+          <button onClick={handleReset} style={{ marginTop: "8px", background: "#ccc" }}>איפוס</button>
         </div>
       </div>
     </>

@@ -22,7 +22,7 @@ const Home = () => {
                 Alias voluptate quia architecto, mollitia quasi dolor dolorem rerum. Doloribus, nesciunt.
             </p>
             <div className="justify-content-center" style={{padding:'30px', margin:"10px"}}>
-                <ButtonBite to="/AllPosts">לכל הפוסטים</ButtonBite>
+                <ButtonBite to="/Allproducts">מעבר לחנות</ButtonBite>
             </div>
           </div>
         </div>

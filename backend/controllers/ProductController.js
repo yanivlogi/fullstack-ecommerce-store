@@ -7,6 +7,12 @@ import path from 'path';
 
 const jwt_key = process.env.JWT_KEY;
 
+// פונקציה להמרה בטוחה למספר
+const safeNumber = (val) => {
+  const n = Number(val);
+  return isNaN(n) ? undefined : n;
+};
+
 // הצגת כל המוצרים עם סינון
 export const getAllProducts = async (req, res) => {
   try {
@@ -26,9 +32,37 @@ export const getAllProducts = async (req, res) => {
     }
 
     if (minPrice || maxPrice) {
-      query.price = {};
-      if (minPrice) query.price.$gte = Number(minPrice);
-      if (maxPrice) query.price.$lte = Number(maxPrice);
+      const min = Number(minPrice) || 0;
+      const max = Number(maxPrice) || Infinity;
+
+      query.$expr = {
+        $and: [
+          {
+            $gte: [
+              {
+                $cond: {
+                  if: { $gt: ["$priceSale", 0] },
+                  then: "$priceSale",
+                  else: "$price"
+                }
+              },
+              min
+            ]
+          },
+          {
+            $lte: [
+              {
+                $cond: {
+                  if: { $gt: ["$priceSale", 0] },
+                  then: "$priceSale",
+                  else: "$price"
+                }
+              },
+              max
+            ]
+          }
+        ]
+      };
     }
 
     const products = await Product.find(query);
@@ -37,6 +71,7 @@ export const getAllProducts = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // הצגת מוצר יחיד
 export const getProductById = async (req, res) => {
@@ -58,7 +93,9 @@ export const saveProduct = async (req, res) => {
     const decoded = jwt.verify(token, jwt_key);
     const userId = decoded.id;
 
-    const imagePaths = req.files.map(file => file.path.replace('uploads/', ''));
+    const imagePaths = Array.isArray(req.files)
+      ? req.files.map(file => file.path.replace('uploads/', '')).join(',')
+      : '';
 
     const product = new Product({
       name: req.body.name,
@@ -68,17 +105,17 @@ export const saveProduct = async (req, res) => {
       barcode: req.body.barcode,
       sku: req.body.sku,
       storeLocation: req.body.storeLocation,
-      stock: req.body.stock,
-      price: req.body.price,
-      priceSale: req.body.priceSale,
-      priceCost: req.body.priceCost,
-      weight: req.body.weight,
-      length: req.body.length,
-      width: req.body.width,
-      height: req.body.height,
+      stock: safeNumber(req.body.stock),
+      price: safeNumber(req.body.price),
+      priceSale: safeNumber(req.body.priceSale),
+      priceCost: safeNumber(req.body.priceCost),
+      weight: safeNumber(req.body.weight),
+      length: safeNumber(req.body.length),
+      width: safeNumber(req.body.width),
+      height: safeNumber(req.body.height),
       sellingType: req.body.sellingType,
       images: imagePaths,
-      author: userId
+      author: userId,
     });
 
     const saved = await product.save();
@@ -105,7 +142,12 @@ export const updateProduct = async (req, res) => {
       return res.status(403).json({ message: 'Unauthorized' });
     }
 
-    let remainingImages = product.images || [];
+    // פיצול תמונות קיימות אם הן מחרוזת
+    let remainingImages = product.images
+      ? product.images.split(',').filter(Boolean)
+      : [];
+
+    // מחיקת תמונות לפי אינדקסים
     const removedIndices = JSON.parse(req.body.removedImageIndices || '[]');
     removedIndices.sort((a, b) => b - a).forEach(i => {
       if (i >= 0 && i < remainingImages.length) {
@@ -114,7 +156,7 @@ export const updateProduct = async (req, res) => {
     });
 
     const newImages = req.files.map(file => file.path.replace('uploads/', ''));
-    const finalImages = [...remainingImages, ...newImages];
+    const finalImages = [...remainingImages, ...newImages].join(',');
 
     const updated = await Product.findByIdAndUpdate(
       req.params.id,
@@ -126,14 +168,14 @@ export const updateProduct = async (req, res) => {
         barcode: req.body.barcode,
         sku: req.body.sku,
         storeLocation: req.body.storeLocation,
-        stock: req.body.stock,
-        price: req.body.price,
-        priceSale: req.body.priceSale,
-        priceCost: req.body.priceCost,
-        weight: req.body.weight,
-        length: req.body.length,
-        width: req.body.width,
-        height: req.body.height,
+        stock: safeNumber(req.body.stock),
+        price: safeNumber(req.body.price),
+        priceSale: safeNumber(req.body.priceSale),
+        priceCost: safeNumber(req.body.priceCost),
+        weight: safeNumber(req.body.weight),
+        length: safeNumber(req.body.length),
+        width: safeNumber(req.body.width),
+        height: safeNumber(req.body.height),
         sellingType: req.body.sellingType,
         images: finalImages
       },
@@ -169,7 +211,7 @@ export const deleteProduct = async (req, res) => {
   }
 };
 
-// החזרת תמונה לפי שם קובץ
+// הצגת תמונה לפי שם קובץ
 export const getProductImage = (req, res) => {
   const { filename } = req.params;
   const imagePath = path.join('uploads', filename);

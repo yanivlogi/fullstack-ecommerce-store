@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import InputEmoji from 'react-input-emoji';
 import { Button } from "react-bootstrap";
 
-const Post = () => {
+const Product = () => {
   const [decoded, setDecoded] = useState(null);
   const [post, setPost] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
@@ -431,4 +431,4 @@ const Post = () => {
   );
 };
 
-export default Post;
+export default Product;

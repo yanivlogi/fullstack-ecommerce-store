@@ -53,12 +53,20 @@
   gap: 8px;
 }
 
+/* מחיר רגיל (אם אין מבצע) */
 .price-original {
-  text-decoration: line-through;
-  color: #999;
   font-size: 14px;
+  color: #333;
+  text-decoration: none;
 }
 
+/* מחיר רגיל מוצג עם קו חוצה אם יש מבצע */
+.price-original.discounted {
+  color: #999;
+  text-decoration: line-through;
+}
+
+/* מחיר מבצע */
 .price-discounted {
   color: #ffc107;
   font-weight: bold;
@@ -112,6 +120,7 @@
     width: 100%;
   }
 }
+
 @media (min-width: 769px) {
   .products-page {
     margin-right: 260px; /* זהה לרוחב הסיידבר */
