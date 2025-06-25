@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../css/CartSlide.css';
 
 export default function CartSlide({ isOpen, onClose, items = [] }) {
@@ -62,8 +63,8 @@ const subtotal = items.reduce(
         </div>
 
         <div className="cart-actions">
-          <button className="keep-shopping">המשך קנייה</button>
-          <button className="checkout">לתשלום</button>
+          <button className="keep-shopping" onClick={onClose}>המשך קנייה</button>
+          <Link to="/purchase" className="checkout btn btn-primary">לתשלום</Link>
         </div>
 
         <div className="paypal-btn">PayPal</div>
