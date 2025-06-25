@@ -40,7 +40,7 @@ const Product = () => {
       const postData = response.data;
 
       // Splitting the image paths into an array and replacing backslashes with forward slashes
-      const imagePaths = postData.image.split(",").map((path) => path.replace('uploads\\', "/"));
+      const imagePaths = (postData.images || "").split(",").map((path) => path.replace('uploads\\', "/"));
 
       // Updating the postData object to include the imagePaths property
       const updatedPostData = {

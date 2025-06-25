@@ -24,6 +24,7 @@ import AllMessages from "./pages/AllMessages";
 
 import ContactUs from "./components/ContactUs"
 import ConfirmationForm from "./service/ConfirmationForm";
+import Purchase from "./pages/Purchase";
 
 
 
@@ -76,6 +77,8 @@ export default function App() {
           <Route path="FilterSidebar" element={<FilterSidebar />} />
           <Route path="AddProduct" element={<AddProduct />} />
           <Route path="edit/:id" element={<EditProduct />} />
+
+          <Route path="purchase" element={<Purchase />} />
 
           <Route path="*" element={<NoPageFound />} />
         </Routes>

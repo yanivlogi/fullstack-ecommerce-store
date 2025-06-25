@@ -13,6 +13,7 @@ Includes full product management, image upload with drag & drop, stock control, 
 - 🖥️ Admin dashboard
 - 🔐 Authentication via JWT (localStorage token)
 - 📱 Fully responsive UI for all screen sizes
+- 💳 Simple checkout page for completing purchases
 
 ## 🛠️ Tech Stack
 
