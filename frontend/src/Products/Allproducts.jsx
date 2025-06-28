@@ -60,28 +60,24 @@ const AllProducts = ({ onOpenCart }) => {
 
   useEffect(() => {
     let result = [...products];
-
     if (category) result = result.filter((p) => p.category === category);
     if (type) result = result.filter((p) => p.type === type);
     if (searchQuery)
       result = result.filter((p) =>
         p.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
-
     if (minPrice) {
       result = result.filter((p) => {
         const effectivePrice = p.priceSale > 0 ? p.priceSale : p.price;
         return effectivePrice >= parseFloat(minPrice);
       });
     }
-
     if (maxPrice) {
       result = result.filter((p) => {
         const effectivePrice = p.priceSale > 0 ? p.priceSale : p.price;
         return effectivePrice <= parseFloat(maxPrice);
       });
     }
-
     setFilteredProducts(result);
   }, [products, category, type, searchQuery, minPrice, maxPrice]);
 
@@ -103,7 +99,9 @@ const AllProducts = ({ onOpenCart }) => {
   };
 
   const getImageUrl = (imagesStr) => {
-    if (!imagesStr) return "";
+    if (!imagesStr || imagesStr.trim() === "") {
+      return "/uploads/default-product.jpg";
+    }
     const firstPath = imagesStr.split(",")[0]?.trim();
     const cleanPath = firstPath.replace(/^uploads[\\/]/, "");
     return `${server_url}/${cleanPath}`;
@@ -120,7 +118,8 @@ const AllProducts = ({ onOpenCart }) => {
     }));
   };
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = (product, e) => {
+    e.stopPropagation(); // לא להעביר את האירוע ל־onClick של הכרטיס
     const quantity = quantities[product._id] || 1;
     const price = product.priceSale > 0 ? product.priceSale : product.price;
 
@@ -132,9 +131,7 @@ const AllProducts = ({ onOpenCart }) => {
       image: getImageUrl(product.images),
     });
 
-    if (onOpenCart) onOpenCart(); // 🟢 פתיחת עגלה
-
-    // 🟡 אנימציה
+    if (onOpenCart) onOpenCart();
     setAddedToCart((prev) => ({ ...prev, [product._id]: true }));
     setTimeout(() => {
       setAddedToCart((prev) => ({ ...prev, [product._id]: false }));
@@ -164,7 +161,12 @@ const AllProducts = ({ onOpenCart }) => {
 
       <section className="product-grid">
         {filteredProducts.map((product) => (
-          <div className="product-card" key={product._id}>
+          <div
+            className="product-card"
+            key={product._id}
+            onClick={() => navigate(`/product/${product._id}`)}
+            style={{ cursor: "pointer" }}
+          >
             {product.priceSale > 0 && <div className="sale-tag">מבצע!</div>}
             <div className="product-image">
               <img src={getImageUrl(product.images)} alt={product.name} />
@@ -181,17 +183,17 @@ const AllProducts = ({ onOpenCart }) => {
                 <span className="price-original">₪{product.price}</span>
               )}
             </div>
-            <div className="actions">
+            <div className="actions" onClick={(e) => e.stopPropagation()}>
               <button
                 className={`add-btn ${addedToCart[product._id] ? "added" : ""}`}
-                onClick={() => handleAddToCart(product)}
+                onClick={(e) => handleAddToCart(product, e)}
               >
-                {addedToCart[product._id] ? "✔ נוסף!" : "הוסף"}
+                {addedToCart[product._id] ? " נוסף! ✔" : "הוסף"}
               </button>
               <div className="quantity-box">
-                <button onClick={() => decreaseQuantity(product._id)}>-</button>
+                <button onClick={(e) => { e.stopPropagation(); decreaseQuantity(product._id); }}>-</button>
                 <span>{quantities[product._id] || 1}</span>
-                <button onClick={() => increaseQuantity(product._id)}>+</button>
+                <button onClick={(e) => { e.stopPropagation(); increaseQuantity(product._id); }}>+</button>
               </div>
             </div>
           </div>

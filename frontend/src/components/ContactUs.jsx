@@ -1,21 +1,33 @@
-import React, { useState } from 'react';
-import '../css/ContactUs.css';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../css/ContactUs.css';
 import SentButton from './buttons/butttonSend/buttonSend';
-import { Alert} from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 
 const ContactUs = () => {
+  const [contactInfo, setContactInfo] = useState({});
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
   const [validationError, setValidationError] = useState(null);
-  const [server_url] = useState(process.env.REACT_APP_SERVER_URL);
 
+  const server_url = process.env.REACT_APP_SERVER_URL;
+
+  useEffect(() => {
+    const fetchContactInfo = async () => {
+      try {
+        const res = await axios.get(`${server_url}/contact-info`);
+        setContactInfo(res.data);
+      } catch (err) {
+        console.error("שגיאה בטעינת פרטי יצירת קשר:", err);
+      }
+    };
+    fetchContactInfo();
+  }, [server_url]);
 
   const isEmailValid = (email) => {
-    // Простая проверка на формат электронной почты с использованием регулярного выражения
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     return emailRegex.test(email);
   };
@@ -23,14 +35,13 @@ const ContactUs = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Проверка валидации перед отправкой
     if (!name || !email || !message) {
-      setValidationError('please fill all fields');
+      setValidationError('אנא מלא/י את כל השדות');
       return;
     }
 
     if (!isEmailValid(email)) {
-      setValidationError('Please enter a valid email address.');
+      setValidationError('כתובת המייל אינה תקינה');
       return;
     }
 
@@ -45,61 +56,62 @@ const ContactUs = () => {
         setSuccess(true);
         setError(null);
         setValidationError(null);
+        setName('');
+        setEmail('');
+        setMessage('');
       } else {
         setSuccess(false);
         setError(response.data.message);
       }
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('שגיאה בשליחת הודעה:', error);
       setSuccess(false);
-      setError('Error sending message');
+      setError('אירעה שגיאה בשליחה');
     }
   };
 
   return (
-    <div className="containercontack">
-      <form className="formContact" onSubmit={handleSubmit}>
-        <div className="descr">צור קשר</div>
+    <div className="contact-wrapper">
+      <div className="contact-info-box">
+        <h2>{contactInfo.title || "ביס מהטבע"}</h2>
+        <p>{contactInfo.description || "חקלאות אורגנית ומשלוחי ירקות ופירות"}</p>
+        <p>📞 {contactInfo.phone}</p>
+        <p>✉️ {contactInfo.email}</p>
+        <p>📍 {contactInfo.address}</p>
+        <div className="social-icons">
+          <a href={contactInfo.facebook}><i className="fab fa-facebook"></i></a>
+          <a href={`mailto:${contactInfo.email}`}><i className="fas fa-envelope"></i></a>
+        </div>
+      </div>
+
+      <form className="contact-form" onSubmit={handleSubmit}>
+        <h2>יש לכם שאלה? צרו קשר!</h2>
         {validationError && <Alert variant="danger">{validationError}</Alert>}
 
-        <div className="inputContact">
-          <input
-            required=""
-            autoComplete="off"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <label htmlFor="name">Name</label>
-        </div>
+        <input
+          type="text"
+          placeholder="שם*"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <input
+          type="email"
+          placeholder="אימייל*"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <textarea
+          placeholder="הודעה*"
+          rows="4"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        ></textarea>
 
-        <div className="inputContact">
-          <input
-            required=""
-            autoComplete="off"
-            name="email"
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <label htmlFor="email">E-mail</label>
-        </div>
+        <SentButton type="submit">שלח/י הודעה</SentButton>
 
-        <div className="inputContact">
-          <textarea
-            required=""
-            cols="30"
-            rows="3"
-            id="message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          ></textarea>
-          <label htmlFor="message">Message</label>
-        </div>
-        <SentButton type="submit">Send message →</SentButton>
+        {success && <div className="success-message">✅ ההודעה נשלחה בהצלחה!</div>}
+        {error && <div className="error-message">❌ {error}</div>}
       </form>
-      {success && <div className="success-message" style={{textShadow: '1px 1px 10px #FC0',fontSize:'30px'}}>Your message has been sent Than for your attention</div>}
-      {error && <div className="error-message">{error}</div>}
     </div>
   );
 };

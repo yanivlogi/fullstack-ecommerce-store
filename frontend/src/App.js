@@ -69,7 +69,7 @@ export default function App() {
           <Route path="WaitingPosts" element={<WaitingPosts />} />
 
           {/* מוצרים */}
-          <Route path="products/:id" element={<Product />} />
+          <Route path="product/:id" element={<Product />} />
           <Route path="Allproducts" element={<Allproducts onOpenCart={() => setCartOpen(true)} />} />
           <Route path="FilterSidebar" element={<FilterSidebar />} />
           <Route path="AddProduct" element={<AddProduct />} />

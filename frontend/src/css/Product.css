@@ -1,0 +1,133 @@
+.product-container {
+  background-color: #fffef9;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 30px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+  direction: rtl;
+}
+
+.product-title {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.product-details td {
+  vertical-align: middle;
+  font-size: 16px;
+  padding: 12px;
+  border-top: 1px solid #eee;
+}
+
+.product-image-wrapper {
+  position: relative;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.product-image {
+  width: 100%;
+  max-width: 350px;
+  height: 350px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+}
+
+
+.product-nav-btns {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  padding: 0 10px;
+}
+
+.product-image-button {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  font-size: 22px;
+  padding: 6px 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.product-image-button:hover {
+  background-color: #fff;
+}
+
+.product-image-prev {
+  position: absolute;
+  left: 10px;
+}
+
+.product-image-next {
+  position: absolute;
+  right: 10px;
+}
+
+.product-author-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-inline-start: 10px;
+}
+
+.product-comments {
+  margin-top: 40px;
+}
+
+.product-comment {
+  border-bottom: 1px solid #eee;
+  padding: 15px 0;
+}
+
+.product-comment img {
+  border-radius: 50%;
+}
+
+.product-comment-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.product-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+@media (max-width: 576px) {
+  .product-image {
+    max-height: 250px;
+  }
+
+  .product-image-button {
+    font-size: 18px;
+    padding: 5px 8px;
+  }
+
+  .product-title {
+    font-size: 22px;
+  }
+}
+
+.product-cart-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.product-quantity-value {
+  min-width: 30px;
+  text-align: center;
+  font-size: 18px;
+}

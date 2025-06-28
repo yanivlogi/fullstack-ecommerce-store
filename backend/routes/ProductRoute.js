@@ -16,16 +16,16 @@ const router = express.Router();
 router.get('/products', getAllProducts);
 
 // שליפת מוצר בודד לפי מזהה
-router.get('/products/:id', getProductById);
+router.get('/product/:id', getProductById);
 
 // הוספת מוצר חדש עם העלאת תמונות
-router.post('/products', upload.array('image[]', 10), saveProduct);
+router.post('/product', upload.array('image[]', 10), saveProduct);
 
 // עדכון מוצר קיים עם אפשרות להוספת תמונות ולמחיקת קיימות
-router.put('/products/:id', upload.array('image[]', 10), updateProduct);
+router.put('/product/:id', upload.array('image[]', 10), updateProduct);
 
 // מחיקת מוצר
-router.delete('/products/:id', deleteProduct);
+router.delete('/product/:id', deleteProduct);
 
 // הצגת קובץ תמונה לפי שם
 router.get('/images/:filename', getProductImage);

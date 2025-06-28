@@ -12,9 +12,10 @@ const pagesMenu = [
   { label: "צור קשר", path: "/contactus" },
 ];
 const categoriesMenu = [
-  { label: "ירקות", path: "/cat/vegetables" },
-  { label: "פירות", path: "/cat/fruits" },
-  { label: "אורגני", path: "/cat/organic" },
+   { label: "מעבר לחנות", path: "Allproducts" }
+  // { label: "ירקות", path: "/cat/vegetables" },
+  // { label: "פירות", path: "/cat/fruits" },
+  // { label: "אורגני", path: "/cat/organic" },
 ];
 
 export default function Header() {
@@ -123,8 +124,8 @@ export default function Header() {
 
           <div className="icons">
             <NavLink to="/profile">👤</NavLink>
-            <NavLink to="/wishlist">❤️</NavLink>
             <NavLink to="/compare">🔄</NavLink>
+            <NavLink to="/wishlist">❤️</NavLink>
             <span
               className={`cart-icon ${animateCart ? "animate" : ""}`}
               onClick={() => setCartOpen(true)}
