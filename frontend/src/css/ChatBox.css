@@ -1,14 +1,17 @@
 .chat-container {
-  max-height: 680px;
-
+  max-height: 310px; /* או 300px */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
   overflow-y: auto;
   border: 1px solid #ccc;
   padding: 10px;
   
+  
 }
 
 .chat-message {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .message-frame {
@@ -54,7 +57,8 @@
   direction: rtl;
   display: flex;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 0px;
+  
   
 }
 
@@ -73,13 +77,18 @@
   border-radius: 5px;
   margin-left: 0px;
   cursor: pointer;
+  
 }
 
 .all-chatBox {
   border: 1px solid #ccc;
-  padding: 10px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   
 }
+
 
 
 

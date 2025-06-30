@@ -74,8 +74,7 @@ const ChatBox = () => {
   };
 
   return (
-    <div style={{ backgroundColor: 'white', border: 'thick double #32a1ce' }}>
-<h2>🗨 צ'אט</h2>
+    <>
 
       {isLoading  ? (
           <div className="px-3">
@@ -127,7 +126,7 @@ const ChatBox = () => {
        
 
       )}
-    </div>
+    </>
   );
 };
 

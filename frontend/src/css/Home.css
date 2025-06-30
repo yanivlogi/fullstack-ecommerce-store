@@ -1,0 +1,196 @@
+.home {
+  font-family: "Heebo", sans-serif;
+  direction: rtl;
+  background-color: #f8f8f8;
+  color: #333;
+}
+
+/* HERO */
+.hero {
+  background-size: cover;
+  background-position: center;
+  height: 420px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+}
+.hero-overlay {
+  position: relative;
+  z-index: 1;
+  color: white;
+  padding: 30px;
+}
+.hero-overlay h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+.hero-overlay p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+/* CATEGORIES */
+.home-categories {
+  background: #fff;
+  padding: 40px 20px;
+}
+.home-categories h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 30px;
+  justify-items: center;
+  padding: 40px 20px;
+}
+
+.cat-card {
+  text-align: center;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.cat-card:hover {
+  transform: scale(1.04);
+}
+
+.cat-image-clean {
+  width: 400px;
+  height: 400px;
+  object-fit: fill;
+  border-radius: 16px;
+  margin-bottom: 12px;
+}
+
+.cat-label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #222;
+  margin-top: 4px;
+}
+
+.cat-image-only:hover {
+  transform: scale(1.08);
+}
+
+
+.cat-emoji {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+.cat-label {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* PROMOTIONS */
+.home-promos {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 40px 20px;
+}
+.promo {
+  flex: 1;
+  min-width: 260px;
+  color: white;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+}
+.promo.green {
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+}
+.promo.orange {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+}
+.promo h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+.promo p {
+  margin-bottom: 15px;
+}
+.promo a {
+  background: white;
+  color: black;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* CHAT FLOATING BUTTON + POPUP */
+.chat-float-wrapper {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+}
+.chat-toggle-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #4caf50;
+  color: white;
+  font-size: 26px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  cursor: pointer;
+}
+.chat-toggle-btn:hover {
+  background-color: #388e3c;
+}
+.chat-popup {
+  width: 350px;
+  height: 420px;
+  background-color: white;
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+}
+.chat-popup.open {
+  display: flex;
+}
+.chat-popup-header {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+.chat-popup-body {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  max-height: 350px;
+  display: contents;
+  flex-direction: column;
+}
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
